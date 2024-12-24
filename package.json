@@ -18,5 +18,18 @@
   "bugs": {
     "url": "https://github.com/mins01/js-color/issues"
   },
-  "homepage": "https://github.com/mins01/js-color#readme"
+  "homepage": "https://github.com/mins01/js-color#readme",
+  
+  "type": "module",
+  "exports": {
+    ".": {
+      "module": "./index.js",
+      "default": "./index.js"
+    },    
+    "./Color": {
+      "module": "./Color.js",
+      "require": "./cjs/Color.cjs",
+      "default": "./Color.js"
+    }
+  }
 }
