@@ -1,0 +1,22 @@
+{
+  "name": "js-color",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Color.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mins01/js-color.git"
+  },
+  "keywords": [
+    "color"
+  ],
+  "author": "공대여자",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/mins01/js-color/issues"
+  },
+  "homepage": "https://github.com/mins01/js-color#readme"
+}
