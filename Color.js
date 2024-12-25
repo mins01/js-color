@@ -26,6 +26,18 @@ class Color{
 			throw new Error("Invalid color object");
 		}
 	}
+
+	get(){
+		return this.toObject();
+	}
+
+	toObject(){
+		const r = {};
+		for(let k in this){
+			r[k] = this[k];
+		}
+		return r;
+	}
 	
 	/**
 	 * valide color
@@ -51,7 +63,11 @@ class Color{
 			default:return this.toHex();break;
 		}
 		return this.toHex();
-	}	
+	}
+	
+	toJSON(){
+		return this.toObject();
+	}
 
 	toRgb(){ return this.constructor.toRgb(this); }
 
