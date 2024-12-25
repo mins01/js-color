@@ -1,13 +1,13 @@
-// import Color from "../Color.js";
-import jsColor from "js-color";
-const Color = jsColor.Color;
+import Color from "../Color.js";
+// import jsColor from "js-color";
+// const Color = jsColor.Color;
 
 let v = '', r = null , c = null;
 
 console.log('START');
 console.log('Color.validColor');
 v = {r:0,g:128,b:255};r = Color.validColor(v); console.assert(r !== null,r+' !== '+v);
-v = {r:0,g:128,b:255,a:0.1};r = Color.validColor(v); console.log(r); console.assert(r !== null,r+' !== '+v);
+v = {r:0,g:128,b:255,a:0.1};r = Color.validColor(v);  console.assert(r !== null,r+' !== '+v);
 v = new Color({r:0,g:128,b:255,a:0.1});r = Color.validColor(v); console.assert(r !== null,r+' !== '+v);
 v = {r:0,g:128,a:0.1};r = Color.validColor(v); console.assert(r === null,r+' !== '+v);
 console.log('END');

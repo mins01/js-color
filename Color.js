@@ -274,10 +274,10 @@ class Color{
 
 
 	static validColor(color){
-		if(!color || Number.isNaN(color?.r) || Number.isNaN(color?.g) || Number.isNaN(color?.b)){ return null; }
-		if(Number.isNaN(color.r) || Number.isNaN(color.g) || Number.isNaN(color.b) ){return null;}
+		if(!color || isNaN(color?.r) || isNaN(color?.g) || isNaN(color?.b)){ return null; }
+		// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
 		if(color.r<0 || color.r>255 ||color.g<0 || color.g>255 ||color.b<0 || color.b>255 ){return null;}
-		if(color.a !== null && (Number.isNaN(color.a) || color.a<0 || color.a>1)){return null;}
+		if(color.a === null || color.a === undefined){ }else if(isNaN(color.a) || color.a<0 || color.a>1){return null;}	
 		return color;
 	}
 	
