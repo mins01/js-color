@@ -1,12 +1,12 @@
 class Color{
 	type=null;
 	format=null;
-	r=null;
-	g=null;
-	b=null;
-	a=null;
-	
-	constructor(color=null){
+	// r=null;
+	// g=null;
+	// b=null;
+	// a=null;
+	#r;#g;#b;#a;
+	constructor(...args){
 		this.type = "rgb";
 		this.format = "hex";
 		this.r = 0;
@@ -14,17 +14,15 @@ class Color{
 		this.b = 0;
 		this.a = null;
 
-		if(color !== null){
-			this.set(color);
+		if(args.length>0){
+			this.set(...args);
 		}
 	}
 	
-	set(color){
-		if(this.valid(color)){
-			Object.assign(this, color);
-		}else{
-			throw new Error("Invalid color object");
-		}
+	set(...args){			
+		const color = this.constructor.parse(...args);
+		if(color){ Object.assign(this, color); }
+		else{ throw new Error("지원되지 않는 형식입니다. "+JSON.stringify(args)); }
 	}
 
 	get(){
@@ -69,13 +67,28 @@ class Color{
 		return this.toObject();
 	}
 
+	valueOf(){
+		return this.toObject()
+	}
+
 	toRgb(){ return this.constructor.toRgb(this); }
-
 	toRgba(){ return this.constructor.toRgba(this); }
-
 	toHex(){ return this.constructor.toHex(this); }
-
 	toColor(){ return this.constructor.toColor(this); }
+
+	setR(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Red must be between 0 and 255. (${v})`); } this.#r = v; }
+	setG(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Green must be between 0 and 255. (${v})`); } this.#g = v; }
+	setB(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Blue must be between 0 and 255. (${v})`); } this.#b = v; }
+	setA(v){ if(Number.isNaN(v) || v<0 || v>1){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
+
+	get r(){return this.#r;}
+	get g(){return this.#g;}
+	get b(){return this.#b;}
+	get a(){return this.#a;}
+	set r(v){this.setR(v);}
+	set g(v){this.setG(v);}
+	set b(v){this.setB(v);}
+	set a(v){this.setA(v);}
 
 	/* static area */
 
@@ -221,7 +234,8 @@ class Color{
 	 * @returns {string}
 	 */
 	static toHex(color){
-		if(!color || !Object.hasOwn(color, "r") || !Object.hasOwn(color, "g") || !Object.hasOwn(color, "b")){ return null; }
+		if(!this.validColor(color)){ return null;}
+
 		if((color?.a??null)===null){
 			return '#' + color.r.toString(16).padStart(2, '0') + color.g.toString(16).padStart(2, '0') + color.b.toString(16).padStart(2, '0');
 		}else{
@@ -239,7 +253,7 @@ class Color{
 	 * @returns {string}
 	 */
 	static toRgb(color){
-		if(!color || !Object.hasOwn(color, "r") || !Object.hasOwn(color, "g") || !Object.hasOwn(color, "b")){ return null; }
+		if(!this.validColor(color)){ return null;}
 
 		if((color?.a??null)===null){
 			return `rgb(${color.r}, ${color.g}, ${color.b})`;
@@ -260,7 +274,7 @@ class Color{
 
 
 	static validColor(color){
-		if(!color || !Object.hasOwn(color, "r") || !Object.hasOwn(color, "g") || !Object.hasOwn(color, "b")){ return null; }
+		if(!color || Number.isNaN(color?.r) || Number.isNaN(color?.g) || Number.isNaN(color?.b)){ return null; }
 		if(Number.isNaN(color.r) || Number.isNaN(color.g) || Number.isNaN(color.b) ){return null;}
 		if(color.r<0 || color.r>255 ||color.g<0 || color.g>255 ||color.b<0 || color.b>255 ){return null;}
 		if(color.a !== null && (Number.isNaN(color.a) || color.a<0 || color.a>1)){return null;}
@@ -291,5 +305,10 @@ class Color{
 	
 
 }
+{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'r'); d.enumerable=true; Object.defineProperty(Color.prototype,'r',d); }
+{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'g'); d.enumerable=true; Object.defineProperty(Color.prototype,'g',d); }
+{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'b'); d.enumerable=true; Object.defineProperty(Color.prototype,'b',d); }
+{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'a'); d.enumerable=true; Object.defineProperty(Color.prototype,'a',d); }
+
 
 export default Color;
