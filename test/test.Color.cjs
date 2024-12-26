@@ -33,26 +33,26 @@ console.log('END');
 
 
 console.log('START');
-console.log('Color.vaildHex');
-v = '#123';r = Color.vaildHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#aBc';r = Color.vaildHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#z23';r = Color.vaildHex(v); console.assert(r === null ,v+' !== null');
+console.log('Color.validHex');
+v = '#123';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
+v = '#aBc';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
+v = '#z23';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
 
-v = '#1234';r = Color.vaildHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#aBcD';r = Color.vaildHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#z234';r = Color.vaildHex(v); console.assert(r === null ,v+' !== null');
+v = '#1234';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
+v = '#aBcD';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
+v = '#z234';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
 
-v = '#123456';r = Color.vaildHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#aBcDeF';r = Color.vaildHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#z23456';r = Color.vaildHex(v); console.assert(r === null ,v+' !== null');
+v = '#123456';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
+v = '#aBcDeF';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
+v = '#z23456';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
 
-v = '#1234567';r = Color.vaildHex(v); console.assert(r === null ,r+' !== '+v);
-v = '#aBcDeFa';r = Color.vaildHex(v); console.assert(r === null ,r+' !== '+v);
-v = '#z234567';r = Color.vaildHex(v); console.assert(r === null ,v+' !== null');
+v = '#1234567';r = Color.validHex(v); console.assert(r === null ,r+' !== '+v);
+v = '#aBcDeFa';r = Color.validHex(v); console.assert(r === null ,r+' !== '+v);
+v = '#z234567';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
 
-v = '#12345678';r = Color.vaildHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#aBcDeFaB';r = Color.vaildHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#z2345678';r = Color.vaildHex(v); console.assert(r === null ,v+' !== null');
+v = '#12345678';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
+v = '#aBcDeFaB';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
+v = '#z2345678';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
 console.log('END');
 
 console.log('START');
@@ -69,17 +69,17 @@ console.log('END');
 // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb
 /* Absolute values */
 console.log('START');
-console.log('Color.vaildRgb + Color.vaildRgba');
-v = 'rgb(0, 128, 255)';r = Color.vaildRgb(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgb(0 128 255)';r = Color.vaildRgb(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgb(0%  50% 100%)';r = Color.vaildRgb(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgb(0%, 50%, 100%)';r = Color.vaildRgb(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgb(0%, 50%, 100% , 0.0028)';r = Color.vaildRgb(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgba(0, 128, 255 , 0.5)';r = Color.vaildRgba(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgba(0 128 255 / .5)';r = Color.vaildRgba(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgba(0%  50% 100% / 50%)';r = Color.vaildRgba(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgba(0%, 50%, 100% , 50%)';r = Color.vaildRgba(v);  console.assert(r !== null ,v+ '=>' +r);
-v = 'rgba(1e2, .5e1, .5e0, +.25e2%)';r = Color.vaildRgba(v);  console.assert(r !== null ,v+ '=>' +r);
+console.log('Color.validRgb + Color.validRgba');
+v = 'rgb(0, 128, 255)';r = Color.validRgb(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgb(0 128 255)';r = Color.validRgb(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgb(0%  50% 100%)';r = Color.validRgb(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgb(0%, 50%, 100%)';r = Color.validRgb(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgb(0%, 50%, 100% , 0.0028)';r = Color.validRgb(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgba(0, 128, 255 , 0.5)';r = Color.validRgba(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgba(0 128 255 / .5)';r = Color.validRgba(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgba(0%  50% 100% / 50%)';r = Color.validRgba(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgba(0%, 50%, 100% , 50%)';r = Color.validRgba(v);  console.assert(r !== null ,v+ '=>' +r);
+v = 'rgba(1e2, .5e1, .5e0, +.25e2%)';r = Color.validRgba(v);  console.assert(r !== null ,v+ '=>' +r);
 console.log('END');
 
 

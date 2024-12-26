@@ -138,7 +138,7 @@ class Color{
 	 * @param {*} v
 	 * @returns {string|null} v or null
 	 */
-	static vaildHex(v){
+	static validHex(v){
 		v = v.replace(/\s/g,'').toLowerCase();
 		return /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v)?v:null;
 	}
@@ -150,7 +150,7 @@ class Color{
 	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: number; }}
 	 */
 	static parseHex(v){
-		if(!(v = this.vaildHex(v))){ return null; }
+		if(!(v = this.validHex(v))){ return null; }
 		const s = v.substring(1); // remove #
 		const len = s.length
 		
@@ -171,19 +171,19 @@ class Color{
 	 * @param {*} v
 	 * @returns {string|null} v or null
 	 */
-	static vaildRgb(v){
+	static validRgb(v){
 		return this.regexpRgba.test(v)?v:null;
 	}
 	
 	/**
 	 * 
-	 * @alias vaildRgb
+	 * @alias validRgb
 	 * @static
 	 * @param {*} v
 	 * @returns {string}
 	 */
-	static vaildRgba(v){
-		return this.vaildRgb(v)
+	static validRgba(v){
+		return this.validRgb(v)
 	}
 	
 	/**
@@ -222,6 +222,16 @@ class Color{
 	 */
 	static parseRgba(v){
 		return this.parseRgb(v);
+	}
+
+
+	static regexpHsla = /^(?:hsla?\(\s*)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?(?:deg|rad|grad|turn)?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*[,\/]\s*)?([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)?(?:\s*\))$/;
+
+	static validHsl(v){
+		return this.regexpHsla.test(v)?v:null;
+	}
+	static validHsla(v){
+		return this.validHsl(v);
 	}
 	
 	
