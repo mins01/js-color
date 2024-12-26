@@ -1,4 +1,4 @@
-import Color from "../Color.js";
+import Color from "../src/Color.js";
 // import jsColor from "js-color";
 // const Color = jsColor.Color;
 

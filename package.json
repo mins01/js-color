@@ -2,7 +2,7 @@
   "name": "js-color",
   "version": "1.0.0",
   "description": "",
-  "main": "Color.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,13 +23,14 @@
   "type": "module",
   "exports": {
     ".": {
-      "module": "./index.js",
+      "import": "./index.js",
       "default": "./index.js"
     },    
-    "./Color": {
-      "module": "./Color.js",
-      "require": "./cjs/Color.cjs",
-      "default": "./Color.js"
+    "./Color.js": {
+      "import": "./src/Color.js",
+      "require": "./src/Color.cjs",
+      "browser": "./src/Color.js",
+      "default": "./src/Color.js"
     }
   }
 }
