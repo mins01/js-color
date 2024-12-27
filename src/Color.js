@@ -35,14 +35,6 @@ class Color{
 	get(){
 		return this.toObject();
 	}
-
-	toObject(){
-		const r = {};
-		for(let k in this){
-			r[k] = this[k];
-		}
-		return r;
-	}
 	
 	/**
 	 * valide color
@@ -80,7 +72,21 @@ class Color{
 	valueOf(){
 		return this.toObject()
 	}
-
+	toObject(decimalable=false){
+		const r = {};
+		for(let k in this){
+			r[k] = this[k];
+		}
+		if(decimalable){
+			r.r=Math.round(r.r);
+			r.g=Math.round(r.g);
+			r.b=Math.round(r.b);
+			r.h=Math.round(r.h);
+			r.s=Math.round(r.s);
+			r.l=Math.round(r.l);
+		}
+		return r;
+	}
 	toColor(){ return this.constructor.toColor(this); }
 	toHex(){ return this.constructor.toHex(this); }
 	toHexa(){ return this.constructor.toHexa(this); }
@@ -298,9 +304,9 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1 사이의 값으로 바꿈
 		// console.log(v,'=>',h,s,l,a);
 		if(h===null || s=== null || l===null){return null;}
-		const c = this.hsl2rgb(h,s,l,true);
+		const rgb = this.hsl2rgb(h,s,l,true);
 		// console.log(v,'=>',c,a);
-		return {type:(a!==null)?'rgba':'rgb', format:(a!==null)?'hsla':'hsl', r:c.r, g:c.g, b:c.b, a:a };
+		return {type:(a!==null)?'rgba':'rgb', format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, h:h, s:s, l:l, a:a };
 	}
 	
 	static parseHsla(v){
@@ -325,25 +331,11 @@ class Color{
 	
 
 	
-	/**
-	 * 
-	 *
-	 * @static
-	 * @param {*} color
-	 * @returns {string}
-	 */
 	static toRgb(color, decimalable=false){
 		if(!this.validRgbColor(color)){ return null;}
 		if(decimalable){ return `rgb(${color.r}, ${color.g}, ${color.b})`; }
 		return `rgb(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)})`;
 	}
-	/**
-	 * 
-	 * @alias toRgb
-	 * @static
-	 * @param {*} color
-	 * @returns {string}
-	 */
 	static toRgba(color, decimalable=false){
 		if(!this.validRgbColor(color)){ return null;}
 		if(decimalable){ return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`; }
@@ -351,14 +343,18 @@ class Color{
 	}
 
 	static toHsl(color, decimalable=false){
-		if(!this.validRgbColor(color)){ return null;}
-		const hsl = this.rgb2hsl(color.r,color.g,color.b);
+		let hsl = null;
+		if(this.validHslColor(color)){ hsl = color;}
+		else if(this.validRgbColor(color)){ hsl = this.rgb2hsl(color.r,color.g,color.b);}
+		else{ return null; }
 		if(decimalable){ return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`; }
 		return `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`;
 	}
 	static toHsla(color, decimalable=false){
-		if(!this.validRgbColor(color)){ return null;}
-		const hsl = this.rgb2hsl(color.r,color.g,color.b);
+		let hsl = null;
+		if(this.validHslColor(color)){ hsl = color;}
+		else if(this.validRgbColor(color)){ hsl = this.rgb2hsl(color.r,color.g,color.b);}
+		else{ return null; }
 		if(decimalable){ return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`; }
 		return `hsla(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%, ${color.a??1})`;
 	}
