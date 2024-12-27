@@ -265,8 +265,6 @@ class Color{
 			h = parseFloat(h) * (200/Math.PI);
 		}else if(h.lastIndexOf('turn')!==-1){
 			h = parseFloat(h) * 360;
-		}else{
-
 		}
 		h = (360+ h % 360) % 360;
 		// if(h!==null) h = (h.lastIndexOf('%') !== -1)?Math.round(parseFloat(h)/100*255):parseFloat(h);

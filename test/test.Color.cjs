@@ -2,6 +2,8 @@
 // import jsColor from "js-color";
 // const Color = jsColor.Color;
 const Color = require("../src/Color.cjs").default;
+// const Color = require("../dist/Color.min.cjs").default;
+
 
 let v = '', r = null , c = null;
 
@@ -61,9 +63,9 @@ v = '#123';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === '#112
 v = '#fFf';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === '#ffffff',c+' != #ffffff');
 v = '#z23';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === null,c+' !== null');
 
-v = '#1234';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === '#11223344',c+' != #11223344');
-v = '#fFfF';r = Color.parseHex(v); c = Color.toHex(r);console.assert(c === '#ffffffff',c+' != #ffffffff');
-v = '#z234';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === null,c+' !== null');
+v = '#1234';r = Color.parseHex(v); c = Color.toHexa(r); console.assert(c === '#11223344',c+' != #11223344');
+v = '#fFfF';r = Color.parseHex(v); c = Color.toHexa(r);console.assert(c === '#ffffffff',c+' != #ffffffff');
+v = '#z234';r = Color.parseHex(v); c = Color.toHexa(r); console.assert(c === null,c+' !== null');
 console.log('END');
 
 // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb
@@ -119,19 +121,19 @@ console.log('END');
 console.log('START');
 console.log('Color.from');
 v = [0,128,255]; r = Color.from(v[0],v[1],v[2]); console.assert(r?.toHex() === '#0080ff',v+'=>'+r?.toHex())
-v = [0,128,255,0.1]; r = Color.from(v[0],v[1],v[2],v[3]); console.assert(r?.toHex() === '#0080ff1a',v+'=>'+r?.toHex())
-v = '#0080FF'; r = Color.from(v); console.assert(r?.toHex() === '#0080FF'.toLowerCase(),v+'=>'+r?.toHex())
-v = '#0080FF80'; r = Color.from(v); console.assert(r?.toHex() === '#0080FF80'.toLowerCase(),v+'=>'+r?.toHex())
+v = [0,128,255,0.1]; r = Color.from(v[0],v[1],v[2],v[3]); console.assert(r?.toHexa() === '#0080ff1a',v+'=>'+r?.toHexa())
+v = '#0080FF'; r = Color.from(v); console.assert(r?.toHex() === '#0080ff'.toLowerCase(),v+'=>'+r?.toHex())
+v = '#0080FF80'; r = Color.from(v); console.assert(r?.toHexa() === '#0080ff80'.toLowerCase(),v+'=>'+r?.toHexa())
 v = 'rgb(0,128,255)'; r = Color.from(v); console.assert(r?.toHex() === '#0080ff'.toLowerCase(),v+'=>'+r?.toHex())
-v = 'rgb(0,128,255,0.1)'; r = Color.from(v); console.assert(r?.toHex() === '#0080ff1a'.toLowerCase(),v+'=>'+r?.toHex())
-v = 'rgba(0,128,255,0.1)'; r = Color.from(v); console.assert(r?.toHex() === '#0080ff1a'.toLowerCase(),v+'=>'+r?.toHex())
+v = 'rgb(0,128,255,0.1)'; r = Color.from(v); console.assert(r?.toHexa() === '#0080ff1a'.toLowerCase(),v+'=>'+r?.toHexa())
+v = 'rgba(0,128,255,0.1)'; r = Color.from(v); console.assert(r?.toHexa() === '#0080ff1a'.toLowerCase(),v+'=>'+r?.toHexa())
 console.log('END');
 
 console.log('START');
 console.log('new Color()');
 v = new Color(); console.assert(v.toHex()==='#000000','=>'+v?.toHex())
 v = new Color(0,128,255); console.assert(v.toHex()==='#0080ff','=>'+v?.toHex())
-v = new Color(0,128,255,0.3); console.assert(v.toHex()==='#0080ff4d','=>'+v?.toHex())
+v = new Color(0,128,255,0.3); console.assert(v.toHexa()==='#0080ff4d','=>'+v?.toHex())
 v = new Color({r:0,g:128,b:255}); console.assert(v.toHex()==='#0080ff','=>'+v?.toHex())
     console.assert(v.g === 128, '=>'+JSON.stringify(v));
     v.set({r:0,g:100,b:255,a:0.2}); console.assert(v.g === 100 && v.a === 0.2, '=>'+JSON.stringify(v));
@@ -140,3 +142,60 @@ v = new Color({r:0,g:128,b:255}); console.assert(v.toHex()==='#0080ff','=>'+v?.t
     try{v.set({r:0,g:100,b:500,a:0.2});console.assert(false,'=>'+JSON.stringify(v))}catch(e){ console.assert(true,'=>'+JSON.stringify(v))}
     try{v.set(1,2,3,4);console.assert(false,'=>'+JSON.stringify(v))}catch(e){ console.assert(true,'=>'+JSON.stringify(v))}
 console.log('END');
+
+console.log('START');
+console.log('Color.validHsl(),Color.validHsla()');
+v = 'hsl(270,60%,70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270 60% 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270deg, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(4.71239rad, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(.75turn, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270, 60%, 50%, .15)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270, 60%, 50%, 15%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270 60% 50% / .15)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270 60% 50% / 15%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(2.75turn, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(-2.75turn, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
+
+v = 'hsl(270,60%,70%)';r = Color.validHsla(v); console.assert(r !== null ,r+' !== '+v);
+console.log('END');
+
+
+console.log('START');
+console.log('Color.parseHsl(),Color.parseHsla()');
+v = 'hsl(270,60%,70%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270, 60%, 70%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270 60% 70%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270deg, 60%, 70%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(4.71239rad, 60%, 70%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(.75turn, 60%, 70%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270, 60%, 50%, .15)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270, 60%, 50%, 15%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270 60% 50% / .15)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(270 60% 50% / 15%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(2.75turn, 60%, 70%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+v = 'hsl(-2.75turn, 60%, 70%)';r = Color.parseHsl(v); console.assert(r !== null ,r+' !== '+v);
+
+v = 'hsl(270,60%,70%)';r = Color.parseHsla(v); console.assert(r !== null ,r+' !== '+v);
+console.log('END');
+
+
+console.log('START');
+console.log('Color.toHex(),toRgb(),toRgba(),toHsl(),toHsla()');
+v = new Color(0,128,255); 
+r = v.toHex(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toHexa(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toRgb(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toRgba(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toHsl(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toHsla(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toColor();   c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r.get());
+v = new Color(0,128,255,0.5); 
+r = v.toHex(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toHexa(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ff80',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toRgb(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toRgba(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ff80',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toHsl(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ffff',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toHsla(); c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ff80',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r);
+r = v.toColor();   c = Color.toHexa(Color.parse(r)); console.assert(Color.toHexa(Color.parse(r))==='#0080ff80',v.toHexa()+'=>'+r+'=>'+c);      //console.log(v.get(),r.get());

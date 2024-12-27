@@ -1,4 +1,5 @@
 import Color from "../src/Color.js";
+// import Color from "../dist/Color.min.js";
 // import jsColor from "js-color";
 // const Color = jsColor.Color;
 
@@ -60,9 +61,9 @@ v = '#123';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === '#112
 v = '#fFf';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === '#ffffff',c+' != #ffffff');
 v = '#z23';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === null,c+' !== null');
 
-v = '#1234';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === '#11223344',c+' != #11223344');
-v = '#fFfF';r = Color.parseHex(v); c = Color.toHex(r);console.assert(c === '#ffffffff',c+' != #ffffffff');
-v = '#z234';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === null,c+' !== null');
+v = '#1234';r = Color.parseHex(v); c = Color.toHexa(r); console.assert(c === '#11223344',c+' != #11223344');
+v = '#fFfF';r = Color.parseHex(v); c = Color.toHexa(r);console.assert(c === '#ffffffff',c+' != #ffffffff');
+v = '#z234';r = Color.parseHex(v); c = Color.toHexa(r); console.assert(c === null,c+' !== null');
 console.log('END');
 
 // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb
@@ -118,19 +119,19 @@ console.log('END');
 console.log('START');
 console.log('Color.from');
 v = [0,128,255]; r = Color.from(v[0],v[1],v[2]); console.assert(r?.toHex() === '#0080ff',v+'=>'+r?.toHex())
-v = [0,128,255,0.1]; r = Color.from(v[0],v[1],v[2],v[3]); console.assert(r?.toHex() === '#0080ff1a',v+'=>'+r?.toHex())
-v = '#0080FF'; r = Color.from(v); console.assert(r?.toHex() === '#0080FF'.toLowerCase(),v+'=>'+r?.toHex())
-v = '#0080FF80'; r = Color.from(v); console.assert(r?.toHex() === '#0080FF80'.toLowerCase(),v+'=>'+r?.toHex())
+v = [0,128,255,0.1]; r = Color.from(v[0],v[1],v[2],v[3]); console.assert(r?.toHexa() === '#0080ff1a',v+'=>'+r?.toHexa())
+v = '#0080FF'; r = Color.from(v); console.assert(r?.toHex() === '#0080ff'.toLowerCase(),v+'=>'+r?.toHex())
+v = '#0080FF80'; r = Color.from(v); console.assert(r?.toHexa() === '#0080ff80'.toLowerCase(),v+'=>'+r?.toHexa())
 v = 'rgb(0,128,255)'; r = Color.from(v); console.assert(r?.toHex() === '#0080ff'.toLowerCase(),v+'=>'+r?.toHex())
-v = 'rgb(0,128,255,0.1)'; r = Color.from(v); console.assert(r?.toHex() === '#0080ff1a'.toLowerCase(),v+'=>'+r?.toHex())
-v = 'rgba(0,128,255,0.1)'; r = Color.from(v); console.assert(r?.toHex() === '#0080ff1a'.toLowerCase(),v+'=>'+r?.toHex())
+v = 'rgb(0,128,255,0.1)'; r = Color.from(v); console.assert(r?.toHexa() === '#0080ff1a'.toLowerCase(),v+'=>'+r?.toHexa())
+v = 'rgba(0,128,255,0.1)'; r = Color.from(v); console.assert(r?.toHexa() === '#0080ff1a'.toLowerCase(),v+'=>'+r?.toHexa())
 console.log('END');
 
 console.log('START');
 console.log('new Color()');
 v = new Color(); console.assert(v.toHex()==='#000000','=>'+v?.toHex())
 v = new Color(0,128,255); console.assert(v.toHex()==='#0080ff','=>'+v?.toHex())
-v = new Color(0,128,255,0.3); console.assert(v.toHex()==='#0080ff4d','=>'+v?.toHex())
+v = new Color(0,128,255,0.3); console.assert(v.toHexa()==='#0080ff4d','=>'+v?.toHex())
 v = new Color({r:0,g:128,b:255}); console.assert(v.toHex()==='#0080ff','=>'+v?.toHex())
     console.assert(v.g === 128, '=>'+JSON.stringify(v));
     v.set({r:0,g:100,b:255,a:0.2}); console.assert(v.g === 100 && v.a === 0.2, '=>'+JSON.stringify(v));
