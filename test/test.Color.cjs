@@ -1,8 +1,31 @@
-// import Color from "../src/Color.js";
+const ColorCjs = require("../src/Color.cjs").default;
+const ColorMinCjs = require("../dist/Color.min.cjs").default;
+
 // import jsColor from "js-color";
 // const Color = jsColor.Color;
-const Color = require("../src/Color.cjs").default;
-// const Color = require("../dist/Color.min.cjs").default;
+let Color = null;
+if(globalThis.process){
+    if(process.argv[2]??false){
+        const arg2 = process.argv[2];
+        if(arg2==1){ 
+            Color = ColorCjs 
+            console.log('Test by Color.cjs');
+        }
+        else if(arg2==2){ 
+            Color = ColorMinCjs 
+            console.log('Test by Color.min.cjs');
+        }else{
+            Color = ColorCjs
+            console.log('Test by Color.cjs');
+        }
+    }else{
+        Color = ColorCjs
+        console.log('Test by Color.cjs');
+    }
+}else{
+    Color = ColorCjs
+    console.log('Test by Color.cjs');
+}
 
 
 let v = '', r = null , c = null;
