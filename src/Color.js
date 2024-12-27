@@ -1,4 +1,6 @@
 class Color{
+	static version='v1.0.0';
+	
 	type=null;
 	format=null;
 	// r=null;
