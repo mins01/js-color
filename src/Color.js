@@ -38,7 +38,7 @@ class Color{
 	 */
 	valid(color=null){
 		if(!color) color = this;
-		return this.constructor.validColorRgb(color);
+		return this.constructor.validColor(color);
 	}
 
 	/**
@@ -120,7 +120,7 @@ class Color{
 		}else if(args.length === 4){
 			v = {r:args[0],g:args[1],b:args[2],a:args[3]};
 		}else{
-			return false;
+			return null;
 		}
 		
 		if(!v){
@@ -133,13 +133,13 @@ class Color{
 	}
 
 
-	static validR(v){ return (Number.isNaN(v) || v<0 || v>255)?null:v; }
+	static validR(v){ return (isNaN(v) || v<0 || v>255)?null:v; }
 	static validG(v){ return this.validR(v); }
 	static validB(v){ return this.validR(v); }
-	static validH(v){ return (Number.isNaN(v) || v<0 || v>360)?null:v; }
-	static validS(v){ return (Number.isNaN(v) || v<0 || v>100)?null:v; }
+	static validH(v){ return (isNaN(v) || v<0 || v>360)?null:v; }
+	static validS(v){ return (isNaN(v) || v<0 || v>100)?null:v; }
 	static validL(v){ return this.validS(v); }
-	static validA(v){ return (Number.isNaN(v) || v<0 || v>1)?null:v; }
+	static validA(v){ return (isNaN(v) || v<0 || v>1)?null:v; }
 
 	/**
 	 * valid Hex
@@ -171,8 +171,6 @@ class Color{
 		return null;
 	}
 	
-	// static regexpRgba = /^(?:rgba?\(\s*)((?:[1-9][0-9]{0,2}|0)%?)(?:\s*,\s*|\s+)((?:[1-9][0-9]{0,2}|0)%?)(?:\s*,\s*|\s+)((?:[1-9][0-9]{0,2}|0)%?)(?:\s*[,\/]\s*)?((?:[1-9][0-9]{0,2}|0|0?\.\d+)%?)?(?:\s*\))$/;
-	// static regexpRgba = /^(?:rgba?\(\s*)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*[,\/]\s*)?([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)?(?:\s*\))$/;
 	
 	/**
 	 * valid Rgb
@@ -183,7 +181,6 @@ class Color{
 	 */
 	static validRgb(v){
 		return colorRegExps.rgba.test(v)?v:null;
-		// return this.regexpRgba.test(v)?v:null;
 	}
 	
 	/**
@@ -224,19 +221,10 @@ class Color{
 		if(r===null || b=== null || g===null){return null;}
 		return { r:r, g:g, b:b, a:(a??1) };
 	}
-	/**
-	 * 
-	 *
-	 * @static
-	 * @param {*} v
-	 * @returns {{ r: any; g: any; b: any; a: any; }}
-	 */
+
 	static parseRgba(v){
 		return this.parseRgb(v);
 	}
-
-
-	// static regexpHsla = /^(?:hsla?\(\s*)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?(?:deg|rad|grad|turn)?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%)(?:\s*[,\/]\s*)?([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)?(?:\s*\))$/;
 
 	static validHsl(v){
 		return colorRegExps.hsla.test(v)?v:null;
@@ -260,24 +248,19 @@ class Color{
 		let a = rvs[0][4]??null;
 
 		// deg|rad|grad|turn
-		if(h.lastIndexOf('deg')!==-1){
-			h = parseFloat(h);
-		}else if(h.lastIndexOf('rad')!==-1){
-			h = parseFloat(h) * (180/Math.PI);
-		}else if(h.lastIndexOf('grad')!==-1){
-			h = parseFloat(h) * (180/200);
-		}else if(h.lastIndexOf('turn')!==-1){
-			h = parseFloat(h) * 360;
-		}
-		h = (360+ h % 360) % 360;
-		// if(h!==null) h = (h.lastIndexOf('%') !== -1)?Math.round(parseFloat(h)/100*255):parseFloat(h);
-		if(s!==null) s = (s.lastIndexOf('%') !== -1)?parseFloat(s):parseFloat(s)*100; //0-100 사이의 값으로 바꿈
-		if(l!==null) l = (l.lastIndexOf('%') !== -1)?parseFloat(l):parseFloat(l)*100; //0-100 사이의 값으로 바꿈
-		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1 사이의 값으로 바꿈
-		// console.log(v,'=>',h,s,l,a);
+		if(h.lastIndexOf('deg') !== -1){ h = parseFloat(h); }
+		else if(h.lastIndexOf('rad') !== -1){ h = parseFloat(h) * (180/Math.PI); }
+		else if(h.lastIndexOf('grad') !== -1){ h = parseFloat(h) * (180/200); }
+		else if(h.lastIndexOf('turn') !== -1){ h = parseFloat(h) * 360; }
+		else{ h = parseFloat(h); }
+		h = (360+ h % 360) % 360; // 0-360
+
+		if(s!==null) s = (s.lastIndexOf('%') !== -1)?parseFloat(s):parseFloat(s)*100; //0-100
+		if(l!==null) l = (l.lastIndexOf('%') !== -1)?parseFloat(l):parseFloat(l)*100; //0-100
+		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1
+
 		if(h===null || s=== null || l===null){return null;}
 		const rgb = ColorConverter.hslToRgb(h,s,l,false);
-		// console.log(v,'=>',c,a);
 		return { r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
 	}
 	
@@ -293,45 +276,43 @@ class Color{
 	 * @returns {string}
 	 */
 	static toHex(color){
-		if(!this.validColorRgb(color)){ return null;}
+		if(!this.validColor(color)){ return null;}
 		return '#' + Math.round(color.r).toString(16).padStart(2, '0') + Math.round(color.g).toString(16).padStart(2, '0') + Math.round(color.b).toString(16).padStart(2, '0');		
 	}
 	static toHexa(color){
-		if(!this.validColorRgb(color)){ return null;}
+		if(!this.validColor(color)){ return null;}
 		return '#' + Math.round(color.r).toString(16).padStart(2, '0') + Math.round(color.g).toString(16).padStart(2, '0') + Math.round(color.b).toString(16).padStart(2, '0') + Math.round((color?.a??1)*255).toString(16).padStart(2, '0');
 	}
 	
 
 	
 	static toRgb(color, allowDecimal=false){
-		if(!this.validColorRgb(color)){ return null;}
+		if(!this.validColor(color)){ return null;}
 		if(!allowDecimal){ return `rgb(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)})`; }
 		return `rgb(${color.r}, ${color.g}, ${color.b})`;
 	}
 	static toRgba(color, allowDecimal=false){
-		if(!this.validColorRgb(color)){ return null;}
+		if(!this.validColor(color)){ return null;}
 		if(!allowDecimal){ return `rgba(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)}, ${color.a??1})`;}
 		return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`; 		
 	}
 
 	static toHsl(color, allowDecimal=false){
-		if(!this.validColorRgb(color)){ return null}
+		if(!this.validColor(color)){ return null}
 		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b,allowDecimal);
 		return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
 	}
 	static toHsla(color, allowDecimal=false){
-		if(!this.validColorRgb(color)){ return null}
+		if(!this.validColor(color)){ return null}
 		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b,allowDecimal);
 		return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`;
 	}
 
 
 
-	static validColorRgb(color){
-		if(!color || isNaN(color?.r) || isNaN(color?.g) || isNaN(color?.b)){ return null; }
-		// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
-		if(color.r<0 || color.r>255 ||color.g<0 || color.g>255 ||color.b<0 || color.b>255 ){return null;}
-		if(color.a === null || color.a === undefined){ }else if(isNaN(color.a) || color.a<0 || color.a>1){return null;}	
+	static validColor(color){
+		if(!color){ return null; }
+		if(this.validR(color?.r??null)===null || this.validG(color?.g??null)===null || this.validB(color?.b??null)===null || this.validA(color?.a??1)===null){return null; }
 		return color;
 	}
 
@@ -351,7 +332,7 @@ class Color{
 	 * @returns {*}
 	 */
 	static parseColor(color){
-		if(!this.validColorRgb(color)){return null;}
+		if(!this.validColor(color)){return null;}
 		return color;
 	}
 	/**

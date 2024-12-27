@@ -42,7 +42,7 @@ class Color{
 	 */
 	valid(color=null){
 		if(!color) color = this;
-		return this.constructor.validColorRgb(color);
+		return this.constructor.validColor(color);
 	}
 
 	/**
@@ -310,35 +310,35 @@ class Color{
 	 * @returns {string}
 	 */
 	static toHex(color){
-		if(!this.validColorRgb(color)){ return null;}
+		if(!this.validColor(color)){ return null;}
 		return '#' + Math.round(color.r).toString(16).padStart(2, '0') + Math.round(color.g).toString(16).padStart(2, '0') + Math.round(color.b).toString(16).padStart(2, '0');		
 	}
 	static toHexa(color){
-		if(!this.validColorRgb(color)){ return null;}
+		if(!this.validColor(color)){ return null;}
 		return '#' + Math.round(color.r).toString(16).padStart(2, '0') + Math.round(color.g).toString(16).padStart(2, '0') + Math.round(color.b).toString(16).padStart(2, '0') + Math.round((color?.a??1)*255).toString(16).padStart(2, '0');
 	}
 	
 
 	
 	static toRgb(color, decimalable=false){
-		if(!this.validColorRgb(color)){ return null;}
+		if(!this.validColor(color)){ return null;}
 		if(decimalable){ return `rgb(${color.r}, ${color.g}, ${color.b})`; }
 		return `rgb(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)})`;
 	}
 	static toRgba(color, decimalable=false){
-		if(!this.validColorRgb(color)){ return null;}
+		if(!this.validColor(color)){ return null;}
 		if(decimalable){ return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`; }
 		return `rgba(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)}, ${color.a??1})`;
 	}
 
 	static toHsl(color, decimalable=false){
-		if(!this.validColorRgb(color)){ return null}
+		if(!this.validColor(color)){ return null}
 		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b);
 		if(decimalable){ return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`; }
 		return `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`;
 	}
 	static toHsla(color, decimalable=false){
-		if(!this.validColorRgb(color)){ return null}
+		if(!this.validColor(color)){ return null}
 		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b);
 		if(decimalable){ return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`; }
 		return `hsla(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%, ${color.a??1})`;
@@ -346,7 +346,7 @@ class Color{
 
 
 
-	static validColorRgb(color){
+	static validColor(color){
 		if(!color || isNaN(color?.r) || isNaN(color?.g) || isNaN(color?.b)){ return null; }
 		// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
 		if(color.r<0 || color.r>255 ||color.g<0 || color.g>255 ||color.b<0 || color.b>255 ){return null;}
@@ -370,7 +370,7 @@ class Color{
 	 * @returns {*}
 	 */
 	static parseColor(color){
-		if(!this.validColorRgb(color)){return null;}
+		if(!this.validColor(color)){return null;}
 		return color;
 	}
 	/**
