@@ -4,7 +4,6 @@ import colorRegExps from "./colorRegExps.js";
 class Color{
 	static version='v1.0.0';
 	
-	format=null;
 	// r=null;
 	// g=null;
 	// b=null;
@@ -28,7 +27,7 @@ class Color{
 		else{ throw new Error("Unsupported format. "+JSON.stringify(args)); }
 	}
 
-	get(allowDecimal=true){ return this.toObject(allowDecimal); }
+	get(){ return this.toObject(true); }
 	
 	/**
 	 * valide color
@@ -260,7 +259,7 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1
 
 		if(h===null || s=== null || l===null){return null;}
-		const rgb = ColorConverter.hslToRgb(h,s,l,false);
+		const rgb = ColorConverter.hslToRgb(h,s,l,true);
 		return { r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
 	}
 	
@@ -294,18 +293,18 @@ class Color{
 	static toRgba(color, allowDecimal=false){
 		if(!this.validColor(color)){ return null;}
 		if(!allowDecimal){ return `rgba(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)}, ${color.a??1})`;}
-		return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`; 		
+		return `rgba(${color.r}, ${color.g}, ${color.b}, ${color?.a??1})`; 		
 	}
 
 	static toHsl(color, allowDecimal=false){
-		if(!this.validColor(color)){ return null}
+		if(!this.validColor(color)){ return null; }
 		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b,allowDecimal);
 		return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
 	}
 	static toHsla(color, allowDecimal=false){
-		if(!this.validColor(color)){ return null}
+		if(!this.validColor(color)){ return null; }
 		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b,allowDecimal);
-		return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`;
+		return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color?.a??1})`;
 	}
 
 
@@ -316,139 +315,19 @@ class Color{
 		return color;
 	}
 
-	// static validHslColor(color){
-	// 	if(!color || isNaN(color?.h) || isNaN(color?.s) || isNaN(color?.l)){ return null; }
-	// 	// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
-	// 	if(color.h<0 || color.h>360 ||color.s<0 || color.s>100 ||color.l<0 || color.l>100 ){return null;}
-	// 	if(color.a === null || color.a === undefined){ }else if(isNaN(color.a) || color.a<0 || color.a>1){return null;}	
-	// 	return color;
-	// }
-	
-	/**
-	 * 
-	 *
-	 * @static
-	 * @param {*} color
-	 * @returns {*}
-	 */
+
 	static parseColor(color){
 		if(!this.validColor(color)){return null;}
 		return color;
 	}
-	/**
-	 * 
-	 *
-	 * @static
-	 * @param {*} props
-	 * @returns {*}
-	 */
-	static toColor(props){ return this.parseColor(props); }
 	
-
-  	// http://hslToRgb.nichabi.com/javascript-function.php
-	// static hslToRgb (h, s, l, decimalable=false) {
-	// 	var r, g, b, m, c, x
-		
-	// 	if (!isFinite(h)) h = 0
-	// 	if (!isFinite(s)) s = 0
-	// 	if (!isFinite(l)) l = 0
-		
-	// 	h /= 60
-	// 	if (h < 0) h = 6 - (-h % 6)
-	// 	h %= 6
-		
-	// 	s = Math.max(0, Math.min(1, s / 100))
-	// 	l = Math.max(0, Math.min(1, l / 100))
-		
-	// 	c = (1 - Math.abs((2 * l) - 1)) * s
-	// 	x = c * (1 - Math.abs((h % 2) - 1))
-		
-	// 	if (h < 1) {
-	// 	r = c
-	// 	g = x
-	// 	b = 0
-	// 	} else if (h < 2) {
-	// 	r = x
-	// 	g = c
-	// 	b = 0
-	// 	} else if (h < 3) {
-	// 	r = 0
-	// 	g = c
-	// 	b = x
-	// 	} else if (h < 4) {
-	// 	r = 0
-	// 	g = x
-	// 	b = c
-	// 	} else if (h < 5) {
-	// 	r = x
-	// 	g = 0
-	// 	b = c
-	// 	} else {
-	// 	r = c
-	// 	g = 0
-	// 	b = x
-	// 	}
-		
-	// 	m = l - c / 2
-	// 	if(decimalable){
-	// 		r = (r + m) * 255
-	// 		g = (g + m) * 255
-	// 		b = (b + m) * 255
-	// 	}else{
-	// 		r = Math.round((r + m) * 255)
-	// 		g = Math.round((g + m) * 255)
-	// 		b = Math.round((b + m) * 255)
-	// 	}
-		
-	// 	return { r: r, g: g, b: b }
-		
-	// }
-	// // http://rgbToHsl.nichabi.com/javascript-function.php
-	// static rgbToHsl (r, g, b, decimalable=false) {
-	// 	var max, min, h, s, l, d
-	// 	r /= 255
-	// 	g /= 255
-	// 	b /= 255
-	// 	max = Math.max(r, g, b)
-	// 	min = Math.min(r, g, b)
-	// 	l = (max + min) / 2
-	// 	if (max == min) {
-	// 		h = s = 0
-	// 	} else {
-	// 		d = max - min
-	// 		s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-	// 		switch (max) {
-	// 			case r:
-	// 			h = (g - b) / d + (g < b ? 6 : 0)
-	// 			break
-	// 			case g:
-	// 			h = (b - r) / d + 2
-	// 			break
-	// 			case b:
-	// 			h = (r - g) / d + 4
-	// 			break
-	// 		}
-	// 		h /= 6
-	// 	}
-	// 	if(decimalable){
-	// 		h = h * 360 //floor -> round
-	// 		s = s * 100 //floor -> round
-	// 		l = l * 100 //floor -> round
-	// 	}else{
-	// 		h = Math.round(h * 360) //floor -> round
-	// 		s = Math.round(s * 100) //floor -> round
-	// 		l = Math.round(l * 100) //floor -> round
-	// 	}
-		
-	// 	return { h: h, s: s, l: l }
-	// }
-
+	static toColor(props){ return this.parseColor(props); }
 
 }
-{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'r'); d.enumerable=true; Object.defineProperty(Color.prototype,'r',d); }
-{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'g'); d.enumerable=true; Object.defineProperty(Color.prototype,'g',d); }
-{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'b'); d.enumerable=true; Object.defineProperty(Color.prototype,'b',d); }
-{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'a'); d.enumerable=true; Object.defineProperty(Color.prototype,'a',d); }
 
+// enumerable. 열거가능처리.
+['r','g','b','a'].forEach((v)=>{
+	const d = Object.getOwnPropertyDescriptor(Color.prototype,v); d.enumerable=true; Object.defineProperty(Color.prototype,v,d);
+})
 
 export default Color;
