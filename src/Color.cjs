@@ -293,7 +293,7 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1 사이의 값으로 바꿈
 		// console.log(v,'=>',h,s,l,a);
 		if(h===null || s=== null || l===null){return null;}
-		const rgb = ColorConverter.hsl2rgb(h,s,l,true);
+		const rgb = ColorConverter.hslToRgb(h,s,l,false);
 		// console.log(v,'=>',c,a);
 		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
 	}
@@ -333,13 +333,13 @@ class Color{
 
 	static toHsl(color, decimalable=false){
 		if(!this.validColorRgb(color)){ return null}
-		const hsl = ColorConverter.rgb2hsl(color.r,color.g,color.b);
+		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b);
 		if(decimalable){ return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`; }
 		return `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`;
 	}
 	static toHsla(color, decimalable=false){
 		if(!this.validColorRgb(color)){ return null}
-		const hsl = ColorConverter.rgb2hsl(color.r,color.g,color.b);
+		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b);
 		if(decimalable){ return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`; }
 		return `hsla(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%, ${color.a??1})`;
 	}
@@ -383,8 +383,8 @@ class Color{
 	static toColor(props){ return this.parseColor(props); }
 	
 
-  	// http://hsl2rgb.nichabi.com/javascript-function.php
-	// static hsl2rgb (h, s, l, decimalable=false) {
+  	// http://hslToRgb.nichabi.com/javascript-function.php
+	// static hslToRgb (h, s, l, decimalable=false) {
 	// 	var r, g, b, m, c, x
 		
 	// 	if (!isFinite(h)) h = 0
@@ -441,8 +441,8 @@ class Color{
 	// 	return { r: r, g: g, b: b }
 		
 	// }
-	// // http://rgb2hsl.nichabi.com/javascript-function.php
-	// static rgb2hsl (r, g, b, decimalable=false) {
+	// // http://rgbToHsl.nichabi.com/javascript-function.php
+	// static rgbToHsl (r, g, b, decimalable=false) {
 	// 	var max, min, h, s, l, d
 	// 	r /= 255
 	// 	g /= 255

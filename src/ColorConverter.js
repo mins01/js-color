@@ -1,6 +1,6 @@
 export default class ColorConverter{
 	// http://rgb2hsl.nichabi.com/javascript-function.php
-	static rgb2hsl (r, g, b, allowDecimal=false) {
+	static rgbToHsl (r, g, b, allowDecimal=false) {
 		let max, min, h, s, l, d;
 		r /= 255; g /= 255; b /= 255;
 		max = Math.max(r, g, b);
@@ -32,7 +32,7 @@ export default class ColorConverter{
 
 
   // http://hsl2rgb.nichabi.com/javascript-function.php
-	static hsl2rgb (h, s, l, allowDecimal=false) {
+	static hslToRgb (h, s, l, allowDecimal=false) {
 		let r, g, b, m, c, x;
 		
 		if (!isFinite(h)) h = 0;

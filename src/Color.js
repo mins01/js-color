@@ -69,28 +69,25 @@ class Color{
 	valueOf(){
 		return this.toObject()
 	}
-	toObject(decimalable=true){
+	toObject(allowDecimal=false){
 		const r = {};
 		for(let k in this){
 			r[k] = this[k];
 		}
-		if(!decimalable){
+		if(!allowDecimal){
 			r.r=Math.round(r.r);
 			r.g=Math.round(r.g);
 			r.b=Math.round(r.b);
-			// r.h=Math.round(r.h);
-			// r.s=Math.round(r.s);
-			// r.l=Math.round(r.l);
 		}
 		return r;
 	}
 	toColor(){ return this.constructor.toColor(this); }
 	toHex(){ return this.constructor.toHex(this); }
 	toHexa(){ return this.constructor.toHexa(this); }
-	toRgb(decimalable=false){ return this.constructor.toRgb(this,decimalable); }
-	toRgba(decimalable=false){ return this.constructor.toRgba(this,decimalable); }
-	toHsl(decimalable=false){ return this.constructor.toHsl(this,decimalable); }
-	toHsla(decimalable=false){ return this.constructor.toHsla(this,decimalable); }
+	toRgb(allowDecimal=false){ return this.constructor.toRgb(this,allowDecimal); }
+	toRgba(allowDecimal=false){ return this.constructor.toRgba(this,allowDecimal); }
+	toHsl(allowDecimal=false){ return this.constructor.toHsl(this,allowDecimal); }
+	toHsla(allowDecimal=false){ return this.constructor.toHsla(this,allowDecimal); }
 
 	setR(v){ if(this.constructor.validR(v)===null){ throw new Error(`Red must be between 0 and 255. (${v})`); } if(this.#r != v){ this.#r = v; }}
 	setG(v){ if(this.constructor.validG(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; }}
@@ -292,7 +289,7 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1 사이의 값으로 바꿈
 		// console.log(v,'=>',h,s,l,a);
 		if(h===null || s=== null || l===null){return null;}
-		const rgb = ColorConverter.hsl2rgb(h,s,l,true);
+		const rgb = ColorConverter.hslToRgb(h,s,l,false);
 		// console.log(v,'=>',c,a);
 		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
 	}
@@ -319,28 +316,26 @@ class Color{
 	
 
 	
-	static toRgb(color, decimalable=false){
+	static toRgb(color, allowDecimal=false){
 		if(!this.validColorRgb(color)){ return null;}
-		if(decimalable){ return `rgb(${color.r}, ${color.g}, ${color.b})`; }
-		return `rgb(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)})`;
+		if(!allowDecimal){ return `rgb(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)})`; }
+		return `rgb(${color.r}, ${color.g}, ${color.b})`;
 	}
-	static toRgba(color, decimalable=false){
+	static toRgba(color, allowDecimal=false){
 		if(!this.validColorRgb(color)){ return null;}
-		if(decimalable){ return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`; }
-		return `rgba(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)}, ${color.a??1})`;
+		if(!allowDecimal){ return `rgba(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)}, ${color.a??1})`;}
+		return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`; 		
 	}
 
-	static toHsl(color, decimalable=false){
+	static toHsl(color, allowDecimal=false){
 		if(!this.validColorRgb(color)){ return null}
-		const hsl = ColorConverter.rgb2hsl(color.r,color.g,color.b);
-		if(decimalable){ return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`; }
-		return `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`;
+		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b,allowDecimal);
+		return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
 	}
-	static toHsla(color, decimalable=false){
+	static toHsla(color, allowDecimal=false){
 		if(!this.validColorRgb(color)){ return null}
-		const hsl = ColorConverter.rgb2hsl(color.r,color.g,color.b);
-		if(decimalable){ return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`; }
-		return `hsla(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%, ${color.a??1})`;
+		const hsl = ColorConverter.rgbToHsl(color.r,color.g,color.b,allowDecimal);
+		return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`;
 	}
 
 
@@ -382,8 +377,8 @@ class Color{
 	static toColor(props){ return this.parseColor(props); }
 	
 
-  	// http://hsl2rgb.nichabi.com/javascript-function.php
-	// static hsl2rgb (h, s, l, decimalable=false) {
+  	// http://hslToRgb.nichabi.com/javascript-function.php
+	// static hslToRgb (h, s, l, decimalable=false) {
 	// 	var r, g, b, m, c, x
 		
 	// 	if (!isFinite(h)) h = 0
@@ -440,8 +435,8 @@ class Color{
 	// 	return { r: r, g: g, b: b }
 		
 	// }
-	// // http://rgb2hsl.nichabi.com/javascript-function.php
-	// static rgb2hsl (r, g, b, decimalable=false) {
+	// // http://rgbToHsl.nichabi.com/javascript-function.php
+	// static rgbToHsl (r, g, b, decimalable=false) {
 	// 	var max, min, h, s, l, d
 	// 	r /= 255
 	// 	g /= 255
