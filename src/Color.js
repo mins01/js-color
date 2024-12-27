@@ -1,3 +1,5 @@
+import colorRegExps from "./colorRegExps.js";
+
 class Color{
 	static version='v1.0.0';
 	
@@ -185,7 +187,7 @@ class Color{
 	}
 	
 	// static regexpRgba = /^(?:rgba?\(\s*)((?:[1-9][0-9]{0,2}|0)%?)(?:\s*,\s*|\s+)((?:[1-9][0-9]{0,2}|0)%?)(?:\s*,\s*|\s+)((?:[1-9][0-9]{0,2}|0)%?)(?:\s*[,\/]\s*)?((?:[1-9][0-9]{0,2}|0|0?\.\d+)%?)?(?:\s*\))$/;
-	static regexpRgba = /^(?:rgba?\(\s*)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*[,\/]\s*)?([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)?(?:\s*\))$/;
+	// static regexpRgba = /^(?:rgba?\(\s*)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)(?:\s*[,\/]\s*)?([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)?(?:\s*\))$/;
 	
 	/**
 	 * valid Rgb
@@ -195,7 +197,8 @@ class Color{
 	 * @returns {string|null} v or null
 	 */
 	static validRgb(v){
-		return this.regexpRgba.test(v)?v:null;
+		return colorRegExps.rgba.test(v)?v:null;
+		// return this.regexpRgba.test(v)?v:null;
 	}
 	
 	/**
@@ -218,8 +221,8 @@ class Color{
 	 */
 	static parseRgb(v){
 		const regexpRgba = new RegExp(
-			this.regexpRgba.source,
-			this.regexpRgba.flags + "g",
+			colorRegExps.rgba.source,
+			colorRegExps.rgba.flags + "g",
 		);
 		const rs = v.matchAll(regexpRgba); if(!rs){ return null}
 		const rvs = [...rs]; if(!rvs || !rvs[0]){ return null}
@@ -248,10 +251,10 @@ class Color{
 	}
 
 
-	static regexpHsla = /^(?:hsla?\(\s*)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?(?:deg|rad|grad|turn)?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%)(?:\s*[,\/]\s*)?([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)?(?:\s*\))$/;
+	// static regexpHsla = /^(?:hsla?\(\s*)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?(?:deg|rad|grad|turn)?)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%)(?:\s*,\s*|\s+)([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%)(?:\s*[,\/]\s*)?([-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?%?)?(?:\s*\))$/;
 
 	static validHsl(v){
-		return this.regexpHsla.test(v)?v:null;
+		return colorRegExps.hsla.test(v)?v:null;
 	}
 
 	static validHsla(v){
@@ -260,8 +263,8 @@ class Color{
 	
 	static parseHsl(v){
 		const regexpHsla = new RegExp(
-			this.regexpHsla.source,
-			this.regexpHsla.flags + "g",
+			colorRegExps.hsla.source,
+			colorRegExps.hsla.flags + "g",
 		);
 		const rs = v.matchAll(regexpHsla); if(!rs){ return null}
 		const rvs = [...rs]; if(!rvs || !rvs[0]){ return null}
