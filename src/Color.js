@@ -1,3 +1,4 @@
+import ColorConverter from "./ColorConverter.js";
 import colorRegExps from "./colorRegExps.js";
 
 class Color{
@@ -291,7 +292,7 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1 사이의 값으로 바꿈
 		// console.log(v,'=>',h,s,l,a);
 		if(h===null || s=== null || l===null){return null;}
-		const rgb = this.hsl2rgb(h,s,l,true);
+		const rgb = ColorConverter.hsl2rgb(h,s,l,true);
 		// console.log(v,'=>',c,a);
 		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
 	}
@@ -331,13 +332,13 @@ class Color{
 
 	static toHsl(color, decimalable=false){
 		if(!this.validColorRgb(color)){ return null}
-		const hsl = this.rgb2hsl(color.r,color.g,color.b);
+		const hsl = ColorConverter.rgb2hsl(color.r,color.g,color.b);
 		if(decimalable){ return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`; }
 		return `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`;
 	}
 	static toHsla(color, decimalable=false){
 		if(!this.validColorRgb(color)){ return null}
-		const hsl = this.rgb2hsl(color.r,color.g,color.b);
+		const hsl = ColorConverter.rgb2hsl(color.r,color.g,color.b);
 		if(decimalable){ return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`; }
 		return `hsla(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%, ${color.a??1})`;
 	}
@@ -382,102 +383,102 @@ class Color{
 	
 
   	// http://hsl2rgb.nichabi.com/javascript-function.php
-	static hsl2rgb (h, s, l, decimalable=false) {
-		var r, g, b, m, c, x
+	// static hsl2rgb (h, s, l, decimalable=false) {
+	// 	var r, g, b, m, c, x
 		
-		if (!isFinite(h)) h = 0
-		if (!isFinite(s)) s = 0
-		if (!isFinite(l)) l = 0
+	// 	if (!isFinite(h)) h = 0
+	// 	if (!isFinite(s)) s = 0
+	// 	if (!isFinite(l)) l = 0
 		
-		h /= 60
-		if (h < 0) h = 6 - (-h % 6)
-		h %= 6
+	// 	h /= 60
+	// 	if (h < 0) h = 6 - (-h % 6)
+	// 	h %= 6
 		
-		s = Math.max(0, Math.min(1, s / 100))
-		l = Math.max(0, Math.min(1, l / 100))
+	// 	s = Math.max(0, Math.min(1, s / 100))
+	// 	l = Math.max(0, Math.min(1, l / 100))
 		
-		c = (1 - Math.abs((2 * l) - 1)) * s
-		x = c * (1 - Math.abs((h % 2) - 1))
+	// 	c = (1 - Math.abs((2 * l) - 1)) * s
+	// 	x = c * (1 - Math.abs((h % 2) - 1))
 		
-		if (h < 1) {
-		r = c
-		g = x
-		b = 0
-		} else if (h < 2) {
-		r = x
-		g = c
-		b = 0
-		} else if (h < 3) {
-		r = 0
-		g = c
-		b = x
-		} else if (h < 4) {
-		r = 0
-		g = x
-		b = c
-		} else if (h < 5) {
-		r = x
-		g = 0
-		b = c
-		} else {
-		r = c
-		g = 0
-		b = x
-		}
+	// 	if (h < 1) {
+	// 	r = c
+	// 	g = x
+	// 	b = 0
+	// 	} else if (h < 2) {
+	// 	r = x
+	// 	g = c
+	// 	b = 0
+	// 	} else if (h < 3) {
+	// 	r = 0
+	// 	g = c
+	// 	b = x
+	// 	} else if (h < 4) {
+	// 	r = 0
+	// 	g = x
+	// 	b = c
+	// 	} else if (h < 5) {
+	// 	r = x
+	// 	g = 0
+	// 	b = c
+	// 	} else {
+	// 	r = c
+	// 	g = 0
+	// 	b = x
+	// 	}
 		
-		m = l - c / 2
-		if(decimalable){
-			r = (r + m) * 255
-			g = (g + m) * 255
-			b = (b + m) * 255
-		}else{
-			r = Math.round((r + m) * 255)
-			g = Math.round((g + m) * 255)
-			b = Math.round((b + m) * 255)
-		}
+	// 	m = l - c / 2
+	// 	if(decimalable){
+	// 		r = (r + m) * 255
+	// 		g = (g + m) * 255
+	// 		b = (b + m) * 255
+	// 	}else{
+	// 		r = Math.round((r + m) * 255)
+	// 		g = Math.round((g + m) * 255)
+	// 		b = Math.round((b + m) * 255)
+	// 	}
 		
-		return { r: r, g: g, b: b }
+	// 	return { r: r, g: g, b: b }
 		
-	}
-	// http://rgb2hsl.nichabi.com/javascript-function.php
-	static rgb2hsl (r, g, b, decimalable=false) {
-		var max, min, h, s, l, d
-		r /= 255
-		g /= 255
-		b /= 255
-		max = Math.max(r, g, b)
-		min = Math.min(r, g, b)
-		l = (max + min) / 2
-		if (max == min) {
-			h = s = 0
-		} else {
-			d = max - min
-			s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-			switch (max) {
-				case r:
-				h = (g - b) / d + (g < b ? 6 : 0)
-				break
-				case g:
-				h = (b - r) / d + 2
-				break
-				case b:
-				h = (r - g) / d + 4
-				break
-			}
-			h /= 6
-		}
-		if(decimalable){
-			h = h * 360 //floor -> round
-			s = s * 100 //floor -> round
-			l = l * 100 //floor -> round
-		}else{
-			h = Math.round(h * 360) //floor -> round
-			s = Math.round(s * 100) //floor -> round
-			l = Math.round(l * 100) //floor -> round
-		}
+	// }
+	// // http://rgb2hsl.nichabi.com/javascript-function.php
+	// static rgb2hsl (r, g, b, decimalable=false) {
+	// 	var max, min, h, s, l, d
+	// 	r /= 255
+	// 	g /= 255
+	// 	b /= 255
+	// 	max = Math.max(r, g, b)
+	// 	min = Math.min(r, g, b)
+	// 	l = (max + min) / 2
+	// 	if (max == min) {
+	// 		h = s = 0
+	// 	} else {
+	// 		d = max - min
+	// 		s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+	// 		switch (max) {
+	// 			case r:
+	// 			h = (g - b) / d + (g < b ? 6 : 0)
+	// 			break
+	// 			case g:
+	// 			h = (b - r) / d + 2
+	// 			break
+	// 			case b:
+	// 			h = (r - g) / d + 4
+	// 			break
+	// 		}
+	// 		h /= 6
+	// 	}
+	// 	if(decimalable){
+	// 		h = h * 360 //floor -> round
+	// 		s = s * 100 //floor -> round
+	// 		l = l * 100 //floor -> round
+	// 	}else{
+	// 		h = Math.round(h * 360) //floor -> round
+	// 		s = Math.round(s * 100) //floor -> round
+	// 		l = Math.round(l * 100) //floor -> round
+	// 	}
 		
-		return { h: h, s: s, l: l }
-	}
+	// 	return { h: h, s: s, l: l }
+	// }
 
 
 }
