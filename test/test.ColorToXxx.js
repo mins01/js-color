@@ -27,9 +27,10 @@ if(globalThis.process){
     console.log('Test by Color.js');
 }
 
-console.log('# Test ColorToXxx')
 console.log('Version',Color.version);
 
+
+console.log('# Test ColorToXxx')
 
 let ss = ['hsla(270deg, 60%, 70%,0.33)','hsla(270deg, 60%, 70%)','rgba(179,133,224,0.33)','rgb(179,133,224)']
 ss.forEach((v,idx) => {

@@ -2,17 +2,20 @@
 class Color{
 	static version='v1.0.0';
 	
-	type=null;
 	format=null;
 	// r=null;
 	// g=null;
 	// b=null;
 	// a=null;
-	#r;#g;#b;#a;
+	#r=0;#g=0;#b=0;
+	#h=0;#s=0;#l=0;
+	#a=null;
 	constructor(...args){
-		this.type = "rgb";
 		this.format = "hex";
 		this.r = 0;
+		this.g = 0;
+		this.b = 0;
+		this.h = 0;
 		this.g = 0;
 		this.b = 0;
 		this.a = null;
@@ -31,14 +34,6 @@ class Color{
 	get(){
 		return this.toObject();
 	}
-
-	toObject(){
-		const r = {};
-		for(let k in this){
-			r[k] = this[k];
-		}
-		return r;
-	}
 	
 	/**
 	 * valide color
@@ -48,7 +43,7 @@ class Color{
 	 */
 	valid(color=null){
 		if(!color) color = this;
-		return this.constructor.validColor(color);
+		return this.constructor.validRgbColor(color);
 	}
 
 	/**
@@ -76,28 +71,62 @@ class Color{
 	valueOf(){
 		return this.toObject()
 	}
-
-	toRgb(){ return this.constructor.toRgb(this); }
-	toRgba(){ return this.constructor.toRgba(this); }
+	toObject(decimalable=false){
+		const r = {};
+		for(let k in this){
+			r[k] = this[k];
+		}
+		if(decimalable){
+			r.r=Math.round(r.r);
+			r.g=Math.round(r.g);
+			r.b=Math.round(r.b);
+			r.h=Math.round(r.h);
+			r.s=Math.round(r.s);
+			r.l=Math.round(r.l);
+		}
+		return r;
+	}
+	toColor(){ return this.constructor.toColor(this); }
 	toHex(){ return this.constructor.toHex(this); }
 	toHexa(){ return this.constructor.toHexa(this); }
-	toColor(){ return this.constructor.toColor(this); }
-	toHsl(){ return this.constructor.toHsl(this); }
-	toHsla(){ return this.constructor.toHsla(this); }
+	toRgb(decimalable=false){ return this.constructor.toRgb(this,decimalable); }
+	toRgba(decimalable=false){ return this.constructor.toRgba(this,decimalable); }
+	toHsl(decimalable=false){ return this.constructor.toHsl(this,decimalable); }
+	toHsla(decimalable=false){ return this.constructor.toHsla(this,decimalable); }
 
-	setR(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Red must be between 0 and 255. (${v})`); } this.#r = v; }
-	setG(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Green must be between 0 and 255. (${v})`); } this.#g = v; }
-	setB(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Blue must be between 0 and 255. (${v})`); } this.#b = v; }
+	setR(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Red must be between 0 and 255. (${v})`); } if(this.#r != v){ this.#r = v; this.syncFromRgb(); }}
+	setG(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; this.syncFromRgb(); }}
+	setB(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Blue must be between 0 and 255. (${v})`); } if(this.#b != v){ this.#b = v; this.syncFromRgb(); }}
+	
+	setH(v){ if(Number.isNaN(v) || v<0 || v>360){ throw new Error(`Hue must be between 0 and 360deg. (${v})`); } if(this.#h != v){ this.#h = v; this.syncFromHsl(); } }
+	setS(v){ if(Number.isNaN(v) || v<0 || v>100){ throw new Error(`Saturation must be between 0 and 100%. (${v})`); }if(this.#s != v){ this.#s = v; this.syncFromHsl(); } }
+	setL(v){ if(Number.isNaN(v) || v<0 || v>100){ throw new Error(`Lightness must be between 0 and 100%. (${v})`); }if(this.#l != v){ this.#l = v; this.syncFromHsl(); } }
+	
 	setA(v){ if(Number.isNaN(v) || v<0 || v>1){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
 
 	get r(){return this.#r;}
-	get g(){return this.#g;}
-	get b(){return this.#b;}
-	get a(){return this.#a;}
 	set r(v){this.setR(v);}
+	get g(){return this.#g;}
 	set g(v){this.setG(v);}
+	get b(){return this.#b;}
 	set b(v){this.setB(v);}
+	get h(){return this.#h;}
+	set h(v){this.setH(v);}
+	get s(){return this.#s;}
+	set s(v){this.setS(v);}
+	get l(){return this.#l;}
+	set l(v){this.setL(v);}
+	get a(){return this.#a;}
 	set a(v){this.setA(v);}
+
+	syncFromRgb(){
+		const hsl = this.constructor.rgb2hsl(this.r,this.g,this.b,true);
+		Object.assign(this,hsl);
+	}
+	syncFromHsl(){
+		const rgb = this.constructor.rgb2hsl(this.r,this.g,this.b,true);
+		Object.assign(this,rgb);
+	}
 
 	/* static area */
 
@@ -117,7 +146,7 @@ class Color{
 	 *
 	 * @static
 	 * @param {...{}} args
-	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: number; }}
+	 * @returns {{ format: string; r: any; g: any; b: any; a: number; }}
 	 */
 	static parse(...args){
 		let v = null;
@@ -156,17 +185,17 @@ class Color{
 	 *
 	 * @static
 	 * @param {string} v HEX string
-	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: number; }}
+	 * @returns {{ format: string; r: any; g: any; b: any; a: number; }}
 	 */
 	static parseHex(v){
 		if(!(v = this.validHex(v))){ return null; }
 		const s = v.substring(1); // remove #
 		const len = s.length
 		
-		if(len==3){ return { type:'rgb', format:'hex', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:null }; }
-		else if(len==4){ return { type:'rgba', format:'hexa', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:parseInt(s[3]+s[3],16)/255 }; }
-		else if(len==6){ return { type:'rgb', format:'hex', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:null }; }
-		else if(len==8){ return { type:'rgba', format:'hexa', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:parseInt(s.substring(6,8),16)/255 }; }
+		if(len==3){ return { format:'hex', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:null }; }
+		else if(len==4){ return { format:'hexa', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:parseInt(s[3]+s[3],16)/255 }; }
+		else if(len==6){ return { format:'hex', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:null }; }
+		else if(len==8){ return { format:'hexa', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:parseInt(s.substring(6,8),16)/255 }; }
 		return null;
 	}
 	
@@ -200,7 +229,7 @@ class Color{
 	 *
 	 * @static
 	 * @param {*} v
-	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: any; }}
+	 * @returns {{ format: string; r: any; g: any; b: any; a: any; }}
 	 */
 	static parseRgb(v){
 		const regexpRgba = new RegExp(
@@ -220,14 +249,14 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a);
 		
 		if(r===null || b=== null || g===null){return null;}
-		return {type:(a!==null)?'rgba':'rgb', format:(a!==null)?'rgba':'rgb', r:r, g:g, b:b, a:a };
+		return { format:(a!==null)?'rgba':'rgb', r:r, g:g, b:b, a:a };
 	}
 	/**
 	 * 
 	 *
 	 * @static
 	 * @param {*} v
-	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: any; }}
+	 * @returns {{ format: string; r: any; g: any; b: any; a: any; }}
 	 */
 	static parseRgba(v){
 		return this.parseRgb(v);
@@ -263,7 +292,7 @@ class Color{
 		}else if(h.lastIndexOf('rad')!==-1){
 			h = parseFloat(h) * (180/Math.PI);
 		}else if(h.lastIndexOf('grad')!==-1){
-			h = parseFloat(h) * (200/Math.PI);
+			h = parseFloat(h) * (180/200);
 		}else if(h.lastIndexOf('turn')!==-1){
 			h = parseFloat(h) * 360;
 		}
@@ -274,9 +303,9 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1 사이의 값으로 바꿈
 		// console.log(v,'=>',h,s,l,a);
 		if(h===null || s=== null || l===null){return null;}
-		const c = this.hsl2rgb(h,s,l);
+		const rgb = this.hsl2rgb(h,s,l,true);
 		// console.log(v,'=>',c,a);
-		return {type:(a!==null)?'rgba':'rgb', format:(a!==null)?'hsla':'hsl', r:c.r, g:c.g, b:c.b, a:a };
+		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, h:h, s:s, l:l, a:a };
 	}
 	
 	static parseHsla(v){
@@ -291,56 +320,58 @@ class Color{
 	 * @returns {string}
 	 */
 	static toHex(color){
-		if(!this.validColor(color)){ return null;}
-		return '#' + color.r.toString(16).padStart(2, '0') + color.g.toString(16).padStart(2, '0') + color.b.toString(16).padStart(2, '0');		
+		if(!this.validRgbColor(color)){ return null;}
+		return '#' + Math.round(color.r).toString(16).padStart(2, '0') + Math.round(color.g).toString(16).padStart(2, '0') + Math.round(color.b).toString(16).padStart(2, '0');		
 	}
 	static toHexa(color){
-		if(!this.validColor(color)){ return null;}
-		return '#' + color.r.toString(16).padStart(2, '0') + color.g.toString(16).padStart(2, '0') + color.b.toString(16).padStart(2, '0') + Math.round((color?.a??1)*255).toString(16).padStart(2, '0');
+		if(!this.validRgbColor(color)){ return null;}
+		return '#' + Math.round(color.r).toString(16).padStart(2, '0') + Math.round(color.g).toString(16).padStart(2, '0') + Math.round(color.b).toString(16).padStart(2, '0') + Math.round((color?.a??1)*255).toString(16).padStart(2, '0');
 	}
 	
 
 	
-	/**
-	 * 
-	 *
-	 * @static
-	 * @param {*} color
-	 * @returns {string}
-	 */
-	static toRgb(color){
-		if(!this.validColor(color)){ return null;}
-		return `rgb(${color.r}, ${color.g}, ${color.b})`;
+	static toRgb(color, decimalable=false){
+		if(!this.validRgbColor(color)){ return null;}
+		if(decimalable){ return `rgb(${color.r}, ${color.g}, ${color.b})`; }
+		return `rgb(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)})`;
 	}
-	/**
-	 * 
-	 * @alias toRgb
-	 * @static
-	 * @param {*} color
-	 * @returns {string}
-	 */
-	static toRgba(color){
-		if(!this.validColor(color)){ return null;}
-		return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`;
+	static toRgba(color, decimalable=false){
+		if(!this.validRgbColor(color)){ return null;}
+		if(decimalable){ return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`; }
+		return `rgba(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)}, ${color.a??1})`;
 	}
 
-	static toHsl(color){
-		if(!this.validColor(color)){ return null;}
-		const hsl = this.rgb2hsl(color.r,color.g,color.b);
-		return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+	static toHsl(color, decimalable=false){
+		let hsl = null;
+		if(this.validHslColor(color)){ hsl = color;}
+		else if(this.validRgbColor(color)){ hsl = this.rgb2hsl(color.r,color.g,color.b);}
+		else{ return null; }
+		if(decimalable){ return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`; }
+		return `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`;
 	}
-	static toHsla(color){
-		if(!this.validColor(color)){ return null;}
-		const hsl = this.rgb2hsl(color.r,color.g,color.b);
-		return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`;
+	static toHsla(color, decimalable=false){
+		let hsl = null;
+		if(this.validHslColor(color)){ hsl = color;}
+		else if(this.validRgbColor(color)){ hsl = this.rgb2hsl(color.r,color.g,color.b);}
+		else{ return null; }
+		if(decimalable){ return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`; }
+		return `hsla(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%, ${color.a??1})`;
 	}
 
 
 
-	static validColor(color){
+	static validRgbColor(color){
 		if(!color || isNaN(color?.r) || isNaN(color?.g) || isNaN(color?.b)){ return null; }
 		// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
 		if(color.r<0 || color.r>255 ||color.g<0 || color.g>255 ||color.b<0 || color.b>255 ){return null;}
+		if(color.a === null || color.a === undefined){ }else if(isNaN(color.a) || color.a<0 || color.a>1){return null;}	
+		return color;
+	}
+
+	static validHslColor(color){
+		if(!color || isNaN(color?.h) || isNaN(color?.s) || isNaN(color?.l)){ return null; }
+		// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
+		if(color.h<0 || color.h>360 ||color.s<0 || color.s>100 ||color.l<0 || color.l>100 ){return null;}
 		if(color.a === null || color.a === undefined){ }else if(isNaN(color.a) || color.a<0 || color.a>1){return null;}	
 		return color;
 	}
@@ -353,7 +384,7 @@ class Color{
 	 * @returns {*}
 	 */
 	static parseColor(color){
-		if(!this.validColor(color)){return null;}
+		if(!this.validRgbColor(color)){return null;}
 		return color;
 	}
 	/**
@@ -366,60 +397,66 @@ class Color{
 	static toColor(props){ return this.parseColor(props); }
 	
 
-  // http://hsl2rgb.nichabi.com/javascript-function.php
-  static hsl2rgb (h, s, l) {
-    var r, g, b, m, c, x
-    
-    if (!isFinite(h)) h = 0
-    if (!isFinite(s)) s = 0
-    if (!isFinite(l)) l = 0
-    
-    h /= 60
-    if (h < 0) h = 6 - (-h % 6)
-    h %= 6
-    
-    s = Math.max(0, Math.min(1, s / 100))
-    l = Math.max(0, Math.min(1, l / 100))
-    
-    c = (1 - Math.abs((2 * l) - 1)) * s
-    x = c * (1 - Math.abs((h % 2) - 1))
-    
-    if (h < 1) {
-      r = c
-      g = x
-      b = 0
-    } else if (h < 2) {
-      r = x
-      g = c
-      b = 0
-    } else if (h < 3) {
-      r = 0
-      g = c
-      b = x
-    } else if (h < 4) {
-      r = 0
-      g = x
-      b = c
-    } else if (h < 5) {
-      r = x
-      g = 0
-      b = c
-    } else {
-      r = c
-      g = 0
-      b = x
-    }
-    
-    m = l - c / 2
-    r = Math.round((r + m) * 255)
-    g = Math.round((g + m) * 255)
-    b = Math.round((b + m) * 255)
-    
-    return { r: r, g: g, b: b }
-    
-  }
+  	// http://hsl2rgb.nichabi.com/javascript-function.php
+	static hsl2rgb (h, s, l, decimalable=false) {
+		var r, g, b, m, c, x
+		
+		if (!isFinite(h)) h = 0
+		if (!isFinite(s)) s = 0
+		if (!isFinite(l)) l = 0
+		
+		h /= 60
+		if (h < 0) h = 6 - (-h % 6)
+		h %= 6
+		
+		s = Math.max(0, Math.min(1, s / 100))
+		l = Math.max(0, Math.min(1, l / 100))
+		
+		c = (1 - Math.abs((2 * l) - 1)) * s
+		x = c * (1 - Math.abs((h % 2) - 1))
+		
+		if (h < 1) {
+		r = c
+		g = x
+		b = 0
+		} else if (h < 2) {
+		r = x
+		g = c
+		b = 0
+		} else if (h < 3) {
+		r = 0
+		g = c
+		b = x
+		} else if (h < 4) {
+		r = 0
+		g = x
+		b = c
+		} else if (h < 5) {
+		r = x
+		g = 0
+		b = c
+		} else {
+		r = c
+		g = 0
+		b = x
+		}
+		
+		m = l - c / 2
+		if(decimalable){
+			r = (r + m) * 255
+			g = (g + m) * 255
+			b = (b + m) * 255
+		}else{
+			r = Math.round((r + m) * 255)
+			g = Math.round((g + m) * 255)
+			b = Math.round((b + m) * 255)
+		}
+		
+		return { r: r, g: g, b: b }
+		
+	}
 	// http://rgb2hsl.nichabi.com/javascript-function.php
-	static rgb2hsl (r, g, b) {
+	static rgb2hsl (r, g, b, decimalable=false) {
 		var max, min, h, s, l, d
 		r /= 255
 		g /= 255
@@ -445,9 +482,16 @@ class Color{
 			}
 			h /= 6
 		}
-		h = Math.round(h * 360) //floor -> round
-		s = Math.round(s * 100) //floor -> round
-		l = Math.round(l * 100) //floor -> round
+		if(decimalable){
+			h = h * 360 //floor -> round
+			s = s * 100 //floor -> round
+			l = l * 100 //floor -> round
+		}else{
+			h = Math.round(h * 360) //floor -> round
+			s = Math.round(s * 100) //floor -> round
+			l = Math.round(l * 100) //floor -> round
+		}
+		
 		return { h: h, s: s, l: l }
 	}
 
@@ -456,6 +500,9 @@ class Color{
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'r'); d.enumerable=true; Object.defineProperty(Color.prototype,'r',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'g'); d.enumerable=true; Object.defineProperty(Color.prototype,'g',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'b'); d.enumerable=true; Object.defineProperty(Color.prototype,'b',d); }
+{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'h'); d.enumerable=true; Object.defineProperty(Color.prototype,'h',d); }
+{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'s'); d.enumerable=true; Object.defineProperty(Color.prototype,'s',d); }
+{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'l'); d.enumerable=true; Object.defineProperty(Color.prototype,'l',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'a'); d.enumerable=true; Object.defineProperty(Color.prototype,'a',d); }
 
 

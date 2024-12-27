@@ -93,15 +93,15 @@ class Color{
 	toHsl(decimalable=false){ return this.constructor.toHsl(this,decimalable); }
 	toHsla(decimalable=false){ return this.constructor.toHsla(this,decimalable); }
 
-	setR(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Red must be between 0 and 255. (${v})`); } if(this.#r != v){ this.#r = v; this.syncFromRgb(); }}
-	setG(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; this.syncFromRgb(); }}
-	setB(v){ if(Number.isNaN(v) || v<0 || v>255){ throw new Error(`Blue must be between 0 and 255. (${v})`); } if(this.#b != v){ this.#b = v; this.syncFromRgb(); }}
+	setR(v){ if(this.constructor.validR(v)===null){ throw new Error(`Red must be between 0 and 255. (${v})`); } if(this.#r != v){ this.#r = v; this.syncFromRgb(); }}
+	setG(v){ if(this.constructor.validG(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; this.syncFromRgb(); }}
+	setB(v){ if(this.constructor.validB(v)===null){ throw new Error(`Blue must be between 0 and 255. (${v})`); } if(this.#b != v){ this.#b = v; this.syncFromRgb(); }}
 	
-	setH(v){ if(Number.isNaN(v) || v<0 || v>360){ throw new Error(`Hue must be between 0 and 360deg. (${v})`); } if(this.#h != v){ this.#h = v; this.syncFromHsl(); } }
-	setS(v){ if(Number.isNaN(v) || v<0 || v>100){ throw new Error(`Saturation must be between 0 and 100%. (${v})`); }if(this.#s != v){ this.#s = v; this.syncFromHsl(); } }
-	setL(v){ if(Number.isNaN(v) || v<0 || v>100){ throw new Error(`Lightness must be between 0 and 100%. (${v})`); }if(this.#l != v){ this.#l = v; this.syncFromHsl(); } }
+	setH(v){ if(this.constructor.validH(v)===null){ throw new Error(`Hue must be between 0 and 360deg. (${v})`); } if(this.#h != v){ this.#h = v; this.syncFromHsl(); } }
+	setS(v){ if(this.constructor.validS(v)===null){ throw new Error(`Saturation must be between 0 and 100%. (${v})`); }if(this.#s != v){ this.#s = v; this.syncFromHsl(); } }
+	setL(v){ if(this.constructor.validL(v)===null){ throw new Error(`Lightness must be between 0 and 100%. (${v})`); }if(this.#l != v){ this.#l = v; this.syncFromHsl(); } }
 	
-	setA(v){ if(Number.isNaN(v) || v<0 || v>1){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
+	setA(v){ if(v !== null && this.constructor.validA(v)===null){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
 
 	get r(){return this.#r;}
 	set r(v){this.setR(v);}
@@ -167,6 +167,15 @@ class Color{
 			return this.parseHex(v)??this.parseRgb(v)??this.parseHsl(v);
 		}
 	}
+
+
+	static validR(v){ return (Number.isNaN(v) || v<0 || v>255)?null:v; }
+	static validG(v){ return this.validR(v); }
+	static validB(v){ return this.validR(v); }
+	static validH(v){ return (Number.isNaN(v) || v<0 || v>360)?null:v; }
+	static validS(v){ return (Number.isNaN(v) || v<0 || v>100)?null:v; }
+	static validL(v){ return this.validS(v); }
+	static validA(v){ return (Number.isNaN(v) || v<0 || v>1)?null:v; }
 
 	/**
 	 * valid Hex

@@ -27,14 +27,12 @@ if(globalThis.process){
     console.log('Test by Color.js');
 }
 
-
+console.log('Version',Color.version);
 
 
 console.log('# Test Color')
-console.log('Version',Color.version);
 
 let v = '', r = null , c = null;
-
 console.log('START','Color.validRgbColor');
 v = {r:0,g:128,b:255};r = Color.validRgbColor(v); console.assert(r !== null,r+' !== '+v);
 v = {r:0,g:128,b:255,a:0.1};r = Color.validRgbColor(v);  console.assert(r !== null,r+' !== '+v);
