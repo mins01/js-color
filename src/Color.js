@@ -7,16 +7,16 @@ class Color{
 	// b=null;
 	// a=null;
 	#r=0;#g=0;#b=0;
-	#h=0;#s=0;#l=0;
+	// #h=0;#s=0;#l=0;
 	#a=null;
 	constructor(...args){
 		this.format = "hex";
 		this.r = 0;
 		this.g = 0;
 		this.b = 0;
-		this.h = 0;
-		this.g = 0;
-		this.b = 0;
+		// this.h = 0;
+		// this.g = 0;
+		// this.b = 0;
 		this.a = null;
 
 		if(args.length>0){
@@ -25,7 +25,7 @@ class Color{
 	}
 	
 	set(...args){			
-		const color = this.constructor.parse(...args);
+		const color = this.constructor.parse(...args);	
 		if(color){ Object.assign(this, color); }
 		else{ throw new Error("지원되지 않는 형식입니다. "+JSON.stringify(args)); }
 	}
@@ -42,7 +42,7 @@ class Color{
 	 */
 	valid(color=null){
 		if(!color) color = this;
-		return this.constructor.validRgbColor(color);
+		return this.constructor.validColorRgb(color);
 	}
 
 	/**
@@ -70,18 +70,18 @@ class Color{
 	valueOf(){
 		return this.toObject()
 	}
-	toObject(decimalable=false){
+	toObject(decimalable=true){
 		const r = {};
 		for(let k in this){
 			r[k] = this[k];
 		}
-		if(decimalable){
+		if(!decimalable){
 			r.r=Math.round(r.r);
 			r.g=Math.round(r.g);
 			r.b=Math.round(r.b);
-			r.h=Math.round(r.h);
-			r.s=Math.round(r.s);
-			r.l=Math.round(r.l);
+			// r.h=Math.round(r.h);
+			// r.s=Math.round(r.s);
+			// r.l=Math.round(r.l);
 		}
 		return r;
 	}
@@ -93,13 +93,13 @@ class Color{
 	toHsl(decimalable=false){ return this.constructor.toHsl(this,decimalable); }
 	toHsla(decimalable=false){ return this.constructor.toHsla(this,decimalable); }
 
-	setR(v){ if(this.constructor.validR(v)===null){ throw new Error(`Red must be between 0 and 255. (${v})`); } if(this.#r != v){ this.#r = v; this.syncFromRgb(); }}
-	setG(v){ if(this.constructor.validG(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; this.syncFromRgb(); }}
-	setB(v){ if(this.constructor.validB(v)===null){ throw new Error(`Blue must be between 0 and 255. (${v})`); } if(this.#b != v){ this.#b = v; this.syncFromRgb(); }}
+	setR(v){ if(this.constructor.validR(v)===null){ throw new Error(`Red must be between 0 and 255. (${v})`); } if(this.#r != v){ this.#r = v; }}
+	setG(v){ if(this.constructor.validG(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; }}
+	setB(v){ if(this.constructor.validB(v)===null){ throw new Error(`Blue must be between 0 and 255. (${v})`); } if(this.#b != v){ this.#b = v; }}
 	
-	setH(v){ if(this.constructor.validH(v)===null){ throw new Error(`Hue must be between 0 and 360deg. (${v})`); } if(this.#h != v){ this.#h = v; this.syncFromHsl(); } }
-	setS(v){ if(this.constructor.validS(v)===null){ throw new Error(`Saturation must be between 0 and 100%. (${v})`); }if(this.#s != v){ this.#s = v; this.syncFromHsl(); } }
-	setL(v){ if(this.constructor.validL(v)===null){ throw new Error(`Lightness must be between 0 and 100%. (${v})`); }if(this.#l != v){ this.#l = v; this.syncFromHsl(); } }
+	// setH(v){ if(this.constructor.validH(v)===null){ throw new Error(`Hue must be between 0 and 360deg. (${v})`); } if(this.#h != v){ this.#h = v; this.syncFromHsl(); } }
+	// setS(v){ if(this.constructor.validS(v)===null){ throw new Error(`Saturation must be between 0 and 100%. (${v})`); }if(this.#s != v){ this.#s = v; this.syncFromHsl(); } }
+	// setL(v){ if(this.constructor.validL(v)===null){ throw new Error(`Lightness must be between 0 and 100%. (${v})`); }if(this.#l != v){ this.#l = v; this.syncFromHsl(); } }
 	
 	setA(v){ if(v !== null && this.constructor.validA(v)===null){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
 
@@ -109,23 +109,23 @@ class Color{
 	set g(v){this.setG(v);}
 	get b(){return this.#b;}
 	set b(v){this.setB(v);}
-	get h(){return this.#h;}
-	set h(v){this.setH(v);}
-	get s(){return this.#s;}
-	set s(v){this.setS(v);}
-	get l(){return this.#l;}
-	set l(v){this.setL(v);}
+	// get h(){return this.#h;}
+	// set h(v){this.setH(v);}
+	// get s(){return this.#s;}
+	// set s(v){this.setS(v);}
+	// get l(){return this.#l;}
+	// set l(v){this.setL(v);}
 	get a(){return this.#a;}
 	set a(v){this.setA(v);}
 
-	syncFromRgb(){
-		const hsl = this.constructor.rgb2hsl(this.r,this.g,this.b,true);
-		Object.assign(this,hsl);
-	}
-	syncFromHsl(){
-		const rgb = this.constructor.rgb2hsl(this.r,this.g,this.b,true);
-		Object.assign(this,rgb);
-	}
+	// syncFromRgb(){
+	// 	const hsl = this.constructor.rgb2hsl(this.r,this.g,this.b,true);
+	// 	Object.assign(this,hsl);
+	// }
+	// syncFromHsl(){
+	// 	const rgb = this.constructor.rgb2hsl(this.r,this.g,this.b,true);
+	// 	Object.assign(this,rgb);
+	// }
 
 	/* static area */
 
@@ -313,7 +313,7 @@ class Color{
 		if(h===null || s=== null || l===null){return null;}
 		const rgb = this.hsl2rgb(h,s,l,true);
 		// console.log(v,'=>',c,a);
-		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, h:h, s:s, l:l, a:a };
+		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b};
 	}
 	
 	static parseHsla(v){
@@ -328,47 +328,43 @@ class Color{
 	 * @returns {string}
 	 */
 	static toHex(color){
-		if(!this.validRgbColor(color)){ return null;}
+		if(!this.validColorRgb(color)){ return null;}
 		return '#' + Math.round(color.r).toString(16).padStart(2, '0') + Math.round(color.g).toString(16).padStart(2, '0') + Math.round(color.b).toString(16).padStart(2, '0');		
 	}
 	static toHexa(color){
-		if(!this.validRgbColor(color)){ return null;}
+		if(!this.validColorRgb(color)){ return null;}
 		return '#' + Math.round(color.r).toString(16).padStart(2, '0') + Math.round(color.g).toString(16).padStart(2, '0') + Math.round(color.b).toString(16).padStart(2, '0') + Math.round((color?.a??1)*255).toString(16).padStart(2, '0');
 	}
 	
 
 	
 	static toRgb(color, decimalable=false){
-		if(!this.validRgbColor(color)){ return null;}
+		if(!this.validColorRgb(color)){ return null;}
 		if(decimalable){ return `rgb(${color.r}, ${color.g}, ${color.b})`; }
 		return `rgb(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)})`;
 	}
 	static toRgba(color, decimalable=false){
-		if(!this.validRgbColor(color)){ return null;}
+		if(!this.validColorRgb(color)){ return null;}
 		if(decimalable){ return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a??1})`; }
 		return `rgba(${Math.round(color.r)}, ${Math.round(color.g)}, ${Math.round(color.b)}, ${color.a??1})`;
 	}
 
 	static toHsl(color, decimalable=false){
-		let hsl = null;
-		if(this.validHslColor(color)){ hsl = color;}
-		else if(this.validRgbColor(color)){ hsl = this.rgb2hsl(color.r,color.g,color.b);}
-		else{ return null; }
+		if(!this.validColorRgb(color)){ return null}
+		const hsl = this.rgb2hsl(color.r,color.g,color.b);
 		if(decimalable){ return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`; }
 		return `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`;
 	}
 	static toHsla(color, decimalable=false){
-		let hsl = null;
-		if(this.validHslColor(color)){ hsl = color;}
-		else if(this.validRgbColor(color)){ hsl = this.rgb2hsl(color.r,color.g,color.b);}
-		else{ return null; }
+		if(!this.validColorRgb(color)){ return null}
+		const hsl = this.rgb2hsl(color.r,color.g,color.b);
 		if(decimalable){ return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color.a??1})`; }
 		return `hsla(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%, ${color.a??1})`;
 	}
 
 
 
-	static validRgbColor(color){
+	static validColorRgb(color){
 		if(!color || isNaN(color?.r) || isNaN(color?.g) || isNaN(color?.b)){ return null; }
 		// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
 		if(color.r<0 || color.r>255 ||color.g<0 || color.g>255 ||color.b<0 || color.b>255 ){return null;}
@@ -376,13 +372,13 @@ class Color{
 		return color;
 	}
 
-	static validHslColor(color){
-		if(!color || isNaN(color?.h) || isNaN(color?.s) || isNaN(color?.l)){ return null; }
-		// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
-		if(color.h<0 || color.h>360 ||color.s<0 || color.s>100 ||color.l<0 || color.l>100 ){return null;}
-		if(color.a === null || color.a === undefined){ }else if(isNaN(color.a) || color.a<0 || color.a>1){return null;}	
-		return color;
-	}
+	// static validHslColor(color){
+	// 	if(!color || isNaN(color?.h) || isNaN(color?.s) || isNaN(color?.l)){ return null; }
+	// 	// if(isNaN(color.r) || isNaN(color.g) || isNaN(color.b) ){return null;}
+	// 	if(color.h<0 || color.h>360 ||color.s<0 || color.s>100 ||color.l<0 || color.l>100 ){return null;}
+	// 	if(color.a === null || color.a === undefined){ }else if(isNaN(color.a) || color.a<0 || color.a>1){return null;}	
+	// 	return color;
+	// }
 	
 	/**
 	 * 
@@ -392,7 +388,7 @@ class Color{
 	 * @returns {*}
 	 */
 	static parseColor(color){
-		if(!this.validRgbColor(color)){return null;}
+		if(!this.validColorRgb(color)){return null;}
 		return color;
 	}
 	/**
@@ -508,9 +504,9 @@ class Color{
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'r'); d.enumerable=true; Object.defineProperty(Color.prototype,'r',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'g'); d.enumerable=true; Object.defineProperty(Color.prototype,'g',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'b'); d.enumerable=true; Object.defineProperty(Color.prototype,'b',d); }
-{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'h'); d.enumerable=true; Object.defineProperty(Color.prototype,'h',d); }
-{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'s'); d.enumerable=true; Object.defineProperty(Color.prototype,'s',d); }
-{	const d = Object.getOwnPropertyDescriptor(Color.prototype,'l'); d.enumerable=true; Object.defineProperty(Color.prototype,'l',d); }
+// {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'h'); d.enumerable=true; Object.defineProperty(Color.prototype,'h',d); }
+// {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'s'); d.enumerable=true; Object.defineProperty(Color.prototype,'s',d); }
+// {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'l'); d.enumerable=true; Object.defineProperty(Color.prototype,'l',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'a'); d.enumerable=true; Object.defineProperty(Color.prototype,'a',d); }
 
 

@@ -37,10 +37,11 @@ ss.forEach((v,idx) => {
     let s,c,r,re,d={};
     s = v;
     c = new Color(s);
+    
     r = s; re=null; d['input string']={return:r,toHsla:re};
     r = JSON.stringify(c); re=null; d['json']={return:r,toHsla:re};
     r = JSON.stringify(c.toObject()); re = null; d['toObject']={return:r,toHsla:re};
-    r = JSON.stringify(c.toObject(true)); re = null; d['toObject decimalable']={return:r,toHsla:re};
+    r = JSON.stringify(c.toObject(false)); re = null; d['toObject nodecimalable']={return:r,toHsla:re};
     r = c.toString(); re = null; d['toString']={return:r,toHsla:re};
     r = c.toHex(); re = Color.from(r).toHsla(); d['toHex']={return:r,toHsla:re};
     r = c.toHex(true); re = Color.from(r).toHsla(); d['toHex decimalable']={return:r,toHsla:re};
