@@ -141,7 +141,7 @@ v = new Color(0,128,255,0.3); console.assert(v.toHexa()==='#0080ff4d','=>'+v?.to
 v = new Color({r:0,g:128,b:255}); console.assert(v.toHex()==='#0080ff','=>'+v?.toHex())
     console.assert(v.g === 128, '=>'+JSON.stringify(v));
     v.set({r:0,g:100,b:255,a:0.2}); console.assert(v.g === 100 && v.a === 0.2, '=>'+JSON.stringify(v));
-    v.set('#0080ff'); console.assert(v.g === 128 && v.a === null, '=>'+JSON.stringify(v));
+    v.set('#0080ff'); console.assert(v.g === 128 && v.a === 1, '=>'+JSON.stringify(v));
     v.set('#0080ff80'); console.assert(v.g === 128 && v.a !== null, '=>'+JSON.stringify(v));
     try{v.set({r:0,g:100,b:500,a:0.2});console.assert(false,'=>'+JSON.stringify(v))}catch(e){ console.assert(true,'=>'+JSON.stringify(v))}
     try{v.set(1,2,3,4);console.assert(false,'=>'+JSON.stringify(v))}catch(e){ console.assert(true,'=>'+JSON.stringify(v))}
