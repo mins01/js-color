@@ -7,16 +7,12 @@ class Color{
 	// b=null;
 	// a=null;
 	#r=0;#g=0;#b=0;
-	// #h=0;#s=0;#l=0;
 	#a=null;
 	constructor(...args){
 		this.format = "hex";
 		this.r = 0;
 		this.g = 0;
 		this.b = 0;
-		// this.h = 0;
-		// this.g = 0;
-		// this.b = 0;
 		this.a = null;
 
 		if(args.length>0){
@@ -97,10 +93,6 @@ class Color{
 	setG(v){ if(this.constructor.validG(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; }}
 	setB(v){ if(this.constructor.validB(v)===null){ throw new Error(`Blue must be between 0 and 255. (${v})`); } if(this.#b != v){ this.#b = v; }}
 	
-	// setH(v){ if(this.constructor.validH(v)===null){ throw new Error(`Hue must be between 0 and 360deg. (${v})`); } if(this.#h != v){ this.#h = v; this.syncFromHsl(); } }
-	// setS(v){ if(this.constructor.validS(v)===null){ throw new Error(`Saturation must be between 0 and 100%. (${v})`); }if(this.#s != v){ this.#s = v; this.syncFromHsl(); } }
-	// setL(v){ if(this.constructor.validL(v)===null){ throw new Error(`Lightness must be between 0 and 100%. (${v})`); }if(this.#l != v){ this.#l = v; this.syncFromHsl(); } }
-	
 	setA(v){ if(v !== null && this.constructor.validA(v)===null){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
 
 	get r(){return this.#r;}
@@ -109,23 +101,8 @@ class Color{
 	set g(v){this.setG(v);}
 	get b(){return this.#b;}
 	set b(v){this.setB(v);}
-	// get h(){return this.#h;}
-	// set h(v){this.setH(v);}
-	// get s(){return this.#s;}
-	// set s(v){this.setS(v);}
-	// get l(){return this.#l;}
-	// set l(v){this.setL(v);}
 	get a(){return this.#a;}
 	set a(v){this.setA(v);}
-
-	// syncFromRgb(){
-	// 	const hsl = this.constructor.rgb2hsl(this.r,this.g,this.b,true);
-	// 	Object.assign(this,hsl);
-	// }
-	// syncFromHsl(){
-	// 	const rgb = this.constructor.rgb2hsl(this.r,this.g,this.b,true);
-	// 	Object.assign(this,rgb);
-	// }
 
 	/* static area */
 
@@ -504,9 +481,6 @@ class Color{
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'r'); d.enumerable=true; Object.defineProperty(Color.prototype,'r',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'g'); d.enumerable=true; Object.defineProperty(Color.prototype,'g',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'b'); d.enumerable=true; Object.defineProperty(Color.prototype,'b',d); }
-// {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'h'); d.enumerable=true; Object.defineProperty(Color.prototype,'h',d); }
-// {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'s'); d.enumerable=true; Object.defineProperty(Color.prototype,'s',d); }
-// {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'l'); d.enumerable=true; Object.defineProperty(Color.prototype,'l',d); }
 {	const d = Object.getOwnPropertyDescriptor(Color.prototype,'a'); d.enumerable=true; Object.defineProperty(Color.prototype,'a',d); }
 
 
