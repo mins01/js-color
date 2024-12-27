@@ -30,6 +30,9 @@ if(globalThis.process){
 
 
 
+console.log('# Test Color')
+console.log('Version',Color.version);
+
 let v = '', r = null , c = null;
 
 console.log('START','Color.validRgbColor');

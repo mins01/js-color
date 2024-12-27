@@ -1,7 +1,6 @@
 class Color{
 	static version='v1.0.0';
 	
-	type=null;
 	format=null;
 	// r=null;
 	// g=null;
@@ -11,7 +10,6 @@ class Color{
 	#h=0;#s=0;#l=0;
 	#a=null;
 	constructor(...args){
-		this.type = "rgb";
 		this.format = "hex";
 		this.r = 0;
 		this.g = 0;
@@ -147,7 +145,7 @@ class Color{
 	 *
 	 * @static
 	 * @param {...{}} args
-	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: number; }}
+	 * @returns {{ format: string; r: any; g: any; b: any; a: number; }}
 	 */
 	static parse(...args){
 		let v = null;
@@ -186,17 +184,17 @@ class Color{
 	 *
 	 * @static
 	 * @param {string} v HEX string
-	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: number; }}
+	 * @returns {{ format: string; r: any; g: any; b: any; a: number; }}
 	 */
 	static parseHex(v){
 		if(!(v = this.validHex(v))){ return null; }
 		const s = v.substring(1); // remove #
 		const len = s.length
 		
-		if(len==3){ return { type:'rgb', format:'hex', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:null }; }
-		else if(len==4){ return { type:'rgba', format:'hexa', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:parseInt(s[3]+s[3],16)/255 }; }
-		else if(len==6){ return { type:'rgb', format:'hex', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:null }; }
-		else if(len==8){ return { type:'rgba', format:'hexa', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:parseInt(s.substring(6,8),16)/255 }; }
+		if(len==3){ return { format:'hex', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:null }; }
+		else if(len==4){ return { format:'hexa', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:parseInt(s[3]+s[3],16)/255 }; }
+		else if(len==6){ return { format:'hex', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:null }; }
+		else if(len==8){ return { format:'hexa', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:parseInt(s.substring(6,8),16)/255 }; }
 		return null;
 	}
 	
@@ -230,7 +228,7 @@ class Color{
 	 *
 	 * @static
 	 * @param {*} v
-	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: any; }}
+	 * @returns {{ format: string; r: any; g: any; b: any; a: any; }}
 	 */
 	static parseRgb(v){
 		const regexpRgba = new RegExp(
@@ -250,14 +248,14 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a);
 		
 		if(r===null || b=== null || g===null){return null;}
-		return {type:(a!==null)?'rgba':'rgb', format:(a!==null)?'rgba':'rgb', r:r, g:g, b:b, a:a };
+		return { format:(a!==null)?'rgba':'rgb', r:r, g:g, b:b, a:a };
 	}
 	/**
 	 * 
 	 *
 	 * @static
 	 * @param {*} v
-	 * @returns {{ type: string; format: string; r: any; g: any; b: any; a: any; }}
+	 * @returns {{ format: string; r: any; g: any; b: any; a: any; }}
 	 */
 	static parseRgba(v){
 		return this.parseRgb(v);
@@ -306,7 +304,7 @@ class Color{
 		if(h===null || s=== null || l===null){return null;}
 		const rgb = this.hsl2rgb(h,s,l,true);
 		// console.log(v,'=>',c,a);
-		return {type:(a!==null)?'rgba':'rgb', format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, h:h, s:s, l:l, a:a };
+		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, h:h, s:s, l:l, a:a };
 	}
 	
 	static parseHsla(v){
