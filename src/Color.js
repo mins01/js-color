@@ -7,13 +7,13 @@ class Color{
 	// b=null;
 	// a=null;
 	#r=0;#g=0;#b=0;
-	#a=null;
+	#a=1;
 	constructor(...args){
-		this.format = "hex";
+		this.format = "hexa";
 		this.r = 0;
 		this.g = 0;
 		this.b = 0;
-		this.a = null;
+		this.a = 1;
 
 		if(args.length>0){
 			this.set(...args);
@@ -93,7 +93,7 @@ class Color{
 	setG(v){ if(this.constructor.validG(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; }}
 	setB(v){ if(this.constructor.validB(v)===null){ throw new Error(`Blue must be between 0 and 255. (${v})`); } if(this.#b != v){ this.#b = v; }}
 	
-	setA(v){ if(v !== null && this.constructor.validA(v)===null){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
+	setA(v){ if(this.constructor.validA(v)===null){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
 
 	get r(){return this.#r;}
 	set r(v){this.setR(v);}
@@ -177,9 +177,9 @@ class Color{
 		const s = v.substring(1); // remove #
 		const len = s.length
 		
-		if(len==3){ return { format:'hex', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:null }; }
+		if(len==3){ return { format:'hex', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:1 }; }
 		else if(len==4){ return { format:'hexa', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:parseInt(s[3]+s[3],16)/255 }; }
-		else if(len==6){ return { format:'hex', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:null }; }
+		else if(len==6){ return { format:'hex', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:1 }; }
 		else if(len==8){ return { format:'hexa', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:parseInt(s.substring(6,8),16)/255 }; }
 		return null;
 	}
@@ -234,7 +234,7 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a);
 		
 		if(r===null || b=== null || g===null){return null;}
-		return { format:(a!==null)?'rgba':'rgb', r:r, g:g, b:b, a:a };
+		return { format:(a!==null)?'rgba':'rgb', r:r, g:g, b:b, a:(a??1) };
 	}
 	/**
 	 * 
@@ -290,7 +290,7 @@ class Color{
 		if(h===null || s=== null || l===null){return null;}
 		const rgb = this.hsl2rgb(h,s,l,true);
 		// console.log(v,'=>',c,a);
-		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b};
+		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
 	}
 	
 	static parseHsla(v){
