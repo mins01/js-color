@@ -12,7 +12,6 @@ class Color{
 	#r=0;#g=0;#b=0;
 	#a=1;
 	constructor(...args){
-		this.format = "hexa";
 		this.r = 0;
 		this.g = 0;
 		this.b = 0;
@@ -26,12 +25,10 @@ class Color{
 	set(...args){			
 		const color = this.constructor.parse(...args);	
 		if(color){ Object.assign(this, color); }
-		else{ throw new Error("지원되지 않는 형식입니다. "+JSON.stringify(args)); }
+		else{ throw new Error("Unsupported format. "+JSON.stringify(args)); }
 	}
 
-	get(){
-		return this.toObject();
-	}
+	get(allowDecimal=true){ return this.toObject(allowDecimal); }
 	
 	/**
 	 * valide color
@@ -50,16 +47,7 @@ class Color{
 	 * @returns {string}
 	 */
 	toString(){
-		switch(this.format??'hex'){
-			case 'hex':return this.toHex(); break;
-			case 'hexa':return this.toHexa(); break;
-			case 'rgb':return this.toRgb(); break;
-			case 'rgba':return this.toRgba(); break;
-			case 'hsl':return this.toHsl(); break;
-			case 'hsla':return this.toHsla(); break;
-			default:return this.toHex();break;
-		}
-		return this.toHex();
+		return this.toRgba()
 	}
 	
 	toJSON(){
@@ -69,7 +57,7 @@ class Color{
 	valueOf(){
 		return this.toObject()
 	}
-	toObject(allowDecimal=false){
+	toObject(allowDecimal=true){
 		const r = {};
 		for(let k in this){
 			r[k] = this[k];
@@ -89,10 +77,9 @@ class Color{
 	toHsl(allowDecimal=false){ return this.constructor.toHsl(this,allowDecimal); }
 	toHsla(allowDecimal=false){ return this.constructor.toHsla(this,allowDecimal); }
 
-	setR(v){ if(this.constructor.validR(v)===null){ throw new Error(`Red must be between 0 and 255. (${v})`); } if(this.#r != v){ this.#r = v; }}
-	setG(v){ if(this.constructor.validG(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } if(this.#g != v){ this.#g = v; }}
-	setB(v){ if(this.constructor.validB(v)===null){ throw new Error(`Blue must be between 0 and 255. (${v})`); } if(this.#b != v){ this.#b = v; }}
-	
+	setR(v){ if(this.constructor.validR(v)===null){ throw new Error(`Red must be between 0 and 255. (${v})`); } this.#r = v; }
+	setG(v){ if(this.constructor.validG(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } this.#g = v; }
+	setB(v){ if(this.constructor.validB(v)===null){ throw new Error(`Blue must be between 0 and 255. (${v})`); } this.#b = v; }
 	setA(v){ if(this.constructor.validA(v)===null){ throw new Error(`Alpha must be between 0 and 1. (${v})`); } this.#a = v; }
 
 	get r(){return this.#r;}
@@ -122,7 +109,7 @@ class Color{
 	 *
 	 * @static
 	 * @param {...{}} args
-	 * @returns {{ format: string; r: any; g: any; b: any; a: number; }}
+	 * @returns {{ r: any; g: any; b: any; a: number; }}
 	 */
 	static parse(...args){
 		let v = null;
@@ -170,17 +157,17 @@ class Color{
 	 *
 	 * @static
 	 * @param {string} v HEX string
-	 * @returns {{ format: string; r: any; g: any; b: any; a: number; }}
+	 * @returns {{ r: any; g: any; b: any; a: number; }}
 	 */
 	static parseHex(v){
 		if(!(v = this.validHex(v))){ return null; }
 		const s = v.substring(1); // remove #
 		const len = s.length
 		
-		if(len==3){ return { format:'hex', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:1 }; }
-		else if(len==4){ return { format:'hexa', r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:parseInt(s[3]+s[3],16)/255 }; }
-		else if(len==6){ return { format:'hex', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:1 }; }
-		else if(len==8){ return { format:'hexa', r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:parseInt(s.substring(6,8),16)/255 }; }
+		if(len==3){ return { r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:1 }; }
+		else if(len==4){ return { r:parseInt(s[0]+s[0],16), g:parseInt(s[1]+s[1],16), b:parseInt(s[2]+s[2],16), a:parseInt(s[3]+s[3],16)/255 }; }
+		else if(len==6){ return { r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:1 }; }
+		else if(len==8){ return { r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:parseInt(s.substring(6,8),16)/255 }; }
 		return null;
 	}
 	
@@ -215,7 +202,7 @@ class Color{
 	 *
 	 * @static
 	 * @param {*} v
-	 * @returns {{ format: string; r: any; g: any; b: any; a: any; }}
+	 * @returns {{ r: any; g: any; b: any; a: any; }}
 	 */
 	static parseRgb(v){
 		const regexpRgba = new RegExp(
@@ -235,14 +222,14 @@ class Color{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a);
 		
 		if(r===null || b=== null || g===null){return null;}
-		return { format:(a!==null)?'rgba':'rgb', r:r, g:g, b:b, a:(a??1) };
+		return { r:r, g:g, b:b, a:(a??1) };
 	}
 	/**
 	 * 
 	 *
 	 * @static
 	 * @param {*} v
-	 * @returns {{ format: string; r: any; g: any; b: any; a: any; }}
+	 * @returns {{ r: any; g: any; b: any; a: any; }}
 	 */
 	static parseRgba(v){
 		return this.parseRgb(v);
@@ -291,7 +278,7 @@ class Color{
 		if(h===null || s=== null || l===null){return null;}
 		const rgb = ColorConverter.hslToRgb(h,s,l,false);
 		// console.log(v,'=>',c,a);
-		return { format:(a!==null)?'hsla':'hsl', r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
+		return { r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
 	}
 	
 	static parseHsla(v){
