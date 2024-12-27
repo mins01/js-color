@@ -23,8 +23,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./index.js",
-      "default": "./index.js"
+      "import": "./src/index.js",
+      "default": "./src/index.js"
     },    
     "./Color.js": {
       "import": "./src/Color.js",

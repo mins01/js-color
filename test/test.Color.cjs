@@ -1,5 +1,5 @@
-const ColorCjs = require("../src/Color.cjs").default;
-const ColorMinCjs = require("../dist/Color.min.cjs").default;
+const ColorCjs = require("../src/Color.js").default;
+const ColorMinCjs = require("../dist/Color.js").default;
 
 // import jsColor from "js-color";
 // const Color = jsColor.Color;

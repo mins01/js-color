@@ -1,5 +1,5 @@
-import ColorConverter from "./ColorConverter.js";
 import colorRegExps from "./colorRegExps.js";
+import ColorConverter from "./ColorConverter.js";
 
 class Color{
 	static version='v1.0.0';
@@ -320,7 +320,7 @@ class Color{
 		if(!this.validColor(color)){return null;}
 		return color;
 	}
-	
+
 	static toColor(props){ return this.parseColor(props); }
 
 }
