@@ -34,6 +34,26 @@ export default class ColorParser{
 		}
 	}
 
+	static parseWithDecimal(...args){
+		let v = null;
+		if(args.length === 1){
+			v = args[0];
+		}else if(args.length === 3){
+			v = {r:args[0],g:args[1],b:args[2]};
+		}else if(args.length === 4){
+			v = {r:args[0],g:args[1],b:args[2],a:args[3]};
+		}else{
+			return null;
+		}
+		
+		if(!v){
+			return null;
+		}else if(typeof v === "object" ){
+			return this.parseColor(v);
+		}else{
+			return this.parseHex(v)??this.parseRgb(v,true)??this.parseHsl(v,true);
+		}
+	}
 
 
 	static validColor(color){

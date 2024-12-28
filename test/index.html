@@ -36,10 +36,33 @@
     <meta property="og:type" content="website">
     
     <!-- //meta og -->
-    <script type="module" src="./test.ColorToXxx.js"></script>
+    
+    <script type="module">
+      import Color from "./src/Color.js";
+      globalThis.Color = Color;
+
+      const color1 = globalThis.color1= new Color({r:0,g:128,b:255});
+      console.log('color1',color1);
+    </script>
+    <script type="module">
+      import jsColor,{Color} from "./index.js";
+      globalThis.jsColor = jsColor;
+      globalThis.Color2 = Color;
+
+      const color2 = globalThis.color2= new Color2({r:0,g:128,b:255});
+      console.log('color2',color2);
+    </script>
 </head>
 <body>
     <div class="container">
+      <h1>js-color</h1>
+      <h2>자바스크립트용 ESM 기준 Color 클래스 - test</h2>
+      <hr>
+      <h3>Test</h3>
+      <ul>
+        <li><a href="./test.Color.html">test.Color.html</a></li>
+        <li><a href="./test.ColorToMethods.html">test.ColorToMethods.html</a></li>
+      </ul>
     </div>
 </body>
 </html>

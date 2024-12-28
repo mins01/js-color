@@ -24,7 +24,7 @@ class Color{
 	}
 	
 	set(...args){			
-		const color = ColorParser.parse(...args);	
+		const color = ColorParser.parseWithDecimal(...args);	
 		if(color){ Object.assign(this, color); }
 		else{ throw new Error("Unsupported format. "+JSON.stringify(args)); }
 	}
@@ -42,22 +42,19 @@ class Color{
 		return ColorParser.validColor(color);
 	}
 
-	/**
-	 * 
-	 *
-	 * @returns {string}
-	 */
-	toString(){
-		return this.toRgba()
+	toString(format='rgba'){
+		switch(format){
+			case 'rgba':return this.toRgba();return;
+			case 'rgb':return this.toRgb();return;
+			case 'hsla':return this.toHsla();return;
+			case 'hsl':return this.toHsl();return;
+			case 'hexa':return this.toHexa();return;
+			case 'hex':return this.toHex();return;
+		}
+		return this.toRgba(); 
 	}
-	
-	toJSON(){
-		return this.toObject();
-	}
-
-	valueOf(){
-		return this.toObject()
-	}
+	toJSON(){ return this.toObject(); }
+	valueOf(){ return this.toObject(); }
 	toObject(allowDecimal=true){ return ColorExporter.toObject(this,allowDecimal);}
 	toColor(){ return ColorExporter.toColor(this); }
 	toHex(){ return ColorExporter.toHex(this); }
@@ -83,7 +80,7 @@ class Color{
 
 	/* static area */
 	static from(...args){
-		return new this( ColorParser.parse(...args) );
+		return new this( ColorParser.parseWithDecimal(...args) );
 	}
 
 	
