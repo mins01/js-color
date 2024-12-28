@@ -86,6 +86,14 @@ let v , r , args;
   args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.validHsla(...args); console.assert(r === args[0],args[0]+'=>'+r);
 }
 {
+  args = [0,128,255,0.5];   r = ColorParser.valid(...args); console.assert(r !== null,args[0]+'=>'+r);
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.valid(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = ['hsla(270, 59%, 70%,0.5)'];   r = ColorParser.valid(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  
+}
+
+
+{
   args = [{r:0,g:128,b:255} ];   r = ColorParser.parseColor(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
   args = [{r:0,g:128,b:255,a:0.5} ];   r = ColorParser.parseColor(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
   args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseColor(...args); console.assert(r === null,args[0]+'=>'+JSON.stringify(r));

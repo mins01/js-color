@@ -34,35 +34,6 @@ console.log('Version',Color.version);
 console.log('# Test Color')
 
 let v = '', r = null , c = null;
-console.log('TEST: Color.validColor');
-
-
-
-console.log('TEST: Color.parseColor');
-
-
-
-console.log('TEST: Color.toColor');
-
-console.log('TEST: Color.validHex');
-
-
-console.log('TEST: Color.parseHex+toHex');
-
-
-// https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb
-/* Absolute values */
-console.log('TEST: Color.validRgb + Color.validRgba');
-
-
-
-console.log('TEST: Color.parseRgb + Color.parseRgba');
-
-
-console.log('TEST: Color.toRgb + Color.toRgba');
-
-console.log('TEST: Color.parse');
-
 
 console.log('TEST: Color.from');
 v = [0,128,255]; r = Color.from(v[0],v[1],v[2]); console.assert(r?.toHex() === '#0080ff',v+'=>'+r?.toHex())
@@ -85,13 +56,12 @@ v = new Color({r:0,g:128,b:255}); console.assert(v.toHex()==='#0080ff','=>'+v?.t
     try{v.set({r:0,g:100,b:500,a:0.2});console.assert(false,'=>'+JSON.stringify(v))}catch(e){ console.assert(true,'=>'+JSON.stringify(v))}
     try{v.set(1,2,3,4);console.assert(false,'=>'+JSON.stringify(v))}catch(e){ console.assert(true,'=>'+JSON.stringify(v))}
 
-console.log('TEST: Color.validHsl(),Color.validHsla()');
-
-
-console.log('TEST: Color.parseHsl(),Color.parseHsla()');
-
-
-console.log('TEST: Color.toHex(),toRgb(),toRgba(),toHsl(),toHsla() with disallowDecimal(default)');
-
-console.log('TEST: ColorExporter.toHex(),toRgb(),toRgba(),toHsl(),toHsla() with allowDecimal');
+console.log('TEST: ToMethod');
+v = new Color(0,128,255,0.3);
+r = v.toHexa(); console.assert(ColorParser.validHexa(r) !== null, v.toString()+'=>'+r);
+r = v.toHex(); console.assert(ColorParser.validHex(r) !== null, v.toString()+'=>'+r);
+r = v.toRgba(); console.assert(ColorParser.validRgba(r) !== null, v.toString()+'=>'+r);
+r = v.toRgb(); console.assert(ColorParser.validRgb(r) !== null, v.toString()+'=>'+r);
+r = v.toHsla(); console.assert(ColorParser.validHsla(r) !== null, v.toString()+'=>'+r);
+r = v.toHsl(); console.assert(ColorParser.validHsl(r) !== null, v.toString()+'=>'+r);
 

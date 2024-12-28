@@ -9,4 +9,4 @@ const Index = {
 export default Index;
 export {Color,colorRegExps,ColorConverter};
 
-//use to: import jsColor,{Color} from "./index.js";
+//use to: import jsColor,{Color} from "./jsColor.js";

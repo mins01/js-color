@@ -30,7 +30,7 @@ export default class ColorParser{
 		}else if(typeof v === "object" ){
 			return this.parseColor(v);
 		}else{
-			return this.parseHex(v)??this.parseRgb(v)??this.parseHsl(v);
+			return this.parseHexa(v)??this.parseRgba(v)??this.parseHsla(v);
 		}
 	}
 
@@ -51,7 +51,28 @@ export default class ColorParser{
 		}else if(typeof v === "object" ){
 			return this.parseColor(v);
 		}else{
-			return this.parseHex(v)??this.parseRgb(v,true)??this.parseHsl(v,true);
+			return this.parseHexa(v)??this.parseRgba(v,true)??this.parseHsla(v,true);
+		}
+	}
+
+	static valid(...args){
+		let v = null;
+		if(args.length === 1){
+			v = args[0];
+		}else if(args.length === 3){
+			v = {r:args[0],g:args[1],b:args[2]};
+		}else if(args.length === 4){
+			v = {r:args[0],g:args[1],b:args[2],a:args[3]};
+		}else{
+			return null;
+		}
+		
+		if(!v){
+			return null;
+		}else if(typeof v === "object" ){
+			return this.validColor(v);
+		}else{
+			return this.validHexa(v)??this.validRgba(v)??this.validHsla(v);
 		}
 	}
 
@@ -70,8 +91,11 @@ export default class ColorParser{
 
 
 
-	static validHex(v){
+	static validHexa(v){
 		return /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v)?v:null;
+	}
+	static validHex(v){
+		return this.validHexa(v);
 	}
 
 
