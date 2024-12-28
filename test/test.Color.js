@@ -28,10 +28,10 @@ if(globalThis.process){
     console.log('Test by Color.js');
 }
 
-console.log('Version',Color.version);
+console.log('Color version: ',Color.version);
 
 
-console.log('# Test Color')
+console.log('# Start: Test for Color #')
 
 let v = '', r = null , c = null;
 
@@ -65,3 +65,4 @@ r = v.toRgb(); console.assert(ColorParser.validRgb(r) !== null, v.toString()+'=>
 r = v.toHsla(); console.assert(ColorParser.validHsla(r) !== null, v.toString()+'=>'+r);
 r = v.toHsl(); console.assert(ColorParser.validHsl(r) !== null, v.toString()+'=>'+r);
 
+console.log('# End: Test for Color #')

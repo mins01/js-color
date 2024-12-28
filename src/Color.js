@@ -4,7 +4,7 @@ import ColorParser from "./ColorParser.js";
 import ColorExporter from "./ColorExporter.js";
 
 class Color{
-	static version='v1.0.0';
+	static version='v1.1.241228';
 	
 	// r=null;
 	// g=null;

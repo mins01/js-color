@@ -3,6 +3,7 @@
 
 # before: npm install terser -g
 npx terser src/colorRegExps.js -o dist/colorRegExps.js --compress
+npx terser src/namedColors.js -o dist/namedColors.js --compress
 npx terser src/ColorConverter.js -o dist/ColorConverter.js --compress
 npx terser src/ColorExporter.js -o dist/ColorExporter.js --compress
 npx terser src/ColorParser.js -o dist/ColorParser.js --compress
