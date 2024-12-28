@@ -1,12 +1,14 @@
 import colorRegExps from "./colorRegExps.js";
 import ColorConverter from "./ColorConverter.js";
+import ColorParser from "./ColorParser.js";
+import ColorExporter from "./ColorExporter.js";
 import Color from "./Color.js";
 
-const Index = {
-    Color,colorRegExps,ColorConverter
+const jsColor = {
+    Color,colorRegExps,ColorConverter,ColorParser,ColorExporter
 }
 
-export default Index;
-export {Color,colorRegExps,ColorConverter};
+export default jsColor;
+export {Color,colorRegExps,ColorConverter,ColorParser,ColorExporter};
 
-//use to: import jsColor,{Color} from "./jsColor.js";
+//use to: import jsColor,{Color,colorRegExps,ColorConverter,ColorParser,ColorExporter} from "./jsColor.js";
