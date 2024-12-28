@@ -74,14 +74,14 @@ export default class ColorParser{
 
 
 
-	static validRgb(v){
+	static validRgba(v){
 		return colorRegExps.rgba.test(v)?v:null;
 	}
-	static validRgba(v){
-		return this.validRgb(v);
+	static validRgb(v){
+		return this.validRgba(v);
 	}
 
-	static parseRgb(v){
+	static parseRgba(v,allowDecimal=false){
 		const regexpRgba = new RegExp(
 			colorRegExps.rgba.source,
 			colorRegExps.rgba.flags + "g",
@@ -93,29 +93,37 @@ export default class ColorParser{
 		let g = rvs[0][2]??null;
 		let b = rvs[0][3]??null;
 		let a = rvs[0][4]??null;
-		if(r!==null) r = (r.lastIndexOf('%') !== -1)?Math.round(parseFloat(r)/100*255):parseFloat(r);
-		if(g!==null) g = (g.lastIndexOf('%') !== -1)?Math.round(parseFloat(g)/100*255):parseFloat(g);
-		if(b!==null) b = (b.lastIndexOf('%') !== -1)?Math.round(parseFloat(b)/100*255):parseFloat(b);
+		if(r!==null) r = (r.lastIndexOf('%') !== -1)?(parseFloat(r)/100*255):parseFloat(r);
+		if(g!==null) g = (g.lastIndexOf('%') !== -1)?(parseFloat(g)/100*255):parseFloat(g);
+		if(b!==null) b = (b.lastIndexOf('%') !== -1)?(parseFloat(b)/100*255):parseFloat(b);
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a);
 		
 		if(r===null || b=== null || g===null){return null;}
+		if(!allowDecimal){
+			r = Math.round(r);
+			g = Math.round(g);
+			b = Math.round(b);
+		}
 		return { r:r, g:g, b:b, a:(a??1) };
 	}
-	static parseRgba(v){
-		return this.parseRgb(v);
+	static parseRgb(v,allowDecimal=false){
+		const r = this.parseRgba(v,allowDecimal);
+		if(r){ delete r.a;}
+		return r;
 	}
 
 
 
-	static validHsl(v){
+
+	static validHsla(v){
 		return colorRegExps.hsla.test(v)?v:null;
 	}
 
-	static validHsla(v){
-		return this.validHsl(v);
+	static validHsl(v){
+		return this.validHsla(v);
 	}
 	
-	static parseHsl(v){
+	static parseHsla(v,allowDecimal=false){
 		const regexpHsla = new RegExp(
 			colorRegExps.hsla.source,
 			colorRegExps.hsla.flags + "g",
@@ -141,12 +149,14 @@ export default class ColorParser{
 		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1
 
 		if(h===null || s=== null || l===null){return null;}
-		const rgb = ColorConverter.hslToRgb(h,s,l,true);
+		const rgb = ColorConverter.hslToRgb(h,s,l,allowDecimal);
 		return { r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
 	}
 	
-	static parseHsla(v){
-		return this.parseHsl(v);
+	static parseHsl(v,allowDecimal=false){
+		const r = this.parseHsla(v,allowDecimal);
+		if(r){ delete r.a;}
+		return r;
 	}
 
 

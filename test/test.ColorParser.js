@@ -100,15 +100,18 @@ let v , r , args;
   args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHex(...args); console.assert(r === null,args[0]+'=>'+JSON.stringify(r));
 }
 {
-  args = ['rgb(0,128,255)'];   r = ColorParser.parseRgb(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
-  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseRgb(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgb(0,128,255)'];   r = ColorParser.parseRgba(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
   args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseRgba(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
-  args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseRgb(...args); console.assert(r === null,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgba(0,128.1,255,0.5)'];   r = ColorParser.parseRgba(...args,true); console.assert(r?.g === 128.1,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseRgb(...args); console.assert(r?.g === 128 && r?.a === undefined,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseRgba(...args); console.assert(r === null,args[0]+'=>'+JSON.stringify(r));
 }
 {
-  args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHsl(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
-  args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsla(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
-  args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsla(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHsla(...args); console.assert(r?.g === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHsla(...args); console.assert(r?.g === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHsla(...args,true); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsla(...args); console.assert(r?.g === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsl(...args); console.assert(r?.g === 133 && r?.a === undefined,args[0]+'=>'+JSON.stringify(r));
   args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseHsla(...args); console.assert(r === null ,args[0]+'=>'+JSON.stringify(r));
 }
 
