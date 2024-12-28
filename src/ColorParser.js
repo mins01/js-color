@@ -1,9 +1,8 @@
 import colorRegExps from "./colorRegExps.js";
+import namedColors from "./namedColors.js";
 import ColorConverter from "./ColorConverter.js";
 
 export default class ColorParser{
-
-
 	static validRed(v){ return (isNaN(v) || v<0 || v>255)?null:v; }
 	static validGreen(v){ return this.validRed(v); }
 	static validBlue(v){ return this.validRed(v); }
@@ -30,7 +29,7 @@ export default class ColorParser{
 		}else if(typeof v === "object" ){
 			return this.parseColor(v);
 		}else{
-			return this.parseHexa(v)??this.parseRgba(v)??this.parseHsla(v);
+			return this.parseNamedColor(v)??this.parseHexa(v)??this.parseRgba(v)??this.parseHsla(v);
 		}
 	}
 
@@ -51,7 +50,7 @@ export default class ColorParser{
 		}else if(typeof v === "object" ){
 			return this.parseColor(v);
 		}else{
-			return this.parseHexa(v)??this.parseRgba(v,true)??this.parseHsla(v,true);
+			return this.parseNamedColor(v)??this.parseHexa(v)??this.parseRgba(v,true)??this.parseHsla(v,true);
 		}
 	}
 
@@ -72,7 +71,7 @@ export default class ColorParser{
 		}else if(typeof v === "object" ){
 			return this.validColor(v);
 		}else{
-			return this.validHexa(v)??this.validRgba(v)??this.validHsla(v);
+			return this.validNamedColor(v)??this.validHexa(v)??this.validRgba(v)??this.validHsla(v);
 		}
 	}
 
@@ -89,7 +88,12 @@ export default class ColorParser{
 		return color;
 	}
 
-
+	static validNamedColor(v){
+		return namedColors[v]?v:null;
+	}
+	static parseNamedColor(v){
+		return namedColors[v]?this.parseHexa(namedColors[v]):null;
+	}
 
 	static validHexa(v){
 		return /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v)?v:null;
@@ -99,7 +103,7 @@ export default class ColorParser{
 	}
 
 
-	static parseHex(v){
+	static parseHexa(v){
 		if(!(v = this.validHex(v))){ return null; }
 		const s = v.substring(1); // remove #
 		const len = s.length
@@ -110,8 +114,10 @@ export default class ColorParser{
 		else if(len==8){ return { r:parseInt(s.substring(0,2),16), g:parseInt(s.substring(2,4),16), b:parseInt(s.substring(4,6),16), a:parseInt(s.substring(6,8),16)/255 }; }
 		return null;
 	}
-	static parseHexa(v){
-		return this.parseHex(v);
+	static parseHex(v){
+		const r = this.parseHexa(v);
+		if(r){ delete r.a;}
+		return r;
 	}
 
 

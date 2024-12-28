@@ -1,3 +1,5 @@
+import namedColors from "../src/namedColors.js";
+import ColorExporter from "../src/ColorExporter.js";
 import ColorParser from "../src/ColorParser.js";
 
 console.log('# Start: Test for ColorParser #');
@@ -86,10 +88,14 @@ let v , r , args;
   args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.validHsla(...args); console.assert(r === args[0],args[0]+'=>'+r);
 }
 {
+  args = ['red'];   r = ColorParser.validNamedColor(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.validNamedColor(...args); console.assert(r === null,args[0]+'=>'+r);
+}
+{
   args = [0,128,255,0.5];   r = ColorParser.valid(...args); console.assert(r !== null,args[0]+'=>'+r);
   args = ['rgba(0,128,255,0.5)'];   r = ColorParser.valid(...args); console.assert(r === args[0],args[0]+'=>'+r);
   args = ['hsla(270, 59%, 70%,0.5)'];   r = ColorParser.valid(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  
+  args = ['red'];   r = ColorParser.valid(...args); console.assert(r === args[0],args[0]+'=>'+r);
 }
 
 
@@ -121,6 +127,10 @@ let v , r , args;
   args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsla(...args); console.assert(r?.g === 133,args[0]+'=>'+JSON.stringify(r));
   args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsl(...args); console.assert(r?.g === 133 && r?.a === undefined,args[0]+'=>'+JSON.stringify(r));
   args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseHsla(...args); console.assert(r === null ,args[0]+'=>'+JSON.stringify(r));
+}
+{
+  args = ['red'];   r = ColorParser.parseNamedColor(...args); console.assert(ColorExporter.toHex(r) === (namedColors[args[0]]??null),args[0]+'=>'+JSON.stringify(r));
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseNamedColor(...args); console.assert(ColorExporter.toHex(r) === (namedColors[args[0]]??null),args[0]+'=>'+JSON.stringify(r));
 }
 
 {
