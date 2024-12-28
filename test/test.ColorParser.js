@@ -127,4 +127,4 @@ let v , r , args;
 }
 
 
-console.log('# End: Test for ColorConverter #');
+console.log('# End: Test for ColorParser #');
