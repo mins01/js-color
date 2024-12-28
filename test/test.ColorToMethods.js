@@ -1,31 +1,4 @@
-import ColorJs from "../src/Color.js";
-// import ColorMinJs from "../dist/Color.min.js";
-
-// import jsColor from "js-color";
-// const Color = jsColor.Color;
-let Color = null;
-if(globalThis.process){
-    if(process.argv[2]??false){
-        const arg2 = process.argv[2];
-        if(arg2==1){
-            Color = ColorJs
-            console.log('Test by Color.js');
-        }
-        else if(arg2==2){
-            Color = ColorMinJs
-            console.log('Test by Color.min.js');
-        }else{
-            Color = ColorJs
-            console.log('Test by Color.js');
-        }
-    }else{
-        Color = ColorJs
-        console.log('Test by Color.js');
-    }
-}else{
-    Color = ColorJs
-    console.log('Test by Color.js');
-}
+import Color from "../src/Color.js";
 
 console.log('Version',Color.version);
 
