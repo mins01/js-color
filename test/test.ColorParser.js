@@ -101,18 +101,27 @@ let v , r , args;
 }
 {
   args = ['rgb(0,128,255)'];   r = ColorParser.parseRgb(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
-  args = ['rgba(0,128,255,0.6)'];   r = ColorParser.parseRgb(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
-  args = ['rgba(0,128,255,0.6)'];   r = ColorParser.parseRgba(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseRgb(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseRgba(...args); console.assert(r?.g === 128,args[0]+'=>'+JSON.stringify(r));
   args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseRgb(...args); console.assert(r === null,args[0]+'=>'+JSON.stringify(r));
 }
 {
   args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHsl(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
-  args = ['hsla(270, 59%, 70%, 0.2)'];   r = ColorParser.parseHsla(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
-  args = ['hsla(270, 59%, 70%, 0.2)'];   r = ColorParser.parseHsla(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
-  args = ['rgba(0,128,255,0.6)'];   r = ColorParser.parseHsla(...args); console.assert(r === null ,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsla(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsla(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseHsla(...args); console.assert(r === null ,args[0]+'=>'+JSON.stringify(r));
 }
 
-
+{
+  args = [0,128,255];   r = ColorParser.parse(...args); console.assert(r.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = [0,128,255,0.5];   r = ColorParser.parse(...args); console.assert(r.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = [{r:0,g:128,b:255}];   r = ColorParser.parse(...args); console.assert(r.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = [{r:0,g:128,b:255,a:0.5}];   r = ColorParser.parse(...args); console.assert(r.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgb(0,128,255)'];   r = ColorParser.parse(...args); console.assert(r.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parse(...args); console.assert(r.g === 128,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parse(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parse(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
+}
 
 
 console.log('# End: Test for ColorConverter #');
