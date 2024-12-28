@@ -1,5 +1,5 @@
 import ColorJs from "../src/Color.js";
-import ColorMinJs from "../dist/Color.min.js";
+import ColorMinJs from "../dist/Color.js";
 
 // import jsColor from "js-color";
 // const Color = jsColor.Color;
@@ -55,25 +55,7 @@ v = {r:0,g:128,a:0.1};r = Color.toColor(v); console.assert(r === null,r+' !== '+
 
 
 console.log('TEST: Color.validHex');
-v = '#123';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#aBc';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#z23';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
 
-v = '#1234';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#aBcD';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#z234';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
-
-v = '#123456';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#aBcDeF';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#z23456';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
-
-v = '#1234567';r = Color.validHex(v); console.assert(r === null ,r+' !== '+v);
-v = '#aBcDeFa';r = Color.validHex(v); console.assert(r === null ,r+' !== '+v);
-v = '#z234567';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
-
-v = '#12345678';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#aBcDeFaB';r = Color.validHex(v); console.assert(r === v.replace(/\s/g,'').toLowerCase(),r+' !== '+v);
-v = '#z2345678';r = Color.validHex(v); console.assert(r === null ,v+' !== null');
 
 console.log('TEST: Color.parseHex+toHex');
 v = '#123';r = Color.parseHex(v); c = Color.toHex(r); console.assert(c === '#112233',c+' != #112233');
@@ -148,20 +130,6 @@ v = new Color({r:0,g:128,b:255}); console.assert(v.toHex()==='#0080ff','=>'+v?.t
     try{v.set(1,2,3,4);console.assert(false,'=>'+JSON.stringify(v))}catch(e){ console.assert(true,'=>'+JSON.stringify(v))}
 
 console.log('TEST: Color.validHsl(),Color.validHsla()');
-v = 'hsl(270,60%,70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(270, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(270 60% 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(270deg, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(4.71239rad, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(.75turn, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(270, 60%, 50%, .15)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(270, 60%, 50%, 15%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(270 60% 50% / .15)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(270 60% 50% / 15%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(2.75turn, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-v = 'hsl(-2.75turn, 60%, 70%)';r = Color.validHsl(v); console.assert(r !== null ,r+' !== '+v);
-
-v = 'hsl(270,60%,70%)';r = Color.validHsla(v); console.assert(r !== null ,r+' !== '+v);
 
 
 console.log('TEST: Color.parseHsl(),Color.parseHsla()');

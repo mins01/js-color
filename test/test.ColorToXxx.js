@@ -1,5 +1,5 @@
 import ColorJs from "../src/Color.js";
-import ColorMinJs from "../dist/Color.min.js";
+// import ColorMinJs from "../dist/Color.min.js";
 
 // import jsColor from "js-color";
 // const Color = jsColor.Color;
