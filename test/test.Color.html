@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Style-Type" content="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="shortcut icon" href="http://www.mins01.com/favicon.ico"> 
+    <link rel="shortcut icon" href="/favicon.ico"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script src="/js/ForGoogle.js"></script>
@@ -37,21 +37,6 @@
     
     <!-- //meta og -->
     
-    <script type="module">
-      import Color from "../src/Color.js";
-      globalThis.Color = Color;
-
-      const color1 = globalThis.color1= new Color({r:0,g:128,b:255});
-      console.log('color1',color1);
-    </script>
-    <script type="module">
-      import jsColor,{Color} from "../index.js";
-      globalThis.jsColor = jsColor;
-      globalThis.Color2 = Color;
-
-      const color2 = globalThis.color2= new Color2({r:0,g:128,b:255});
-      console.log('color2',color2);
-    </script>
     <script type="module" src="./test.Color.js"></script>
 </head>
 <body>
