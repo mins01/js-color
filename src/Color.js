@@ -3,9 +3,7 @@ import ColorConverter from "./ColorConverter.js";
 import ColorParser from "./ColorParser.js";
 import ColorExporter from "./ColorExporter.js";
 
-class Color{
-	static version='v1.1.241228';
-	
+class Color{	
 	// r=null;
 	// g=null;
 	// b=null;

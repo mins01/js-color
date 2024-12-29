@@ -1,7 +1,9 @@
-import Color from "../src/Color.js";
-import ColorParser from "../src/ColorParser.js";
+// import Color from "../src/Color.js";
+// import ColorParser from "../src/ColorParser.js";
+import jsColor,{Color,ColorParser} from "../src/jsColor.js";
 
-console.log('Color version: ',Color.version);
+
+console.log('Color version: ',jsColor.version);
 
 
 console.log('# Start: Test for Color #')

@@ -6,8 +6,10 @@ import ColorExporter from "./ColorExporter.js";
 import Color from "./Color.js";
 
 const jsColor = {
+    version:'v1.0.20241229',
     Color,colorRegExps,namedColors,ColorConverter,ColorParser,ColorExporter
 }
+// jsColor.version='v1.0.20241229';
 
 export default jsColor;
 export {Color,colorRegExps,namedColors,ColorConverter,ColorParser,ColorExporter};
