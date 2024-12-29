@@ -43,5 +43,11 @@ argss.forEach((args,idx) => {
     r = c.toHsl(false); re = Color.from(r).toHsl(); d['toHsl disallowDecimal(default)']={return:r};
     r = c.toHsla(true); d['toHsla allowDecimal']={return:r};
     r = c.toHsla(false); d['toHsla disallowDecimal(default)']={return:r};
+
+    r = c.toHwb(true); re = Color.from(r).toHwb(); d['toHwb allowDecimal']={return:r};
+    r = c.toHwb(false); re = Color.from(r).toHwb(); d['toHwb disallowDecimal(default)']={return:r};
+    r = c.toHwba(true); d['toHwba allowDecimal']={return:r};
+    r = c.toHwba(false); d['toHwba disallowDecimal(default)']={return:r};
+    
     console.table(d);
 });

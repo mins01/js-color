@@ -33,6 +33,17 @@ export default class ColorExporter{
 		return `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, ${color?.a??1})`;
 	}
 
+	static toHwb(color, allowDecimal=false){
+		if(!ColorParser.validColor(color)){ return null; }
+		const hwb = ColorConverter.rgbToHwb(color.r,color.g,color.b,allowDecimal);
+		return `hwb(${hwb.h}, ${hwb.w}%, ${hwb.b}%)`;
+	}
+	static toHwba(color, allowDecimal=false){
+		if(!ColorParser.validColor(color)){ return null; }
+		const hwb = ColorConverter.rgbToHwb(color.r,color.g,color.b,allowDecimal);
+		return `hwba(${hwb.h}, ${hwb.w}%, ${hwb.b}%, ${color?.a??1})`;
+	}
+
 	static toColor(color){ return ColorParser.parseColor(color); }
 
   static toObject(color,allowDecimal=true){

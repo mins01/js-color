@@ -29,7 +29,7 @@ export default class ColorParser{
 		}else if(typeof v === "object" ){
 			return this.parseColor(v);
 		}else{
-			return this.parseNamedColor(v)??this.parseHexa(v)??this.parseRgba(v)??this.parseHsla(v);
+			return this.parseNamedColor(v)??this.parseHexa(v)??this.parseRgba(v)??this.parseHsla(v)??this.parseHwba(v);
 		}
 	}
 
@@ -50,7 +50,7 @@ export default class ColorParser{
 		}else if(typeof v === "object" ){
 			return this.parseColor(v);
 		}else{
-			return this.parseNamedColor(v)??this.parseHexa(v)??this.parseRgba(v,true)??this.parseHsla(v,true);
+			return this.parseNamedColor(v)??this.parseHexa(v)??this.parseRgba(v,true)??this.parseHsla(v,true)??this.parseHwba(v,true);
 		}
 	}
 
@@ -210,4 +210,49 @@ export default class ColorParser{
 	}
 
 
+
+
+	static validHwba(v){
+		return colorRegExps.hwba.test(v)?v:null;
+	}
+
+	static validHwb(v){
+		return this.validHwba(v);
+	}
+
+	static parseHwba(v,allowDecimal=false){
+		const regexpHwba = new RegExp(
+			colorRegExps.hwba.source,
+			colorRegExps.hwba.flags + "g",
+		);
+		const rs = v.matchAll(regexpHwba); if(!rs){ return null}
+		const rvs = [...rs]; if(!rvs || !rvs[0]){ return null}
+		
+		let h = rvs[0][1]??null;
+		let w = rvs[0][2]??null;
+		let b = rvs[0][3]??null;
+		let a = rvs[0][4]??null;
+
+		// deg|rad|grad|turn
+		if(h.lastIndexOf('deg') !== -1){ h = parseFloat(h); }
+		else if(h.lastIndexOf('rad') !== -1){ h = parseFloat(h) * (180/Math.PI); }
+		else if(h.lastIndexOf('grad') !== -1){ h = parseFloat(h) * (180/200); }
+		else if(h.lastIndexOf('turn') !== -1){ h = parseFloat(h) * 360; }
+		else{ h = parseFloat(h); }
+		h = (360+ h % 360) % 360; // 0-360
+
+		if(w!==null) w = (w.lastIndexOf('%') !== -1)?parseFloat(w):parseFloat(w)*100; //0-100
+		if(b!==null) b = (b.lastIndexOf('%') !== -1)?parseFloat(b):parseFloat(b)*100; //0-100
+		if(a!==null) a = (a.lastIndexOf('%') !== -1)?parseFloat(a)/100:parseFloat(a); //0-1
+
+		if(h===null || w=== null || b===null){return null;}
+		const rgb = ColorConverter.hwbToRgb(h,w,b,allowDecimal);
+		return { r:rgb.r, g:rgb.g, b:rgb.b, a:(a??1)};
+	}
+
+	static parseHwb(v,allowDecimal=false){
+		const r = this.parseHwba(v,allowDecimal);
+		if(r){ delete r.a;}
+		return r;
+	}
 }

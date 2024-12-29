@@ -63,6 +63,8 @@ class Color{
 	toRgba(allowDecimal=false){ return ColorExporter.toRgba(this,allowDecimal); }
 	toHsl(allowDecimal=false){ return ColorExporter.toHsl(this,allowDecimal); }
 	toHsla(allowDecimal=false){ return ColorExporter.toHsla(this,allowDecimal); }
+	toHwb(allowDecimal=false){ return ColorExporter.toHwb(this,allowDecimal); }
+	toHwba(allowDecimal=false){ return ColorExporter.toHwba(this,allowDecimal); }
 
 	setR(v){ if(ColorParser.validRed(v)===null){ throw new Error(`Red must be between 0 and 255. (${v})`); } this.#r = v; }
 	setG(v){ if(ColorParser.validGreen(v)===null){ throw new Error(`Green must be between 0 and 255. (${v})`); } this.#g = v; }

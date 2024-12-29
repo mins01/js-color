@@ -88,6 +88,15 @@ let v , r , args;
   args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.validHsla(...args); console.assert(r === args[0],args[0]+'=>'+r);
 }
 {
+  args = ['hwb(270, 59%, 70%)'];   r = ColorParser.validHwb(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = ['hwb(270, 59%, 70%, 0.5)'];   r = ColorParser.validHwb(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = ['hwba(270, 59%, 70%, 0.5)'];   r = ColorParser.validHwb(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = ['hwb(0.1, 0.1%, 0.1%,0.5)'];   r = ColorParser.validHwb(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = ['hwb(0.1, 0.1, 0.1,0.5)'];   r = ColorParser.validHwb(...args); console.assert(r === null,args[0]+'=>'+r);
+  args = ['hwb(270, , 70%, 0.5)'];   r = ColorParser.validHwb(...args); console.assert(r === null,args[0]+'=>'+r);
+  args = ['hwba(270, 59%, 70%, 0.5)'];   r = ColorParser.validHwba(...args); console.assert(r === args[0],args[0]+'=>'+r);
+}
+{
   args = ['red'];   r = ColorParser.validNamedColor(...args); console.assert(r === args[0],args[0]+'=>'+r);
   args = ['rgba(0,128,255,0.5)'];   r = ColorParser.validNamedColor(...args); console.assert(r === null,args[0]+'=>'+r);
 }
@@ -121,12 +130,20 @@ let v , r , args;
   args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseRgba(...args); console.assert(r === null,args[0]+'=>'+JSON.stringify(r));
 }
 {
-  args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHsla(...args); console.assert(r?.g === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hsl(270deg, 59%, 70%)'];   r = ColorParser.parseHsla(...args); console.assert(r?.g === 133,args[0]+'=>'+JSON.stringify(r));
   args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHsla(...args); console.assert(r?.g === 133,args[0]+'=>'+JSON.stringify(r));
   args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parseHsla(...args,true); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
   args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsla(...args); console.assert(r?.g === 133,args[0]+'=>'+JSON.stringify(r));
   args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHsl(...args); console.assert(r?.g === 133 && r?.a === undefined,args[0]+'=>'+JSON.stringify(r));
   args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseHsla(...args); console.assert(r === null ,args[0]+'=>'+JSON.stringify(r));
+}
+{
+  args = ['hwb(270deg, 59%, 70%)'];   r = ColorParser.parseHwba(...args); console.assert(r?.g === 150,args[0]+'=>'+JSON.stringify(r));
+  args = ['hwb(270, 59%, 70%)'];   r = ColorParser.parseHwba(...args); console.assert(r?.g === 150,args[0]+'=>'+JSON.stringify(r));
+  args = ['hwb(270, 59%, 70%)'];   r = ColorParser.parseHwba(...args,true); console.assert(Math.round(r?.g) === 150,args[0]+'=>'+JSON.stringify(r));
+  args = ['hwba(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHwba(...args); console.assert(r?.g === 150,args[0]+'=>'+JSON.stringify(r));
+  args = ['hwba(270, 59%, 70%, 0.5)'];   r = ColorParser.parseHwb(...args); console.assert(r?.g === 150 && r?.a === undefined,args[0]+'=>'+JSON.stringify(r));
+  args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parseHwba(...args); console.assert(r === null ,args[0]+'=>'+JSON.stringify(r));
 }
 {
   args = ['red'];   r = ColorParser.parseNamedColor(...args); console.assert(ColorExporter.toHex(r) === (namedColors[args[0]]??null),args[0]+'=>'+JSON.stringify(r));
@@ -142,6 +159,8 @@ let v , r , args;
   args = ['rgba(0,128,255,0.5)'];   r = ColorParser.parse(...args); console.assert(r.g === 128,args[0]+'=>'+JSON.stringify(r));
   args = ['hsl(270, 59%, 70%)'];   r = ColorParser.parse(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
   args = ['hsla(270, 59%, 70%, 0.5)'];   r = ColorParser.parse(...args); console.assert(Math.round(r?.g) === 133,args[0]+'=>'+JSON.stringify(r));
+  args = ['hwb(270, 59%, 70%)'];   r = ColorParser.parse(...args); console.assert(Math.round(r?.g) === 150,args[0]+'=>'+JSON.stringify(r));
+  args = ['hwba(270, 59%, 70%, 0.5)'];   r = ColorParser.parse(...args); console.assert(Math.round(r?.g) === 150,args[0]+'=>'+JSON.stringify(r));
 }
 
 
