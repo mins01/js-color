@@ -1,4 +1,4 @@
-import ColorExporter from "../src/ColorExporter.js";
+import ColorExporter from "../lib/ColorExporter.js";
 
 console.log('# Start: Test for ColorExporter #');
 

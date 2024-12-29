@@ -1,4 +1,4 @@
-import jsColor,{Color,colorRegExps,ColorConverter} from "../src/index.js";
+import jsColor,{Color,colorRegExps,ColorConverter} from "../lib/index.js";
 
 console.log('Start: Test for index');
 

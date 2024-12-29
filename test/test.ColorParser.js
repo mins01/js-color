@@ -1,6 +1,6 @@
-import namedColors from "../src/namedColors.js";
-import ColorExporter from "../src/ColorExporter.js";
-import ColorParser from "../src/ColorParser.js";
+import namedColors from "../lib/namedColors.js";
+import ColorExporter from "../lib/ColorExporter.js";
+import ColorParser from "../lib/ColorParser.js";
 
 console.log('# Start: Test for ColorParser #');
 
