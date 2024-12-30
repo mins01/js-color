@@ -6,47 +6,43 @@ console.log('# Start: Test for ColorParser #');
 
 let v , r , args;
 {
-  args = [0];   r = ColorParser.validRed(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [0];   r = ColorParser.valid0to255(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [128];   r = ColorParser.valid0to255(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [255];   r = ColorParser.valid0to255(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [-128];    r = ColorParser.valid0to255(...args); console.assert(r === null,args[0]+'=>'+r);
+  args = [512];   r = ColorParser.valid0to255(...args); console.assert(r === null,args[0]+'=>'+r);
+  args = ['128'];   r = ColorParser.valid0to255(...args); console.assert(r === null,args[0]+'=>'+r);
+  
   args = [128];   r = ColorParser.validRed(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [255];   r = ColorParser.validRed(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [-128];    r = ColorParser.validRed(...args); console.assert(r === null,args[0]+'=>'+r);
-  args = [512];   r = ColorParser.validRed(...args); console.assert(r === null,args[0]+'=>'+r);
-  
-  args = [0];   r = ColorParser.validGreen(...args); console.assert(r === args[0],args[0]+'=>'+r);
   args = [128];   r = ColorParser.validGreen(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [255];   r = ColorParser.validGreen(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [-128];    r = ColorParser.validGreen(...args); console.assert(r === null,args[0]+'=>'+r);
-  args = [512];   r = ColorParser.validGreen(...args); console.assert(r === null,args[0]+'=>'+r);
-  
-  args = [0];   r = ColorParser.validBlue(...args); console.assert(r === args[0],args[0]+'=>'+r);
   args = [128];   r = ColorParser.validBlue(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [255];   r = ColorParser.validBlue(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [-128];    r = ColorParser.validBlue(...args); console.assert(r === null,args[0]+'=>'+r);
-  args = [512];   r = ColorParser.validBlue(...args); console.assert(r === null,args[0]+'=>'+r);
   
-  args = [0];   r = ColorParser.validAlpha(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [0];   r = ColorParser.valid0to1(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [0.5];   r = ColorParser.valid0to1(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [1];   r = ColorParser.valid0to1(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [-0.1];    r = ColorParser.valid0to1(...args); console.assert(r === null,args[0]+'=>'+r);
+  args = [1.1];   r = ColorParser.valid0to1(...args); console.assert(r === null,args[0]+'=>'+r);
+  
   args = [0.5];   r = ColorParser.validAlpha(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [1];   r = ColorParser.validAlpha(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [-0.1];    r = ColorParser.validAlpha(...args); console.assert(r === null,args[0]+'=>'+r);
-  args = [1.1];   r = ColorParser.validAlpha(...args); console.assert(r === null,args[0]+'=>'+r);
   
-  args = [0];   r = ColorParser.validHue(...args); console.assert(r === args[0],args[0]+'=>'+r);
+
+  args = [0];   r = ColorParser.valid0to360(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [180];   r = ColorParser.valid0to360(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [360];   r = ColorParser.valid0to360(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [-1];   r = ColorParser.valid0to360(...args); console.assert(r === null,args[0]+'=>'+r);
+  args = [361];    r = ColorParser.valid0to360(...args); console.assert(r === null,args[0]+'=>'+r);
+
   args = [180];   r = ColorParser.validHue(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [360];   r = ColorParser.validHue(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [-1];   r = ColorParser.validHue(...args); console.assert(r === null,args[0]+'=>'+r);
-  args = [361];    r = ColorParser.validHue(...args); console.assert(r === null,args[0]+'=>'+r);
   
-  args = [0];   r = ColorParser.validSaturation(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [0];   r = ColorParser.valid0to100(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [50];   r = ColorParser.valid0to100(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [100];   r = ColorParser.valid0to100(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = [-1];   r = ColorParser.valid0to100(...args); console.assert(r === null,args[0]+'=>'+r);
+  args = [101];    r = ColorParser.valid0to100(...args); console.assert(r === null,args[0]+'=>'+r);
+  
   args = [50];   r = ColorParser.validSaturation(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [100];   r = ColorParser.validSaturation(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [-1];   r = ColorParser.validSaturation(...args); console.assert(r === null,args[0]+'=>'+r);
-  args = [101];    r = ColorParser.validSaturation(...args); console.assert(r === null,args[0]+'=>'+r);
-  
-  args = [0];   r = ColorParser.validLightness(...args); console.assert(r === args[0],args[0]+'=>'+r);
   args = [50];   r = ColorParser.validLightness(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [100];   r = ColorParser.validLightness(...args); console.assert(r === args[0],args[0]+'=>'+r);
-  args = [-1];   r = ColorParser.validLightness(...args); console.assert(r === null,args[0]+'=>'+r);
-  args = [101];    r = ColorParser.validLightness(...args); console.assert(r === null,args[0]+'=>'+r);
+  
 }
 
 {
