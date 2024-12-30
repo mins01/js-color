@@ -6,6 +6,9 @@ console.log('# Start: Test for ColorParser #');
 
 let v , r , args;
 {
+  args = [128];   r = ColorParser.validIsNumber(...args); console.assert(r === args[0],args[0]+'=>'+r);
+  args = ['128'];   r = ColorParser.validIsNumber(...args); console.assert(r === null,args[0]+'=>'+r);
+
   args = [0];   r = ColorParser.valid0to255(...args); console.assert(r === args[0],args[0]+'=>'+r);
   args = [128];   r = ColorParser.valid0to255(...args); console.assert(r === args[0],args[0]+'=>'+r);
   args = [255];   r = ColorParser.valid0to255(...args); console.assert(r === args[0],args[0]+'=>'+r);
