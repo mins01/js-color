@@ -23,14 +23,14 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./src/jsColor.js",
-      "default": "./src/jsColor.js"
+      "import": "./v1/src/jsColor.js",
+      "default": "./v1/src/jsColor.js"
     },    
     "./Color.js": {
-      "import": "./src/Color.js",
-      "require": "./src/Color.cjs",
-      "browser": "./src/Color.js",
-      "default": "./src/Color.js"
+      "import": "./v1/src/Color.js",
+      "require": "./v1/src/Color.cjs",
+      "browser": "./v1/src/Color.js",
+      "default": "./v1/src/Color.js"
     }
   }
 }

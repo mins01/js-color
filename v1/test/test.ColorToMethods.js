@@ -1,4 +1,4 @@
-import Color from "../lib/Color.js";
+import Color from "../src/Color.js";
 
 console.log('Version',Color.version);
 

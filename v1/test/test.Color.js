@@ -1,6 +1,6 @@
 // import Color from "../lib/Color.js";
 // import ColorParser from "../lib/ColorParser.js";
-import jsColor,{Color,ColorParser} from "../lib/jsColor.js";
+import jsColor,{Color,ColorParser} from "../src/jsColor.js";
 
 
 console.log('Color version: ',jsColor.version);

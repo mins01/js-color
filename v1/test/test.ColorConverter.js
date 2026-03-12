@@ -1,4 +1,4 @@
-import ColorConverter from "../lib/ColorConverter.js";
+import ColorConverter from "../src/ColorConverter.js";
 
 console.log('# Start: Test for ColorConverter #');
 
