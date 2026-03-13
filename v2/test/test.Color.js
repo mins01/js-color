@@ -1,56 +1,236 @@
 import Color from "../src/Color.js";
 
-const color1 = new Color(20,60,200,0.004);
-console.log('color1',color1);
-const color2 = color1.clone()
-console.log('color1.clone()',color2);
-console.log('Color.fromRgba(color1)',Color.fromRgba(color1));
-console.log('#--------------------------------#');
-color1.setRgba(200,120,30)
-console.log('color1.setRgba(200,120,30)',color1);
-color1.setRgba(201,121,31,0.123)
-console.log('color1.setRgba(201,120,30,0.2)',color1);
-{
-  const hsl = color1.toHsl();
-  color2.setHsla(hsl.h,hsl.s,hsl.l);
-  console.log('color2.setHsla(hsl.h,hsl.s,hsl.l)',color2,hsl);
-}
-{
-  const hsl = color1.toHsl();
-  color2.setHsla(hsl.h,hsl.s,hsl.l,color1.a);
-  console.log('color2.setHsla(hsl.h,hsl.s,hsl.l)',color2,hsl);
-}
-{
-  const hsl = { h: 31.91489361702127, s: 0.8392857142857145, l: 0.7803921568627451 };
-  color2.setHsla(hsl.h,hsl.s,hsl.l,color1.a);
-  console.log('color2.setHsla(hsl.h,hsl.s,hsl.l)',color2,hsl);
-}
-{
-  const hsv = color1.toHsv();
-  color2.setHsva(hsv.h,hsv.s,hsv.v,color1.a);
-  console.log('color2.setHsva(hsv.h,hsv.s,hsv.v,color1.a)',color2,hsv);
-}
-console.log('#--------------------------------#');
-console.log('"1"+color1',"1"+color1);
-console.log('+color1',+color1);
-console.log('Number(color1)',Number(color1));
-console.log('JSON.stringify(color1)',JSON.stringify(color1));
-console.log('color1.toUint8ClampedArray()',color1.toUint8ClampedArray());
-console.log('color1.toStringRgb()',color1.toStringRgb());
-console.log('color1.toStringRgba()',color1.toStringRgba());
-console.log('color1.toStringHex()',color1.toStringHex());
-console.log('color1.toStringHexa()',color1.toStringHexa());
-console.log('color1.toRgb()',color1.toRgb());
-console.log('color1.toRgba()',color1.toRgba());
-console.log('color1.toHsl()',color1.toHsl());
-console.log('color1.toHsla()',color1.toHsla());
-console.log('color1.toStringHsl()',color1.toStringHsl());
-console.log('color1.toStringHsla()',color1.toStringHsla());
-console.log('color1.toHsv()',color1.toHsv());
-console.log('color1.toHsva()',color1.toHsva());
-console.log('color1.toCmyk()',color1.toCmyk());
-console.log('color1.toCmyka()',color1.toCmyka());
-console.log('color1.toStringCmyk()',color1.toStringCmyk());
-console.log('color1.toStringCmyka()',color1.toStringCmyka());
-console.log('color1.equals(color2)',color1.equals(color2),color1,color2);
+const assert = (label, result, expected) => {
+  const a = JSON.stringify(result);
+  const b = JSON.stringify(expected);
+  const pass = a === b;
+  console.log(pass ? '[PASS]' : '[FAIL]', label);
+  if (!pass) {
+    console.log('  expected:', b);
+    console.log('  got:     ', a);
+  }
+};
 
+// === constructor ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  assert('constructor(r,g,b,a)', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+}
+{
+  const c = new Color();
+  assert('constructor() defaults', c.toRgba(), { r: 0, g: 0, b: 0, a: 1 });
+}
+{
+  const c = new Color({ r: 100, g: 150, b: 200, a: 0.8 });
+  assert('constructor(object)', c.toRgba(), { r: 100, g: 150, b: 200, a: 0.8 });
+}
+{
+  const c = new Color({ r: 100, g: 150, b: 200 });
+  assert('constructor(object) no alpha', c.toRgba(), { r: 100, g: 150, b: 200, a: 1 });
+}
+
+// === clamp ===
+{
+  const c = new Color(300, -10, 128.7, 1.5);
+  assert('clamp values', c.toRgba(), { r: 255, g: 0, b: 129, a: 1 });
+}
+
+// === clone ===
+{
+  const c1 = new Color(201, 121, 31, 0.5);
+  const c2 = c1.clone();
+  assert('clone', c2.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+  assert('clone is not same ref', c1 !== c2, true);
+}
+
+// === equals ===
+{
+  const c1 = new Color(201, 121, 31, 0.5);
+  const c2 = new Color(201, 121, 31, 0.5);
+  const c3 = new Color(201, 121, 31, 0.6);
+  assert('equals true', c1.equals(c2), true);
+  assert('equals false', c1.equals(c3), false);
+}
+
+// === fromRgba ===
+{
+  const c = Color.fromRgba(201, 121, 31, 0.5);
+  assert('fromRgba', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+}
+{
+  const c1 = new Color(50, 100, 150, 0.3);
+  const c2 = Color.fromRgba(c1);
+  assert('fromRgba(object)', c2.toRgba(), { r: 50, g: 100, b: 150, a: 0.3 });
+}
+
+// === fromString ===
+{
+  const c = Color.fromString('#c9791f');
+  assert('fromString hex', c.toRgba(), { r: 201, g: 121, b: 31, a: 1 });
+}
+{
+  const c = Color.fromString('rgba(201, 121, 31, 0.5)');
+  assert('fromString rgba', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+}
+{
+  const c = Color.fromString('rgb(201, 121, 31, 0.5)');
+  assert('fromString rgb with alpha', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+}
+{
+  const c = Color.fromString('hsl(31.76, 73.28%, 45.49%)');
+  assert('fromString hsl', [c.r, c.g, c.b], [201, 121, 31]);
+}
+{
+  const c = Color.fromString('hsla(31.76, 73.28%, 45.49%, 0.5)');
+  assert('fromString hsla', { rgb: [c.r, c.g, c.b], a: c.a }, { rgb: [201, 121, 31], a: 0.5 });
+}
+{
+  const c = Color.fromString('cmyk(0%, 40%, 85%, 21%)');
+  assert('fromString cmyk', [c.r, c.g, c.b], [201, 121, 30]);
+}
+{
+  const c = Color.fromString('cmyka(0%, 40%, 85%, 21%, 0.5)');
+  assert('fromString cmyka', { rgb: [c.r, c.g, c.b], a: c.a }, { rgb: [201, 121, 30], a: 0.5 });
+}
+{
+  assert('fromString invalid', Color.fromString('not a color'), null);
+}
+
+// === setRgba ===
+{
+  const c = new Color();
+  c.setRgba(201, 121, 31, 0.5);
+  assert('setRgba', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+}
+{
+  const c = new Color(0, 0, 0, 0.8);
+  c.setRgba(100, 100, 100);
+  assert('setRgba a=null keeps alpha', c.a, 0.8);
+}
+
+// === setHsla ===
+{
+  const c = new Color();
+  c.setHsla(0, 1, 0.5);
+  assert('setHsla red', c.toRgb(), { r: 255, g: 0, b: 0 });
+}
+{
+  const c = new Color();
+  c.setHsla(120, 1, 0.5, 0.7);
+  assert('setHsla green with alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 0, g: 255, b: 0 }, a: 0.7 });
+}
+
+// === setCmyk / setCmyka ===
+{
+  const c = new Color();
+  c.setCmyk(0, 0, 0, 0);
+  assert('setCmyk white', c.toRgb(), { r: 255, g: 255, b: 255 });
+}
+{
+  const c = new Color();
+  c.setCmyk(1, 0, 0, 0);
+  assert('setCmyk cyan', c.toRgb(), { r: 0, g: 255, b: 255 });
+}
+{
+  const c = new Color();
+  c.setCmyka(0, 1, 1, 0, 0.3);
+  assert('setCmyka red with alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 255, g: 0, b: 0 }, a: 0.3 });
+}
+
+// === setHsva ===
+{
+  const c = new Color();
+  c.setHsva(0, 1, 1);
+  assert('setHsva red', c.toRgb(), { r: 255, g: 0, b: 0 });
+}
+{
+  const c = new Color();
+  c.setHsva(120, 1, 1, 0.4);
+  assert('setHsva green with alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 0, g: 255, b: 0 }, a: 0.4 });
+}
+
+// === toNumber / toRgbNumber / toRgbaNumber / toArgbNumber ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  assert('toRgbNumber', c.toRgbNumber(), ((201 << 16) | (121 << 8) | 31) >>> 0);
+  assert('toRgbaNumber', c.toRgbaNumber(), ((201 << 24) | (121 << 16) | (31 << 8) | 128) >>> 0);
+  assert('toArgbNumber', c.toArgbNumber(), ((128 << 24) | (201 << 16) | (121 << 8) | 31) >>> 0);
+  assert('toNumber === toRgbNumber', c.toNumber(), c.toRgbNumber());
+}
+
+// === valueOf / Symbol.toPrimitive ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  assert('valueOf', +c, c.toRgbNumber());
+  assert('toPrimitive string', `${c}`, c.toString());
+  assert('toPrimitive default', '' + c, c.toString());
+}
+
+// === toJSON ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  assert('toJSON', JSON.stringify(c), JSON.stringify({ r: 201, g: 121, b: 31, a: 0.5 }));
+}
+
+// === toUint8ClampedArray ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  const arr = c.toUint8ClampedArray();
+  assert('toUint8ClampedArray', [arr[0], arr[1], arr[2], arr[3]], [201, 121, 31, 128]);
+}
+
+// === toString / toStringRgb / toStringRgba ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  assert('toStringRgb', c.toStringRgb(), 'rgb(201, 121, 31)');
+  assert('toStringRgba', c.toStringRgba(), 'rgba(201, 121, 31, 0.5)');
+  assert('toString default', c.toString(), 'rgba(201, 121, 31, 0.5)');
+  assert('toString("hex")', c.toString('hex'), '#c9791f');
+  assert('toString("hsl")', c.toString('hsl'), c.toStringHsl());
+  assert('toString("cmyk")', c.toString('cmyk'), c.toStringCmyk());
+}
+
+// === toStringHex / toStringHexa ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  assert('toStringHex', c.toStringHex(), '#c9791f');
+  assert('toStringHexa', c.toStringHexa(), '#c9791f80');
+}
+
+// === toRgb / toRgba ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  assert('toRgb', c.toRgb(), { r: 201, g: 121, b: 31 });
+  assert('toRgba', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+}
+
+// === toHsl / toHsla / toStringHsl / toStringHsla ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  const hsl = c.toHsl();
+  assert('toHsl has h,s,l', 'h' in hsl && 's' in hsl && 'l' in hsl, true);
+  const hsla = c.toHsla();
+  assert('toHsla has a', hsla.a, 0.5);
+  assert('toStringHsl format', c.toStringHsl().startsWith('hsl('), true);
+  assert('toStringHsla format', c.toStringHsla().startsWith('hsla('), true);
+}
+
+// === toHsv / toHsva ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  const hsv = c.toHsv();
+  assert('toHsv has h,s,v', 'h' in hsv && 's' in hsv && 'v' in hsv, true);
+  const hsva = c.toHsva();
+  assert('toHsva has a', hsva.a, 0.5);
+}
+
+// === toCmyk / toCmyka / toStringCmyk / toStringCmyka ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  const cmyk = c.toCmyk();
+  assert('toCmyk has c,m,y,k', 'c' in cmyk && 'm' in cmyk && 'y' in cmyk && 'k' in cmyk, true);
+  const cmyka = c.toCmyka();
+  assert('toCmyka has a', cmyka.a, 0.5);
+  assert('toStringCmyk format', c.toStringCmyk().startsWith('cmyk('), true);
+  assert('toStringCmyka format', c.toStringCmyka().startsWith('cmyka('), true);
+}

@@ -1,12 +1,43 @@
-import { rgbToHsl , rgbToHsv, hslToRgb, hsvToRgb, rgbToCmyk} from './color-utils.js';
+import { rgbToHsl , rgbToHsv, hslToRgb, hsvToRgb, rgbToCmyk, cmykToRgb} from './color-utils.js';
+import ColorParser from './ColorParser.js';
+
 
 export default class Color{
   static toStringType = 'rgba';
 
+  static from(){
+
+  }
+  static fromString(string){
+    const parsed = ColorParser.parse(string);
+    if (!parsed) return null;
+    const { type, value } = parsed;
+    const color = new this();
+    switch (type) {
+      case 'hex': case 'rgb':
+        color.setRgba(value.r, value.g, value.b); break;
+      case 'hexa': case 'rgba':
+        color.setRgba(value.r, value.g, value.b, value.a); break;
+      case 'hsl':
+        color.setHsla(value.h, value.s, value.l); break;
+      case 'hsla':
+        color.setHsla(value.h, value.s, value.l, value.a); break;
+      case 'cmyk':
+        color.setCmyk(value.c, value.m, value.y, value.k); break;
+      case 'cmyka':
+        color.setCmyka(value.c, value.m, value.y, value.k, value.a); break;
+      default: return null;
+    }
+    return color;
+  }
   static fromRgba(r=0,g=0,b=0,a=1){
     return new this(r,g,b,a);
   }
 
+  r=0
+  g=0
+  b=0
+  a=1
   /**
    * Color constructor
    * @param {number} r - red value from 0 to 255
@@ -38,6 +69,14 @@ export default class Color{
   }
   setHsla(h=0,s=0,l=0,a=null){
     let { r,g,b} = hslToRgb(h,s,l);
+    this.setRgba(r,g,b,a);
+  }
+  setCmyk(c=0,m=0,y=0,k=0){
+    const {r,g,b} = cmykToRgb(c,m,y,k);
+    this.setRgba(r,g,b);
+  }
+  setCmyka(c=0,m=0,y=0,k=0,a=null){
+    const {r,g,b} = cmykToRgb(c,m,y,k);
     this.setRgba(r,g,b,a);
   }
   setHsva(h=0,s=0,v=0,a=null){

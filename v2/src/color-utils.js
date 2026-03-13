@@ -170,3 +170,11 @@ export function rgbToCmyk(r, g, b) {
 
   return { c, m, y, k };
 }
+
+export function cmykToRgb(c, m, y, k) {
+  return {
+    r: Math.round(255 * (1 - c) * (1 - k)),
+    g: Math.round(255 * (1 - m) * (1 - k)),
+    b: Math.round(255 * (1 - y) * (1 - k))
+  };
+}
