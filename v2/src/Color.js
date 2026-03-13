@@ -34,6 +34,7 @@ export default class Color{
     return new this(r,g,b,a);
   }
 
+  #cache = new Map();
   r=0
   g=0
   b=0
@@ -53,18 +54,23 @@ export default class Color{
   clone(){ return new this.constructor(this) }
 
   equals(color){
-    return ( this.r === color.r && this.g === color.g && this.b === color.b && this.a === color.a );
+    return color &&
+      this.r === color.r &&
+      this.g === color.g &&
+      this.b === color.b &&
+      this.a === color.a
   }
 
   // sets
-  setRgba(r=0,g=0,b=0,a=null){ 
+  setRgba(r=0,g=0,b=0,a=null){
+    this.#cache.clear()   // 캐시 클리어
+
     const clamp255 = v => Math.min(255, Math.max(0, Math.round(v)));
     const clamp1 = v => Math.min(1, Math.max(0, +v));
 
     this.r = clamp255(r);
     this.g = clamp255(g);
     this.b = clamp255(b);
-
     if(a !== null) this.a = clamp1(a);
   }
   setHsla(h=0,s=0,l=0,a=null){
@@ -100,7 +106,7 @@ export default class Color{
     return this.toString();
   }
   valueOf(){ return this.toNumber() }
-  toJSON(){ return {...this} }
+  toJSON(){ return { r:this.r, g:this.g, b:this.b, a:this.a } }
 
   // rgb numbers
   toRgbNumber(){ return ((this.r << 16) | (this.g << 8) | this.b) >>> 0 }
@@ -111,18 +117,17 @@ export default class Color{
   toUint8ClampedArray(){ return new Uint8ClampedArray([this.r,this.g,this.b,Math.round(this.a*255)]) }
 
   toString(type = Color.toStringType){
-    const map = {
-      rgb: () => this.toStringRgb(),
-      rgba: () => this.toStringRgba(),
-      hex: () => this.toStringHex(),
-      hexa: () => this.toStringHexa(),
-      hsl: () => this.toStringHsl(),
-      hsla: () => this.toStringHsla(),
-      cmyk: () => this.toStringCmyk(),
-      cmyka: () => this.toStringCmyka(),
-    };
-
-    return map[type]?.() ?? this.toStringRgba();
+    switch(type){
+      case 'rgb': return this.toStringRgb()
+      case 'rgba': return this.toStringRgba()
+      case 'hex': return this.toStringHex()
+      case 'hexa': return this.toStringHexa()
+      case 'hsl': return this.toStringHsl()
+      case 'hsla': return this.toStringHsla()
+      case 'cmyk': return this.toStringCmyk()
+      case 'cmyka': return this.toStringCmyka()
+      default: return this.toStringRgba()
+    }
   }
   // RGB
   toStringRgb(){ return `rgb(${this.r}, ${this.g}, ${this.b})`; }
@@ -137,7 +142,10 @@ export default class Color{
   }
   toRgb(){ return { r: this.r, g: this.g, b: this.b}; }
   toRgba(){ return { ...this.toRgb(), a: this.a}; }
-  toHsl(){ return rgbToHsl(this.r, this.g, this.b); }
+  toHsl(){
+    if(!this.#cache.has('hsl')) this.#cache.set('hsl',rgbToHsl(this.r, this.g, this.b));
+    return this.#cache.get('hsl');
+  }
   toHsla(){ return {...this.toHsl(),a:this.a}; }
   toStringHsl() {
     const { h, s, l } = this.toHsl();
@@ -147,9 +155,15 @@ export default class Color{
     const { h, s, l} = this.toHsl();
     return `hsla(${h.toFixed(2)}, ${(s*100).toFixed(2)}%, ${(l*100).toFixed(2)}%, ${this.a.toFixed(3)})`;
   }
-  toHsv(){ return rgbToHsv(this.r, this.g, this.b); }
+  toHsv(){ 
+    if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.r, this.g, this.b));
+    return this.#cache.get('hsv');
+  }
   toHsva(){ return {...this.toHsv(),a:this.a}; }
-  toCmyk(){ return rgbToCmyk(this.r, this.g, this.b); }
+  toCmyk(){
+    if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.r, this.g, this.b));
+    return this.#cache.get('cmyk');
+  }
   toCmyka(){ return {...this.toCmyk(),a:this.a}; }
   toStringCmyk() {
     const { c, m, y, k } = this.toCmyk();
