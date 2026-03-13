@@ -97,25 +97,24 @@ export default class Color{
     return `#${hex(this.r)}${hex(this.g)}${hex(this.b)}${hex(Math.round(this.a*255))}`;
   }
   toRgb(){ return { r: this.r, g: this.g, b: this.b}; }
-  toRgba(){ return { r: this.r, g: this.g, b: this.b, a: this.a}; }
+  toRgba(){ return { ...this.toRgb(), a: this.a}; }
   toHsl(){ return rgbToHsl(this.r, this.g, this.b); }
-  toHsla(){ return {...rgbToHsl(this.r, this.g, this.b),a:this.a}; }
-  toStringHsl(){
-    const {h,s,l} = this.toHsl();
-    return `hsl(${h}, ${(s*100).toFixed(2)}%, ${(l*100).toFixed(2)}%)`; 
+  toHsla(){ return {...this.toHsl(),a:this.a}; }
+  toStringHsl() {
+    const { h, s, l } = this.toHsl();
+    return `hsl(${h.toFixed(2)}, ${(s * 100).toFixed(2)}%, ${(l * 100).toFixed(2)}%)`;
   }
   toStringHsla(){
-    const {h,s,l} = this.toHsl();
-    return `hsla(${h}, ${(s*100).toFixed(2)}%, ${(l*100).toFixed(2)}%, ${this.a.toFixed(3)})`;
+    const { h, s, l} = this.toHsl();
+    return `hsla(${h.toFixed(2)}, ${(s*100).toFixed(2)}%, ${(l*100).toFixed(2)}%, ${this.a.toFixed(3)})`;
   }
   toHsv(){ return rgbToHsv(this.r, this.g, this.b); }
-  toHsva(){ return {...rgbToHsv(this.r, this.g, this.b),a:this.a}; }
+  toHsva(){ return {...this.toHsv(),a:this.a}; }
   toCmyk(){ return rgbToCmyk(this.r, this.g, this.b); }
-  toCmyka(){ return {...rgbToCmyk(this.r, this.g, this.b),a:this.a}; }
+  toCmyka(){ return {...this.toCmyk(),a:this.a}; }
   toStringCmyk() {
     const { c, m, y, k } = this.toCmyk();
     const pct = v => Math.round(v * 100);
-
     return `cmyk(${pct(c)}%, ${pct(m)}%, ${pct(y)}%, ${pct(k)}%)`;
   }
   toStringCmyka() {
