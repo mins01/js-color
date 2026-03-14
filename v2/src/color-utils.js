@@ -115,10 +115,15 @@ export function hslToRgb(h, s, l) {
     b = hue2rgb(p, q, h - 1 / 3);
   }
 
+  // return {
+  //   r: Math.round(r * 255),
+  //   g: Math.round(g * 255),
+  //   b: Math.round(b * 255)
+  // };
   return {
-    r: Math.round(r * 255),
-    g: Math.round(g * 255),
-    b: Math.round(b * 255)
+    r: (r * 255),
+    g: (g * 255),
+    b: (b * 255)
   };
 }
 
@@ -144,10 +149,15 @@ export function hsvToRgb(h, s, v) {
     r = c; g = 0; b = x;
   }
 
+  // return {
+  //   r: Math.round((r + m) * 255),
+  //   g: Math.round((g + m) * 255),
+  //   b: Math.round((b + m) * 255)
+  // };
   return {
-    r: Math.round((r + m) * 255),
-    g: Math.round((g + m) * 255),
-    b: Math.round((b + m) * 255)
+    r: ((r + m) * 255),
+    g: ((g + m) * 255),
+    b: ((b + m) * 255)
   };
 }
 
@@ -172,9 +182,14 @@ export function rgbToCmyk(r, g, b) {
 }
 
 export function cmykToRgb(c, m, y, k) {
+  // return {
+  //   r: Math.round(255 * (1 - c) * (1 - k)),
+  //   g: Math.round(255 * (1 - m) * (1 - k)),
+  //   b: Math.round(255 * (1 - y) * (1 - k))
+  // };
   return {
-    r: Math.round(255 * (1 - c) * (1 - k)),
-    g: Math.round(255 * (1 - m) * (1 - k)),
-    b: Math.round(255 * (1 - y) * (1 - k))
+    r: (255 * (1 - c) * (1 - k)),
+    g: (255 * (1 - m) * (1 - k)),
+    b: (255 * (1 - y) * (1 - k))
   };
 }
