@@ -21,6 +21,8 @@ export default class Color{
   }
   static fromColor(color){ return new this(color.r, color.g, color.b, color.a); }
 
+  static parse(string){ return ColorParser.parse(string); } 
+
   #cache = new Map();
   realR=0
   realG=0
@@ -64,8 +66,9 @@ export default class Color{
   setColor(color){
     this.setRgba(color.r, color.g, color.b, color.a);
   }
+  
   setString(string){
-    const parsed = ColorParser.parse(string);
+    const parsed = Color.parse(string);
     
     if (!parsed) return false;
     const { type, value } = parsed;
@@ -131,7 +134,17 @@ export default class Color{
     return this.toString();
   }
   valueOf(){ return this.toNumber() }
-  toJSON(){ return { r:this.r, g:this.g, b:this.b, a:this.a } }
+  toJSON(){ 
+    return { 
+      r:this.r,
+      g:this.g,
+      b:this.b,
+      a:this.a,
+      realR:this.realR,
+      realG:this.realG,
+      realB:this.realB,
+    } 
+  }
 
   // rgb numbers
   toRgbNumber(){ return ((this.r << 16) | (this.g << 8) | this.b) >>> 0 }

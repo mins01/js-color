@@ -169,8 +169,9 @@ const assert = (label, result, expected) => {
 // === toJSON ===
 {
   const c = new Color(201, 121, 31, 0.5);
-  assert('toJSON', JSON.stringify(c), JSON.stringify({ r: 201, g: 121, b: 31, a: 0.5 }));
+  assert('toJSON', JSON.stringify(c), JSON.stringify({r:201,g:121,b:31,a:0.5,realR:201,realG:121,realB:31}));
 }
+
 
 // === toUint8ClampedArray ===
 {
