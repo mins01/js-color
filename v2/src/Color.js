@@ -35,10 +35,22 @@ export default class Color{
   }
 
   #cache = new Map();
-  r=0
-  g=0
-  b=0
+  realR=0
+  realG=0
+  realB=0
+  // r=0
+  // g=0
+  // b=0
   a=1
+
+  set r(v){ this.realR = v;}
+  set g(v){ this.realG = v;}
+  set b(v){ this.realB = v;}
+  get r(){ return Math.round(this.realR);}
+  get g(){ return Math.round(this.realG);}
+  get b(){ return Math.round(this.realB);}
+  
+
   /**
    * Color constructor
    * @param {number} r - red value from 0 to 255
@@ -65,7 +77,8 @@ export default class Color{
   setRgba(r=0,g=0,b=0,a=null){
     this.#cache.clear()   // 캐시 클리어
 
-    const clamp255 = v => Math.min(255, Math.max(0, Math.round(v)));
+    // const clamp255 = v => Math.min(255, Math.max(0, Math.round(v)));
+    const clamp255 = v => Math.min(255, Math.max(0, +v));
     const clamp1 = v => Math.min(1, Math.max(0, +v));
 
     this.r = clamp255(r);
@@ -118,42 +131,47 @@ export default class Color{
 
   toString(type = Color.toStringType){
     switch(type){
-      case 'rgb': return this.toStringRgb()
-      case 'rgba': return this.toStringRgba()
-      case 'hex': return this.toStringHex()
-      case 'hexa': return this.toStringHexa()
-      case 'hsl': return this.toStringHsl()
-      case 'hsla': return this.toStringHsla()
-      case 'cmyk': return this.toStringCmyk()
-      case 'cmyka': return this.toStringCmyka()
-      default: return this.toStringRgba()
+      case 'rgb': return this.toRgbString()
+      case 'rgba': return this.toRgbaString()
+      case 'hex': return this.toHexString()
+      case 'hexa': return this.toHexaString()
+      case 'hsl': return this.toHslString()
+      case 'hsla': return this.toHslaString()
+      case 'cmyk': return this.toCmykString()
+      case 'cmyka': return this.toCmykaString()
+      default: return this.toRgbaString()
     }
   }
+  toFixed(v, d=2){ return v.toFixed(d).replace(/\.?0+$/, ''); }
   // RGB
-  toStringRgb(){ return `rgb(${this.r}, ${this.g}, ${this.b})`; }
-  toStringRgba(){ return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`; }
-  toStringHex(){
+  toRgbString(){ return `rgb(${this.r}, ${this.g}, ${this.b})`; }
+  toRgbaString(){ return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.toFixed(this.a,2)})`; }
+  toRealRgbString(){ return `rgb(${this.realR}, ${this.realG}, ${this.realB})`; }
+  toRealRgbaString(){ return `rgba(${this.realR}, ${this.realG}, ${this.realB}, ${this.a})`; }
+  toHexString(){
     const hex = v => v.toString(16).padStart(2,'0');
     return `#${hex(this.r)}${hex(this.g)}${hex(this.b)}`;
   }
-  toStringHexa(){
+  toHexaString(){
     const hex = v => v.toString(16).padStart(2,'0');
     return `#${hex(this.r)}${hex(this.g)}${hex(this.b)}${hex(Math.round(this.a*255))}`;
   }
   toRgb(){ return { r: this.r, g: this.g, b: this.b}; }
   toRgba(){ return { ...this.toRgb(), a: this.a}; }
+  toRealRgb(){ return { r: this.realR, g: this.realG, b: this.realB}; }
+  toRealRgba(){ return { ...this.toRealRgb(), a: this.a}; }
   toHsl(){
     if(!this.#cache.has('hsl')) this.#cache.set('hsl',rgbToHsl(this.r, this.g, this.b));
     return this.#cache.get('hsl');
   }
   toHsla(){ return {...this.toHsl(),a:this.a}; }
-  toStringHsl() {
+  toHslString() {
     const { h, s, l } = this.toHsl();
-    return `hsl(${h.toFixed(2)}, ${(s * 100).toFixed(2)}%, ${(l * 100).toFixed(2)}%)`;
+    return `hsl(${this.toFixed(h,2)}, ${this.toFixed(s*100,2)}%, ${this.toFixed(l*100,2)}%)`;
   }
-  toStringHsla(){
+  toHslaString(){
     const { h, s, l} = this.toHsl();
-    return `hsla(${h.toFixed(2)}, ${(s*100).toFixed(2)}%, ${(l*100).toFixed(2)}%, ${this.a.toFixed(3)})`;
+    return `hsla(${this.toFixed(h,2)}, ${this.toFixed(s*100,2)}%, ${this.toFixed(l*100,2)}%, ${this.a.toFixed(3)})`;
   }
   toHsv(){ 
     if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.r, this.g, this.b));
@@ -165,15 +183,14 @@ export default class Color{
     return this.#cache.get('cmyk');
   }
   toCmyka(){ return {...this.toCmyk(),a:this.a}; }
-  toStringCmyk() {
+  toCmykString() {
     const { c, m, y, k } = this.toCmyk();
     const pct = v => Math.round(v * 100);
     return `cmyk(${pct(c)}%, ${pct(m)}%, ${pct(y)}%, ${pct(k)}%)`;
   }
-  toStringCmyka() {
+  toCmykaString() {
     const { c, m, y, k } = this.toCmyk();
     const pct = v => Math.round(v * 100);
-
     return `cmyka(${pct(c)}%, ${pct(m)}%, ${pct(y)}%, ${pct(k)}%, ${+this.a.toFixed(3)})`;
   }
 }

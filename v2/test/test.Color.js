@@ -179,22 +179,22 @@ const assert = (label, result, expected) => {
   assert('toUint8ClampedArray', [arr[0], arr[1], arr[2], arr[3]], [201, 121, 31, 128]);
 }
 
-// === toString / toStringRgb / toStringRgba ===
+// === toString / toRgbString / toRgbaString ===
 {
   const c = new Color(201, 121, 31, 0.5);
-  assert('toStringRgb', c.toStringRgb(), 'rgb(201, 121, 31)');
-  assert('toStringRgba', c.toStringRgba(), 'rgba(201, 121, 31, 0.5)');
+  assert('toRgbString', c.toRgbString(), 'rgb(201, 121, 31)');
+  assert('toRgbaString', c.toRgbaString(), 'rgba(201, 121, 31, 0.5)');
   assert('toString default', c.toString(), 'rgba(201, 121, 31, 0.5)');
   assert('toString("hex")', c.toString('hex'), '#c9791f');
-  assert('toString("hsl")', c.toString('hsl'), c.toStringHsl());
-  assert('toString("cmyk")', c.toString('cmyk'), c.toStringCmyk());
+  assert('toString("hsl")', c.toString('hsl'), c.toHslString());
+  assert('toString("cmyk")', c.toString('cmyk'), c.toCmykString());
 }
 
-// === toStringHex / toStringHexa ===
+// === toHexString / toHexaString ===
 {
   const c = new Color(201, 121, 31, 0.5);
-  assert('toStringHex', c.toStringHex(), '#c9791f');
-  assert('toStringHexa', c.toStringHexa(), '#c9791f80');
+  assert('toHexString', c.toHexString(), '#c9791f');
+  assert('toHexaString', c.toHexaString(), '#c9791f80');
 }
 
 // === toRgb / toRgba ===
@@ -204,15 +204,22 @@ const assert = (label, result, expected) => {
   assert('toRgba', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
 }
 
-// === toHsl / toHsla / toStringHsl / toStringHsla ===
+// === toRealRgb / toRealRgba ===
+{
+  const c = new Color(201.5, 121.3, 31.2, 0.5);
+  assert('toRealRgb', c.toRealRgb(), { r: 201.5, g: 121.3, b: 31.2 });
+  assert('toRealRgba', c.toRealRgba(), { r: 201.5, g: 121.3, b: 31.2, a: 0.5 });
+}
+
+// === toHsl / toHsla / toHslString / toHslaString ===
 {
   const c = new Color(201, 121, 31, 0.5);
   const hsl = c.toHsl();
   assert('toHsl has h,s,l', 'h' in hsl && 's' in hsl && 'l' in hsl, true);
   const hsla = c.toHsla();
   assert('toHsla has a', hsla.a, 0.5);
-  assert('toStringHsl format', c.toStringHsl().startsWith('hsl('), true);
-  assert('toStringHsla format', c.toStringHsla().startsWith('hsla('), true);
+  assert('toHslString format', c.toHslString().startsWith('hsl('), true);
+  assert('toHslaString format', c.toHslaString().startsWith('hsla('), true);
 }
 
 // === toHsv / toHsva ===
@@ -224,13 +231,13 @@ const assert = (label, result, expected) => {
   assert('toHsva has a', hsva.a, 0.5);
 }
 
-// === toCmyk / toCmyka / toStringCmyk / toStringCmyka ===
+// === toCmyk / toCmyka / toCmykString / toCmykaString ===
 {
   const c = new Color(201, 121, 31, 0.5);
   const cmyk = c.toCmyk();
   assert('toCmyk has c,m,y,k', 'c' in cmyk && 'm' in cmyk && 'y' in cmyk && 'k' in cmyk, true);
   const cmyka = c.toCmyka();
   assert('toCmyka has a', cmyka.a, 0.5);
-  assert('toStringCmyk format', c.toStringCmyk().startsWith('cmyk('), true);
-  assert('toStringCmyka format', c.toStringCmyka().startsWith('cmyka('), true);
+  assert('toCmykString format', c.toCmykString().startsWith('cmyk('), true);
+  assert('toCmykaString format', c.toCmykaString().startsWith('cmyka('), true);
 }
