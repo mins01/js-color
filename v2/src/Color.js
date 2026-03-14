@@ -5,34 +5,21 @@ import ColorParser from './ColorParser.js';
 export default class Color{
   static toStringType = 'rgba';
 
-  static from(){
-
+  static from(input){
+    if (input instanceof Color) return this.fromColor(input);
+    if (typeof input === 'string') return Color.fromString(input);
+    if (Array.isArray(input)) return Color.fromRgba(...input);
   }
   static fromString(string){
-    const parsed = ColorParser.parse(string);
-    if (!parsed) return null;
-    const { type, value } = parsed;
     const color = new this();
-    switch (type) {
-      case 'hex': case 'rgb':
-        color.setRgba(value.r, value.g, value.b); break;
-      case 'hexa': case 'rgba':
-        color.setRgba(value.r, value.g, value.b, value.a); break;
-      case 'hsl':
-        color.setHsla(value.h, value.s, value.l); break;
-      case 'hsla':
-        color.setHsla(value.h, value.s, value.l, value.a); break;
-      case 'cmyk':
-        color.setCmyk(value.c, value.m, value.y, value.k); break;
-      case 'cmyka':
-        color.setCmyka(value.c, value.m, value.y, value.k, value.a); break;
-      default: return null;
-    }
-    return color;
+    if(color.setString(string)) return color;
+    return null;
   }
+
   static fromRgba(r=0,g=0,b=0,a=1){
     return new this(r,g,b,a);
   }
+  static fromColor(color){ return new this(color.r, color.g, color.b, color.a); }
 
   #cache = new Map();
   realR=0
@@ -74,6 +61,31 @@ export default class Color{
   }
 
   // sets
+  setColor(color){
+    this.setRgba(color.r, color.g, color.b, color.a);
+  }
+  setString(string){
+    const parsed = ColorParser.parse(string);
+    
+    if (!parsed) return false;
+    const { type, value } = parsed;
+    switch (type) {
+      case 'hex': case 'rgb':
+        this.setRgba(value.r, value.g, value.b); break;
+      case 'hexa': case 'rgba':
+        this.setRgba(value.r, value.g, value.b, value.a); break;
+      case 'hsl':
+        this.setHsla(value.h, value.s, value.l); break;
+      case 'hsla':
+        this.setHsla(value.h, value.s, value.l, value.a); break;
+      case 'cmyk':
+        this.setCmyk(value.c, value.m, value.y, value.k); break;
+      case 'cmyka':
+        this.setCmyka(value.c, value.m, value.y, value.k, value.a); break;
+      default: return false;
+    }
+    return true
+  }  
   setRgba(r=0,g=0,b=0,a=null){
     this.#cache.clear()   // 캐시 클리어
 
