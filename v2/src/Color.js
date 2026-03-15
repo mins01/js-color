@@ -176,7 +176,11 @@ export default class Color{
       default: return this.toRgbaString()
     }
   }
-  toFixed(v, d=2){ return v.toFixed(d).replace(/\.?0+$/, ''); }
+  toFixed(v, d=2){ 
+    const n = Number(v);
+    if (isNaN(n)) return '';
+    return n.toFixed(d).replace(/(?:\.0+|(\.\d+?)0+)$/, '$1');
+   }
   // RGB
   toRgbString(){ return `rgb(${this.r}, ${this.g}, ${this.b})`; }
   toRgbaString(){ return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.toFixed(this.a,2)})`; }
@@ -201,11 +205,11 @@ export default class Color{
   toHsla(){ return {...this.toHsl(),a:this.a}; }
   toHslString() {
     const { h, s, l } = this.toHsl();
-    return `hsl(${this.toFixed(h,2)}, ${this.toFixed(s*100,2)}%, ${this.toFixed(l*100,2)}%)`;
+    return `hsl(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(l*100,0)}%)`;
   }
   toHslaString(){
     const { h, s, l} = this.toHsl();
-    return `hsla(${this.toFixed(h,2)}, ${this.toFixed(s*100,2)}%, ${this.toFixed(l*100,2)}%, ${this.a.toFixed(3)})`;
+    return `hsla(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(l*100,0)}%, ${this.a.toFixed(3)})`;
   }
   toHsv(){ 
     if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.r, this.g, this.b));
