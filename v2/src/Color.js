@@ -61,6 +61,13 @@ export default class Color{
       this.b === color.b &&
       this.a === color.a
   }
+  realEquals(color){
+    return color &&
+      this.realR === color.realR &&
+      this.realG === color.realG &&
+      this.realB === color.realB &&
+      this.a === color.a
+  }
 
   // sets
   setColor(color){
