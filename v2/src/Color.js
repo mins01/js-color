@@ -19,7 +19,9 @@ export default class Color{
   static fromRgba(r=0,g=0,b=0,a=1){
     return new this(r,g,b,a);
   }
-  static fromColor(color){ return new this(color.r, color.g, color.b, color.a); }
+  static fromColor(color){ 
+    return new this(color.realR??color.r, color.realG??color.g, color.realB??color.b, color.a); 
+  }
 
   static parse(string){ return ColorParser.parse(string); } 
 
