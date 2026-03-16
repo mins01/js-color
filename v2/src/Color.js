@@ -26,6 +26,7 @@ export default class Color{
   static parse(string){ return ColorParser.parse(string); } 
 
   #cache = new Map();
+  toStringType=Color.toStringType;
   realR=0
   realG=0
   realB=0
@@ -73,6 +74,7 @@ export default class Color{
 
   // sets
   setColor(color){
+    if(!color) return;
     this.setRgba(color.r, color.g, color.b, color.a);
   }
   
@@ -163,7 +165,7 @@ export default class Color{
 
   toUint8ClampedArray(){ return new Uint8ClampedArray([this.r,this.g,this.b,Math.round(this.a*255)]) }
 
-  toString(type = Color.toStringType){
+  toString(type = this.toStringType){
     switch(type){
       case 'rgb': return this.toRgbString()
       case 'rgba': return this.toRgbaString()
