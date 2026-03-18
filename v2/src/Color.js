@@ -128,6 +128,7 @@ export default class Color{
     let { r,g,b} = hsvToRgb(h,s,v);
     this.setRgba(r,g,b,a);
   }
+  setHsba(h=0,s=0,b=0,a=null){ return this.setHsva(h,s,b,a); }
 
 
   // gets
@@ -213,11 +214,29 @@ export default class Color{
     const { h, s, l} = this.toHsl();
     return `hsla(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(l*100,0)}%, ${this.a.toFixed(3)})`;
   }
-  toHsv(){ 
+  toHsv(){
     if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.r, this.g, this.b));
     return this.#cache.get('hsv');
   }
   toHsva(){ return {...this.toHsv(),a:this.a}; }
+  toHsvString() {
+    const { h, s, v } = this.toHsv();
+    return `hsv(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(v*100,0)}%)`;
+  }
+  toHsvaString() {
+    const { h, s, v } = this.toHsv();
+    return `hsva(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(v*100,0)}%, ${this.a.toFixed(3)})`;
+  }
+  toHsb(){ const {h,s,v} = this.toHsv(); return {h,s,b:v}; }
+  toHsba(){ return {...this.toHsb(),a:this.a}; }
+  toHsbString() {
+    const { h, s, b } = this.toHsb();
+    return `hsb(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(b*100,0)}%)`;
+  }
+  toHsbaString() {
+    const { h, s, b } = this.toHsb();
+    return `hsba(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(b*100,0)}%, ${this.a.toFixed(3)})`;
+  }
   toCmyk(){
     if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.r, this.g, this.b));
     return this.#cache.get('cmyk');

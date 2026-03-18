@@ -223,13 +223,43 @@ const assert = (label, result, expected) => {
   assert('toHslaString format', c.toHslaString().startsWith('hsla('), true);
 }
 
-// === toHsv / toHsva ===
+// === toHsv / toHsva / toHsvString / toHsvaString ===
 {
   const c = new Color(201, 121, 31, 0.5);
   const hsv = c.toHsv();
   assert('toHsv has h,s,v', 'h' in hsv && 's' in hsv && 'v' in hsv, true);
   const hsva = c.toHsva();
   assert('toHsva has a', hsva.a, 0.5);
+  assert('toHsvString format', c.toHsvString().startsWith('hsv('), true);
+  assert('toHsvaString format', c.toHsvaString().startsWith('hsva('), true);
+}
+
+// === setHsba / toHsb / toHsba / toHsbString / toHsbaString ===
+{
+  const c = new Color();
+  c.setHsba(0, 1, 1);
+  assert('setHsba red', c.toRgb(), { r: 255, g: 0, b: 0 });
+}
+{
+  const c = new Color();
+  c.setHsba(120, 1, 1, 0.4);
+  assert('setHsba green with alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 0, g: 255, b: 0 }, a: 0.4 });
+}
+{
+  const c = new Color(201, 121, 31, 0.5);
+  const hsb = c.toHsb();
+  assert('toHsb has h,s,b', 'h' in hsb && 's' in hsb && 'b' in hsb, true);
+  assert('toHsb no v key', 'v' in hsb, false);
+  const hsba = c.toHsba();
+  assert('toHsba has a', hsba.a, 0.5);
+  assert('toHsbString format', c.toHsbString().startsWith('hsb('), true);
+  assert('toHsbaString format', c.toHsbaString().startsWith('hsba('), true);
+}
+{
+  const c = new Color();
+  c.setHsva(0, 1, 1);
+  const { b } = c.toHsb();
+  assert('toHsb b equals toHsv v', b, c.toHsv().v);
 }
 
 // === toCmyk / toCmyka / toCmykString / toCmykaString ===
