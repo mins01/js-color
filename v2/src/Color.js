@@ -174,6 +174,8 @@ export default class Color{
       case 'hexa': return this.toHexaString()
       case 'hsl': return this.toHslString()
       case 'hsla': return this.toHslaString()
+      case 'hsb': return this.toHsbString()
+      case 'hsba': return this.toHsbaString()
       case 'cmyk': return this.toCmykString()
       case 'cmyka': return this.toCmykaString()
       default: return this.toRgbaString()
