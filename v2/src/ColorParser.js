@@ -7,6 +7,7 @@ export default class ColorParser {
     hex8:   /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i,
     rgb:    /^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([0-9.]+)\s*)?\)$/i,
     hsl:    /^hsla?\(\s*([0-9.]+)\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*(?:,\s*([0-9.]+)\s*)?\)$/i,
+    hsb:    /^hsba?\(\s*([0-9.]+)\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*(?:,\s*([0-9.]+)\s*)?\)$/i,
     cmyk:   /^cmyk\(\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*\)$/i,
     cmyka:  /^cmyka\(\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)\s*\)$/i,
   };
@@ -60,6 +61,13 @@ export default class ColorParser {
       const value = { h: +m[1], s: +m[2] / 100, l: +m[3] / 100 };
       if (m[4] !== undefined) value.a = +m[4];
       return { type: m[4] !== undefined ? 'hsla' : 'hsl', value };
+    }
+
+    // hsb(h, s%, b%) / hsb(h, s%, b%, a) / hsba(h, s%, b%, a)
+    if ((m = str.match(this.#patterns.hsb))) {
+      const value = { h: +m[1], s: +m[2] / 100, b: +m[3] / 100 };
+      if (m[4] !== undefined) value.a = +m[4];
+      return { type: m[4] !== undefined ? 'hsba' : 'hsb', value };
     }
 
     // cmyk(c%, m%, y%, k%)

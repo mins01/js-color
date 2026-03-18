@@ -92,6 +92,10 @@ export default class Color{
         this.setHsla(value.h, value.s, value.l); break;
       case 'hsla':
         this.setHsla(value.h, value.s, value.l, value.a); break;
+      case 'hsb':
+        this.setHsba(value.h, value.s, value.b); break;
+      case 'hsba':
+        this.setHsba(value.h, value.s, value.b, value.a); break;
       case 'cmyk':
         this.setCmyk(value.c, value.m, value.y, value.k); break;
       case 'cmyka':
