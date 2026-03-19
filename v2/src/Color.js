@@ -75,7 +75,7 @@ export default class Color{
   // sets
   setColor(color){
     if(!color) return;
-    this.setRgba(color.r, color.g, color.b, color.a);
+    this.setRgba(color.realR??color.r, color.realG??color.g, color.realB??color.b, color.a);
   }
   
   setString(string){
@@ -208,7 +208,7 @@ export default class Color{
   toRealRgb(){ return { r: this.realR, g: this.realG, b: this.realB}; }
   toRealRgba(){ return { ...this.toRealRgb(), a: this.a}; }
   toHsl(){
-    if(!this.#cache.has('hsl')) this.#cache.set('hsl',rgbToHsl(this.r, this.g, this.b));
+    if(!this.#cache.has('hsl')) this.#cache.set('hsl',rgbToHsl(this.realR, this.realG, this.realB));
     return this.#cache.get('hsl');
   }
   toHsla(){ return {...this.toHsl(),a:this.a}; }
@@ -221,7 +221,7 @@ export default class Color{
     return `hsla(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(l*100,0)}%, ${this.a.toFixed(3)})`;
   }
   toHsv(){
-    if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.r, this.g, this.b));
+    if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.realR, this.realG, this.realB));
     return this.#cache.get('hsv');
   }
   toHsva(){ return {...this.toHsv(),a:this.a}; }
@@ -244,7 +244,7 @@ export default class Color{
     return `hsba(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(b*100,0)}%, ${this.a.toFixed(3)})`;
   }
   toCmyk(){
-    if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.r, this.g, this.b));
+    if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.realR, this.realG, this.realB));
     return this.#cache.get('cmyk');
   }
   toCmyka(){ return {...this.toCmyk(),a:this.a}; }
