@@ -75,7 +75,11 @@ export default class Color{
   // sets
   setColor(color){
     if(!color) return;
-    this.setRgba(color.realR??color.r, color.realG??color.g, color.realB??color.b, color.a);
+    const rgba = color?.toRealRgba?.()??color?.toRgba?.()?? (color && typeof color === 'object' ? color : null);
+    if (!rgba || rgba.r == null || rgba.g == null || rgba.b == null) {
+      throw new TypeError("Invalid Color");
+    }
+    this.setRgba(rgba.r, rgba.g, rgba.b, rgba.a??null);
   }
   
   setString(string){

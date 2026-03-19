@@ -21,10 +21,11 @@ const assert = (label, result, expected) => {
   const l = 0.14218750000000002
 
 
+  console.log({h,s,l});
   const c = new Color();
-  console.log(c.setHsla(h,s,l));
+  c.setHsla(h,s,l)
   const hsl = c.toHsl()
-  console.log(hsl.h-h,hsl.s-s,hsl.l-l)
+  console.log('diff',hsl.h-h,hsl.s-s,hsl.l-l)
   console.log(c.toRgb())
   console.log(c.toRealRgb())
   console.log(c.toHsl())
