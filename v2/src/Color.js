@@ -211,47 +211,62 @@ export default class Color{
   toRgba(){ return { ...this.toRgb(), a: this.a}; }
   toRealRgb(){ return { r: this.realR, g: this.realG, b: this.realB}; }
   toRealRgba(){ return { ...this.toRealRgb(), a: this.a}; }
-  toHsl(){
-    if(!this.#cache.has('hsl')) this.#cache.set('hsl',rgbToHsl(this.realR, this.realG, this.realB));
-    return this.#cache.get('hsl');
+  toHsl(isReal=true){
+    if(!isReal){
+      if(!this.#cache.has('hsl')) this.#cache.set('hsl',rgbToHsl(this.r, this.g, this.b));
+      return this.#cache.get('hsl');
+    }else{
+      if(!this.#cache.has('real-hsl')) this.#cache.set('real-hsl',rgbToHsl(this.realR, this.realG, this.realB));
+      return this.#cache.get('real-hsl');
+    }
   }
-  toHsla(){ return {...this.toHsl(),a:this.a}; }
+  toHsla(isReal=true){ return {...this.toHsl(isReal),a:this.a}; }
   toHslString() {
-    const { h, s, l } = this.toHsl();
+    const { h, s, l } = this.toHsl(false);
     return `hsl(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(l*100,0)}%)`;
   }
   toHslaString(){
-    const { h, s, l} = this.toHsl();
-    return `hsla(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(l*100,0)}%, ${this.a.toFixed(3)})`;
+    const { h, s, l , a} = this.toHsla(false);
+    return `hsla(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(l*100,0)}%, ${a.toFixed(3)})`;
   }
-  toHsv(){
-    if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.realR, this.realG, this.realB));
-    return this.#cache.get('hsv');
+  toHsv(isReal=true){
+    if(!isReal){
+      if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.r, this.g, this.b));
+      return this.#cache.get('hsv');
+    }else{
+      if(!this.#cache.has('real-hsv')) this.#cache.set('real-hsv',rgbToHsv(this.realR, this.realG, this.realB));
+      return this.#cache.get('real-hsv');
+    }
   }
-  toHsva(){ return {...this.toHsv(),a:this.a}; }
+  toHsva(isReal=true){ return {...this.toHsv(isReal),a:this.a}; }
   toHsvString() {
-    const { h, s, v } = this.toHsv();
+    const { h, s, v } = this.toHsv(false);
     return `hsv(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(v*100,0)}%)`;
   }
   toHsvaString() {
-    const { h, s, v } = this.toHsv();
-    return `hsva(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(v*100,0)}%, ${this.a.toFixed(3)})`;
+    const { h, s, v , a} = this.toHsva(false);
+    return `hsva(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(v*100,0)}%, ${a.toFixed(3)})`;
   }
-  toHsb(){ const {h,s,v} = this.toHsv(); return {h,s,b:v}; }
-  toHsba(){ return {...this.toHsb(),a:this.a}; }
+  toHsb(isReal=true){ const {h,s,v} = this.toHsv(isReal); return {h,s,b:v}; }
+  toHsba(isReal=true){ return {...this.toHsb(isReal),a:this.a}; }
   toHsbString() {
-    const { h, s, b } = this.toHsb();
+    const { h, s, b } = this.toHsb(false);
     return `hsb(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(b*100,0)}%)`;
   }
   toHsbaString() {
-    const { h, s, b } = this.toHsb();
-    return `hsba(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(b*100,0)}%, ${this.a.toFixed(3)})`;
+    const { h, s, b, a } = this.toHsba(false);
+    return `hsba(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(b*100,0)}%, ${a.toFixed(3)})`;
   }
-  toCmyk(){
-    if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.realR, this.realG, this.realB));
-    return this.#cache.get('cmyk');
+  toCmyk(isReal=true){
+    if(!isReal){
+      if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.r, this.g, this.b));
+      return this.#cache.get('cmyk');
+    }else{
+      if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.realR, this.realG, this.realB));
+      return this.#cache.get('cmyk');  
+    }
   }
-  toCmyka(){ return {...this.toCmyk(),a:this.a}; }
+  toCmyka(isReal=true){ return {...this.toCmyk(isReal),a:this.a}; }
   toCmykString() {
     const { c, m, y, k } = this.toCmyk();
     const pct = v => Math.round(v * 100);
