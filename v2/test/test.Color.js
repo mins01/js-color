@@ -52,6 +52,12 @@ const assert = (label, result, expected) => {
   assert('equals false', c1.equals(c3), false);
 }
 
+// === from ===
+{
+  const c = Color.from({r:201.1,g:121.1,b:31,a:0.5});
+  assert('from', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+  assert('from real', c.toRealRgba(), { r: 201.1, g: 121.1, b: 31, a: 0.5 });
+}
 // === fromRgba ===
 {
   const c = Color.fromRgba(201, 121, 31, 0.5);
@@ -96,6 +102,18 @@ const assert = (label, result, expected) => {
   assert('fromString invalid', Color.fromString('not a color'), null);
 }
 
+// === set ===
+{
+  const c = new Color();
+  c.set(Color.from({ r: 201, g: 121, b: 31, a: 0.5 }));
+  assert('set string', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });  
+  c.set({ r: 201, g: 121, b: 31, a: 0.5 });
+  assert('set object', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+  c.set([201, 121, 31, 0.5]);
+  assert('set array', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });  
+  c.set('rgb(201, 121, 31, 0.5)');
+  assert('set string', c.toRgba(), { r: 201, g: 121, b: 31, a: 0.5 });
+}
 // === setRgba ===
 {
   const c = new Color();

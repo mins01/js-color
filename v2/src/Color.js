@@ -7,6 +7,7 @@ export default class Color{
 
   static from(input){
     if (input instanceof Color) return this.fromColor(input);
+    if (input instanceof Object && 'r' in input && 'g' in input && 'b' in input) return this.fromColor(input);
     if (typeof input === 'string') return Color.fromString(input);
     if (Array.isArray(input)) return Color.fromRgba(...input);
   }
@@ -73,6 +74,22 @@ export default class Color{
   }
 
   // sets
+
+  set(input){
+    if (input == null) return false;
+    // 1. Color 인스턴스
+    if (input instanceof Color) { this.setColor(input); return true; }
+    // 2. rgba 객체
+    if (typeof input === 'object' && !Array.isArray(input)) {
+      if ('r' in input && 'g' in input && 'b' in input) { this.setColor(input); return true; }
+    }
+    // 3. string (hex, rgb, hsl 등)
+    if (typeof input === 'string') { return this.setString(input); }
+    // 4. array
+    if (Array.isArray(input)) { this.setRgba(...input); return true; }
+    return false;
+  }
+
   setColor(color){
     if(!color) return;
     const rgba = color?.toRealRgba?.()??color?.toRgba?.()?? (color && typeof color === 'object' ? color : null);
