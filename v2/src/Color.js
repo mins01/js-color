@@ -52,8 +52,7 @@ export default class Color{
    * @param {number} a - alpha value from 0 to 1
    */
   constructor(r=0,g=0,b=0,a=1){
-    if (typeof r === "object"  && !Array.isArray(r)) { ({ r, g, b, a = 1 } = r) }
-    this.setRgba(r,g,b,a);
+    this.set(r,g,b,a);
   }
 
   clone(){ return new this.constructor(this) }
@@ -75,7 +74,7 @@ export default class Color{
 
   // sets
 
-  set(input){
+  set(input,g=null,b=null,a=null){
     if (input == null) return false;
     // 1. Color 인스턴스
     if (input instanceof Color) { this.setColor(input); return true; }
@@ -87,6 +86,8 @@ export default class Color{
     if (typeof input === 'string') { return this.setString(input); }
     // 4. array
     if (Array.isArray(input)) { this.setRgba(...input); return true; }
+    // 5. r,g,b,a
+    if(g != null && b != null) { this.setRgba(input,g,b,a); return true; }
     return false;
   }
 
