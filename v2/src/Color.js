@@ -224,6 +224,9 @@ export default class Color{
   toFixed(v, d=2){ 
     const n = Number(v);
     if (isNaN(n)) return '';
+    if(d===0){
+      return Math.round(n).toString();
+    }
     return n.toFixed(d).replace(/(?:\.0+|(\.\d+?)0+)$/, '$1');
    }
   // RGB
@@ -282,7 +285,7 @@ export default class Color{
   toHsb(isReal=true){ const {h,s,v} = this.toHsv(isReal); return {h,s,b:v}; }
   toHsba(isReal=true){ return {...this.toHsb(isReal),a:this.a}; }
   toHsbString() {
-    const { h, s, b } = this.toHsb(false);
+    const { h, s, b } = this.toHsb(false);    
     return `hsb(${this.toFixed(h,0)}, ${this.toFixed(s*100,0)}%, ${this.toFixed(b*100,0)}%)`;
   }
   toHsbaString() {
