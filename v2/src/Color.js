@@ -125,7 +125,7 @@ export default class Color{
       default: return false;
     }
     return true
-  }  
+  }
   setRgba(r=0,g=0,b=0,a=null){
     this.#cache.clear()   // 캐시 클리어
 
@@ -138,23 +138,37 @@ export default class Color{
     this.b = clamp255(b);
     if(a !== null) this.a = clamp1(a);
   }
+  setRgb(r=0,g=0,b=0){
+    return this.setRgba(r,g,b);
+  }
   setHsla(h=0,s=0,l=0,a=null){
     let { r,g,b} = hslToRgb(h,s,l);
+    this.setRgba(r,g,b,a);
+  }
+  setHsl(h=0,s=0,l=0){
+    return this.setHsla(h,s,l);
+  }
+  setCmyka(c=0,m=0,y=0,k=0,a=null){
+    const {r,g,b} = cmykToRgb(c,m,y,k);
     this.setRgba(r,g,b,a);
   }
   setCmyk(c=0,m=0,y=0,k=0){
     const {r,g,b} = cmykToRgb(c,m,y,k);
     this.setRgba(r,g,b);
   }
-  setCmyka(c=0,m=0,y=0,k=0,a=null){
-    const {r,g,b} = cmykToRgb(c,m,y,k);
-    this.setRgba(r,g,b,a);
-  }
   setHsva(h=0,s=0,v=0,a=null){
     let { r,g,b} = hsvToRgb(h,s,v);
     this.setRgba(r,g,b,a);
   }
-  setHsba(h=0,s=0,b=0,a=null){ return this.setHsva(h,s,b,a); }
+  setHsv(h=0,s=0,v=0){
+    return this.setHsva(h,s,v);
+  }
+  setHsba(h=0,s=0,b=0,a=null){
+    return this.setHsva(h,s,b,a);
+  }
+  setHsb(h=0,s=0,b=0){
+    return this.setHsba(h,s,b);
+  }
 
 
   // gets

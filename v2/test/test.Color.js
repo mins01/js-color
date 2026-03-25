@@ -126,6 +126,30 @@ const assert = (label, result, expected) => {
   assert('setRgba a=null keeps alpha', c.a, 0.8);
 }
 
+// === setRgb ===
+{
+  const c = new Color();
+  c.setRgb(201, 121, 31);
+  assert('setRgb', c.toRgb(), { r: 201, g: 121, b: 31 });
+}
+{
+  const c = new Color(0, 0, 0, 0.8);
+  c.setRgb(100, 100, 100);
+  assert('setRgb keeps alpha', c.a, 0.8);
+}
+
+// === setHsl ===
+{
+  const c = new Color();
+  c.setHsl(0, 1, 0.5);
+  assert('setHsl red', c.toRgb(), { r: 255, g: 0, b: 0 });
+}
+{
+  const c = new Color(0, 0, 0, 0.6);
+  c.setHsl(120, 1, 0.5);
+  assert('setHsl keeps alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 0, g: 255, b: 0 }, a: 0.6 });
+}
+
 // === setHsla ===
 {
   const c = new Color();
@@ -153,6 +177,37 @@ const assert = (label, result, expected) => {
   const c = new Color();
   c.setCmyka(0, 1, 1, 0, 0.3);
   assert('setCmyka red with alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 255, g: 0, b: 0 }, a: 0.3 });
+}
+
+// === setHsv ===
+{
+  const c = new Color();
+  c.setHsv(0, 1, 1);
+  assert('setHsv red', c.toRgb(), { r: 255, g: 0, b: 0 });
+}
+{
+  const c = new Color(0, 0, 0, 0.5);
+  c.setHsv(240, 1, 1);
+  assert('setHsv keeps alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 0, g: 0, b: 255 }, a: 0.5 });
+}
+
+// === setHsb ===
+{
+  const c = new Color();
+  c.setHsb(0, 1, 1);
+  assert('setHsb red', c.toRgb(), { r: 255, g: 0, b: 0 });
+}
+{
+  const c = new Color(0, 0, 0, 0.9);
+  c.setHsb(240, 1, 1);
+  assert('setHsb keeps alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 0, g: 0, b: 255 }, a: 0.9 });
+}
+{
+  const c1 = new Color();
+  c1.setHsv(60, 0.5, 0.8);
+  const c2 = new Color();
+  c2.setHsb(60, 0.5, 0.8);
+  assert('setHsb equals setHsv', c1.toRgb(), c2.toRgb());
 }
 
 // === setHsva ===
