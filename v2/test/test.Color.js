@@ -222,6 +222,80 @@ const assert = (label, result, expected) => {
   assert('setHsva green with alpha', { rgb: c.toRgb(), a: c.a }, { rgb: { r: 0, g: 255, b: 0 }, a: 0.4 });
 }
 
+
+// === setOklab ===
+{
+  const c = new Color();
+  // red (OKLab 기준 근사값)
+  c.setOklab(0.62796, 0.22486, 0.12585);
+  assert('setOklab red', c.toRgb(), { r: 255, g: 0, b: 0 });
+}
+{
+  const c = new Color();
+  // green
+  c.setOklab(0.86644, -0.23389, 0.17950);
+  assert('setOklab green', c.toRgb(), { r: 0, g: 255, b: 0 });
+}
+{
+  const c = new Color();
+  // blue
+  c.setOklab(0.45201, -0.03246, -0.31153);
+  assert('setOklab blue', c.toRgb(), { r: 0, g: 0, b: 255 });
+}
+{
+  const c = new Color(0, 0, 0, 0.6);
+  // red + alpha 유지
+  c.setOklab(0.62796, 0.22486, 0.12585);
+  assert(
+    'setOklab keeps alpha',
+    { rgb: c.toRgb(), a: c.a },
+    { rgb: { r: 255, g: 0, b: 0 }, a: 0.6 }
+  );
+}
+
+// === setOklch ===
+{
+  const c = new Color();
+  // red (OKLCH 기준 근사값)
+  c.setOklch(0.62796, 0.25786, 29.23);
+  assert('setOklch red', c.toRgb(), { r: 255, g: 0, b: 0 });
+}
+{
+  const c = new Color();
+  // green
+  c.setOklch(0.86644, 0.29483, 142.50);
+  assert('setOklch green', c.toRgb(), { r: 0, g: 255, b: 0 });
+}
+{
+  const c = new Color();
+  // blue
+  c.setOklch(0.45201, 0.31321, 264.05);
+  assert('setOklch blue', c.toRgb(), { r: 0, g: 0, b: 255 });
+}
+{
+  const c = new Color(0, 0, 0, 0.6);
+  // red + alpha 유지
+  c.setOklch(0.62796, 0.25786, 29.23);
+  assert(
+    'setOklch keeps alpha',
+    { rgb: c.toRgb(), a: c.a },
+    { rgb: { r: 255, g: 0, b: 0 }, a: 0.6 }
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // === toNumber / toRgbNumber / toRgbaNumber / toArgbNumber ===
 {
   const c = new Color(201, 121, 31, 0.5);
@@ -344,4 +418,26 @@ const assert = (label, result, expected) => {
   assert('toCmyka has a', cmyka.a, 0.5);
   assert('toCmykString format', c.toCmykString().startsWith('cmyk('), true);
   assert('toCmykaString format', c.toCmykaString().startsWith('cmyka('), true);
+}
+
+// === toOklab / toOklaba / toOklabString / toOklabaString ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  const lab = c.toOklab();
+  assert('toOklab has L,a,b', 'L' in lab && 'a' in lab && 'b' in lab, true);
+  const laba = c.toOklaba();
+  assert('toOklaba has alpha', laba.alpha, 0.5);
+  assert('toOklabString format', c.toOklabString().startsWith('oklab('), true);
+  assert('toOklabaString format', c.toOklabaString().startsWith('oklab('), true);
+}
+
+// === toOklch / toOklcha / toOklchString / toOklchaString ===
+{
+  const c = new Color(201, 121, 31, 0.5);
+  const lch = c.toOklch();
+  assert('toOklch has L,C,h', 'L' in lch && 'C' in lch && 'h' in lch, true);
+  const lcha = c.toOklcha();
+  assert('toOklcha has alpha', lcha.alpha, 0.5);
+  assert('toOklchString format', c.toOklchString().startsWith('oklch('), true);
+  assert('toOklchaString format', c.toOklchaString().startsWith('oklch('), true);  
 }

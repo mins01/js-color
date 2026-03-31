@@ -193,3 +193,93 @@ export function cmykToRgb(c, m, y, k) {
     b: (255 * (1 - y) * (1 - k))
   };
 }
+
+
+
+export function srgbToLinear(c) {
+    c /= 255;
+    return c <= 0.04045
+        ? c / 12.92
+        : Math.pow((c + 0.055) / 1.055, 2.4);
+}
+
+export function rgbToOklab(r, g, b) {
+    // sRGB → Linear RGB
+
+
+    const R = srgbToLinear(r);
+    const G = srgbToLinear(g);
+    const B = srgbToLinear(b);
+
+    // Linear RGB → LMS
+    let l = 0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B;
+    let m = 0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B;
+    let s = 0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B;
+
+    // cube root
+    l = Math.cbrt(l);
+    m = Math.cbrt(m);
+    s = Math.cbrt(s);
+
+    // LMS → OKLab
+    const L = 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s;
+    const a = 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s;
+    const b2 = 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s;
+
+    return { L, a, b: b2 };
+}
+export function linearToSrgb(c) {
+    return c <= 0.0031308
+        ? 12.92 * c
+        : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+}
+
+export function oklabToRgb(L, a, b) {
+    // 1. OKLab → LMS
+    let l = L + 0.3963377774 * a + 0.2158037573 * b;
+    let m = L - 0.1055613458 * a - 0.0638541728 * b;
+    let s = L - 0.0894841775 * a - 1.2914855480 * b;
+
+    // 2. cube
+    l = l * l * l;
+    m = m * m * m;
+    s = s * s * s;
+
+    // 3. LMS → Linear RGB
+    let R =  4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+    let G = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+    let B = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+
+    // 4. Linear RGB → sRGB
+    // 외부 선언
+
+    R = linearToSrgb(R);
+    G = linearToSrgb(G);
+    B = linearToSrgb(B);
+
+    // ✔ 그대로 반환 (0~1 범위, out-of-gamut 가능)
+    return { r: R * 255, g: G * 255, b: B * 255 };
+}
+
+export function oklabToOklch(L, a, b) {
+  const C = Math.sqrt(a * a + b * b);
+  let h = Math.atan2(b, a) * 180 / Math.PI;
+  if (h < 0) h += 360;
+  return { L, C, h };
+}
+
+export function oklchToOklab(L, C, h) {
+  const hr = h * Math.PI / 180;
+  const a = C * Math.cos(hr);
+  const b = C * Math.sin(hr);
+  return { L, a, b };
+}
+
+export function rgbToOklch(r, g, b) {
+  const oklab = rgbToOklab(r, g, b);
+  return oklabToOklch(oklab.L, oklab.a, oklab.b)
+}
+export function oklchTORgb(L, C, h) {
+  const oklab = oklchToOklab(L, C, h);
+  return oklabToRgb(oklab.L, oklab.a, oklab.b);
+}

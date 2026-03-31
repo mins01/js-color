@@ -1,4 +1,4 @@
-import { rgbToHsl , rgbToHsv, hslToRgb, hsvToRgb, rgbToCmyk, cmykToRgb} from './color-utils.js';
+import { rgbToHsl , rgbToHsv, hslToRgb, hsvToRgb, rgbToCmyk, cmykToRgb , oklabToRgb, rgbToOklab, oklchTORgb, rgbToOklch} from './color-utils.js';
 import ColorParser from './ColorParser.js';
 
 
@@ -170,6 +170,25 @@ export default class Color{
     return this.setHsba(h,s,b);
   }
 
+  setOklab(L=0,a=0,b=0){
+    const rgb = oklabToRgb(L,a,b);
+    this.setRgba(rgb.r,rgb.g,rgb.b);
+  }
+
+  setOklch(L=0,C=0,h=0){
+    const {r,g,b} = oklchTORgb(L,C,h);
+    this.setRgba(r,g,b);
+  }
+
+
+
+
+
+
+
+
+
+
 
   // gets
   /**
@@ -229,7 +248,7 @@ export default class Color{
    }
   // RGB
   toRgbString(d=0){ return `rgb(${this.toFixed(this.realR,d)}, ${this.toFixed(this.realG,d)}, ${this.toFixed(this.realB,d)})`; }
-  toRgbaString(d=0){ return `rgba(${this.toFixed(this.realR,d)}, ${this.toFixed(this.realG,d)}, ${this.toFixed(this.realB,d)}, ${this.toFixed(this.a,3)})`; }
+  toRgbaString(d=0){ return `rgba(${this.toFixed(this.realR,d)}, ${this.toFixed(this.realG,d)}, ${this.toFixed(this.realB,d)}, ${this.toFixed(this.a,4)})`; }
   toRealRgbString(){ return `rgb(${this.realR}, ${this.realG}, ${this.realB})`; }
   toRealRgbaString(){ return `rgba(${this.realR}, ${this.realG}, ${this.realB}, ${this.a})`; }
   toHexString(){
@@ -255,7 +274,7 @@ export default class Color{
   }
   toHslaString(d=0){
     const { h, s, l , a} = this.toHsla();
-    return `hsla(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(l*100,d)}%, ${this.toFixed(a,3)})`;
+    return `hsla(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(l*100,d)}%, ${this.toFixed(a,4)})`;
   }
   toHsv(){
     if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.realR, this.realG, this.realB));
@@ -268,7 +287,7 @@ export default class Color{
   }
   toHsvaString(d=0) {
     const { h, s, v , a} = this.toHsva();
-    return `hsva(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(v*100,d)}%, ${this.toFixed(a,3)})`;
+    return `hsva(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(v*100,d)}%, ${this.toFixed(a,4)})`;
   }
   toHsb(){ const {h,s,v} = this.toHsv(); return {h,s,b:v}; }
   toHsba(){ return {...this.toHsb(),a:this.a}; }
@@ -278,7 +297,7 @@ export default class Color{
   }
   toHsbaString(d=0) {
     const { h, s, b, a } = this.toHsba();
-    return `hsba(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(b*100,d)}%, ${this.toFixed(a,3)})`;
+    return `hsba(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(b*100,d)}%, ${this.toFixed(a,4)})`;
   }
   toCmyk(){
     if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.realR, this.realG, this.realB));
@@ -291,8 +310,43 @@ export default class Color{
     return `cmyk(${pct(c)}%, ${pct(m)}%, ${pct(y)}%, ${pct(k)}%)`;
   }
   toCmykaString() {
-    const { c, m, y, k } = this.toCmyk();
+    const { c, m, y, k, a } = this.toCmyka();
     const pct = v => Math.round(v * 100);
-    return `cmyka(${pct(c)}%, ${pct(m)}%, ${pct(y)}%, ${pct(k)}%, ${this.toFixed(this.a,3)})`;
+    return `cmyka(${pct(c)}%, ${pct(m)}%, ${pct(y)}%, ${pct(k)}%, ${this.toFixed(a,4)})`;
   }
+
+  toOklab() {
+    if(!this.#cache.has('oklab')) this.#cache.set('oklab',rgbToOklab(this.realR, this.realG, this.realB));
+    return this.#cache.get('oklab');
+  }
+  toOklaba(){ return {...this.toOklab(),alpha:this.a}; }
+  toOklabString(d=4) {
+    const { L, a, b } = this.toOklab();
+    return `oklab(${this.toFixed(L,d)} ${this.toFixed(a,d)} ${this.toFixed(b,d)})`;
+  }
+  toOklabaString(d=4) {
+    const { L, a, b, alpha } = this.toOklaba();
+    return `oklab(${this.toFixed(L,d)} ${this.toFixed(a,d)} ${this.toFixed(b,d)} / ${this.toFixed(alpha,4)})`;
+  }
+
+
+  toOklch() {
+    if (!this.#cache.has('oklch')) {
+      this.#cache.set('oklch', rgbToOklch(this.realR, this.realG, this.realB));
+    }
+    return this.#cache.get('oklch');
+  }
+
+  toOklcha() { return { ...this.toOklch(), alpha: this.a }; }
+
+  toOklchString(d=4) {
+    const { L, C, h } = this.toOklch();
+    return `oklch(${this.toFixed(L,d)} ${this.toFixed(C,d)} ${this.toFixed(h,d)})`;
+  }
+
+  toOklchaString(d=4) {
+    const { L, C, h, alpha } = this.toOklcha();
+    return `oklch(${this.toFixed(L,d)} ${this.toFixed(C,d)} ${this.toFixed(h,d)} / ${this.toFixed(alpha,4)})`;
+  }
+
 }
