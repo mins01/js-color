@@ -72,7 +72,8 @@ const assert = (label, result, expected) => {
   console.log(c.toRealRgb(),c.toHsl(),c.toHsl(false));
   assert(`hsl-${i}`,c.toHslString(3),hslString)
   c.setHsl(318,0.34,0.9999);
-  console.log(c.toRealRgb(),c.toHsl(),c.toHsl(false));
+  console.log(c.toRealRgb(),c.toHsl(),c.toHsl(false),c.toRgbaString(2));
+  console.log(c.toRgbString(2),c.toRgbaString(1),c.toRgbaString(0));
   
 }
 

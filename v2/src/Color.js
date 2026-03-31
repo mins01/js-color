@@ -228,8 +228,8 @@ export default class Color{
     return n.toFixed(d).replace(/(?:\.0+|(\.\d+?)0+)$/, '$1');
    }
   // RGB
-  toRgbString(){ return `rgb(${this.r}, ${this.g}, ${this.b})`; }
-  toRgbaString(){ return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.toFixed(this.a,2)})`; }
+  toRgbString(d=0){ return `rgb(${this.toFixed(this.realR,d)}, ${this.toFixed(this.realG,d)}, ${this.toFixed(this.realB,d)})`; }
+  toRgbaString(d=0){ return `rgba(${this.toFixed(this.realR,d)}, ${this.toFixed(this.realG,d)}, ${this.toFixed(this.realB,d)}, ${this.toFixed(this.a,3)})`; }
   toRealRgbString(){ return `rgb(${this.realR}, ${this.realG}, ${this.realB})`; }
   toRealRgbaString(){ return `rgba(${this.realR}, ${this.realG}, ${this.realB}, ${this.a})`; }
   toHexString(){
@@ -251,12 +251,11 @@ export default class Color{
   toHsla(){ return {...this.toHsl(),a:this.a}; }
   toHslString(d=0) {
     const { h, s, l } = this.toHsl();
-    console.log(`-------------- ${this.toFixed(h,d)}`);
     return `hsl(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(l*100,d)}%)`;
   }
   toHslaString(d=0){
     const { h, s, l , a} = this.toHsla();
-    return `hsla(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(l*100,d)}%, ${a.toFixed(3)})`;
+    return `hsla(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(l*100,d)}%, ${this.toFixed(a,3)})`;
   }
   toHsv(){
     if(!this.#cache.has('hsv')) this.#cache.set('hsv',rgbToHsv(this.realR, this.realG, this.realB));
@@ -269,7 +268,7 @@ export default class Color{
   }
   toHsvaString(d=0) {
     const { h, s, v , a} = this.toHsva();
-    return `hsva(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(v*100,d)}%, ${a.toFixed(3)})`;
+    return `hsva(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(v*100,d)}%, ${this.toFixed(a,3)})`;
   }
   toHsb(){ const {h,s,v} = this.toHsv(); return {h,s,b:v}; }
   toHsba(){ return {...this.toHsb(),a:this.a}; }
@@ -279,7 +278,7 @@ export default class Color{
   }
   toHsbaString(d=0) {
     const { h, s, b, a } = this.toHsba();
-    return `hsba(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(b*100,d)}%, ${a.toFixed(3)})`;
+    return `hsba(${this.toFixed(h,d)}, ${this.toFixed(s*100,d)}%, ${this.toFixed(b*100,d)}%, ${this.toFixed(a,3)})`;
   }
   toCmyk(){
     if(!this.#cache.has('cmyk')) this.#cache.set('cmyk',rgbToCmyk(this.realR, this.realG, this.realB));
@@ -294,6 +293,6 @@ export default class Color{
   toCmykaString() {
     const { c, m, y, k } = this.toCmyk();
     const pct = v => Math.round(v * 100);
-    return `cmyka(${pct(c)}%, ${pct(m)}%, ${pct(y)}%, ${pct(k)}%, ${+this.a.toFixed(3)})`;
+    return `cmyka(${pct(c)}%, ${pct(m)}%, ${pct(y)}%, ${pct(k)}%, ${this.toFixed(this.a,3)})`;
   }
 }
