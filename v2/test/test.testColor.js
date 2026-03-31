@@ -67,10 +67,10 @@ const assert = (label, result, expected) => {
 
   const c = new Color();
   let i = 0;
-  let hslString =`hsl(318, 34%, 99.99%)` 
+  let hslString =`hsl(318.3999, 34.3339%, 99.3999%)` 
   c.setString(hslString);
   console.log(c.toRealRgb(),c.toHsl(),c.toHsl(false));
-  assert(`hsl-${i}`,c.toHslString(),hslString)
+  assert(`hsl-${i}`,c.toHslString(3),hslString)
   c.setHsl(318,0.34,0.9999);
   console.log(c.toRealRgb(),c.toHsl(),c.toHsl(false));
   
