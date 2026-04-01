@@ -237,6 +237,10 @@ export default class Color{
       case 'hsba': return this.toHsbaString()
       case 'cmyk': return this.toCmykString()
       case 'cmyka': return this.toCmykaString()
+      case 'oklab': return this.toOklabString()
+      case 'oklaba': return this.toOklabaString()
+      case 'oklch': return this.toOklchString()
+      case 'oklcha': return this.toOklchaString()
       default: return this.toRgbaString()
     }
   }

@@ -327,7 +327,7 @@ const assert = (label, result, expected) => {
   assert('toUint8ClampedArray', [arr[0], arr[1], arr[2], arr[3]], [201, 121, 31, 128]);
 }
 
-// === toString / toRgbString / toRgbaString ===
+// === toString  ===
 {
   const c = new Color(201, 121, 31, 0.5);
   assert('toRgbString', c.toRgbString(), 'rgb(201, 121, 31)');
@@ -336,6 +336,8 @@ const assert = (label, result, expected) => {
   assert('toString("hex")', c.toString('hex'), '#c9791f');
   assert('toString("hsl")', c.toString('hsl'), c.toHslString());
   assert('toString("cmyk")', c.toString('cmyk'), c.toCmykString());
+  assert('toString("oklab")', c.toString('oklab'), c.toOklabString());
+  assert('toString("oklch")', c.toString('oklch'), c.toOklchString());
 }
 
 // === toHexString / toHexaString ===
