@@ -10,6 +10,8 @@ export default class ColorParser {
     hsb:    /^hsba?\(\s*([0-9.]+)\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*(?:,\s*([0-9.]+)\s*)?\)$/i,
     cmyk:   /^cmyk\(\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*\)$/i,
     cmyka:  /^cmyka\(\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)\s*\)$/i,
+    oklab:  /^oklab\(\s*([0-9.]+)\s+([+-]?[0-9.]+)\s+([+-]?[0-9.]+)(?:\s*\/\s*([0-9.]+))?\s*\)$/i,
+    oklch:  /^oklch\(\s*([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)(?:\s*\/\s*([0-9.]+))?\s*\)$/i,
   };
 
   static parse(str) {
@@ -84,6 +86,20 @@ export default class ColorParser {
         type: 'cmyka',
         value: { c: +m[1] / 100, m: +m[2] / 100, y: +m[3] / 100, k: +m[4] / 100, a: +m[5] }
       };
+    }
+
+     // oklab(L a b [ / alpha ])
+    if ((m = str.match(this.#patterns.oklab))) {
+      const value = { L: +m[1], a: +m[2], b: +m[3] };
+      if (m[4] !== undefined) value.alpha = +m[4];
+      return { type: m[4] !== undefined ? 'oklaba' : 'oklab', value };
+    }
+
+    // oklch(L C h [ / alpha ])
+    if ((m = str.match(this.#patterns.oklch))) {
+      const value = { L: +m[1], C: +m[2], h: +m[3] };
+      if (m[4] !== undefined) value.alpha = +m[4];
+      return { type: m[4] !== undefined ? 'oklcha' : 'oklch', value };
     }
 
     return null;

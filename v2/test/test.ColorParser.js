@@ -52,6 +52,15 @@ assert('cmyk(0%, 40%, 85%, 21%)', ColorParser.parse('cmyk(0%, 40%, 85%, 21%)'), 
 // --- cmyka ---
 assert('cmyka(0%, 40%, 85%, 21%, 0.123)', ColorParser.parse('cmyka(0%, 40%, 85%, 21%, 0.123)'), { type: 'cmyka', value: { c: 0, m: 0.4, y: 0.85, k: 0.21, a: 0.123 } });
 
+
+// --- oklab ---
+assert('oklab(0.627 0.224 -0.125)', ColorParser.parse('oklab(0.627 0.224 -0.125)'), { type: 'oklab', value: { L: 0.627, a: 0.224, b: -0.125 } });
+assert('oklab(0.627 0.224 -0.125 / 0.5)', ColorParser.parse('oklab(0.627 0.224 -0.125 / 0.5)'), { type: 'oklaba', value: { L: 0.627, a: 0.224, b: -0.125, alpha: 0.5 } });
+
+// --- oklch ---
+assert('oklch(0.627 0.138 264)', ColorParser.parse('oklch(0.627 0.138 264)'), { type: 'oklch', value: { L: 0.627, C: 0.138, h: 264 } });
+assert('oklch(0.627 0.138 264 / 0.8)', ColorParser.parse('oklch(0.627 0.138 264 / 0.8)'), { type: 'oklcha', value: { L: 0.627, C: 0.138, h: 264, alpha: 0.8 } });
+
 // --- whitespace ---
 assert('spaces', ColorParser.parse('  rgb( 255 , 0 , 0 )  '), { type: 'rgb', value: { r: 255, g: 0, b: 0 } });
 
